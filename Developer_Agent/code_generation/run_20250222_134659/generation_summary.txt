@@ -1,0 +1,16 @@
+Code Generation Summary
+==================================================
+
+Requirements:
+{
+  "Title": "Image Preprocessing as per Model",
+  "Description": "As a user, I want the system to perform image preprocessing (standardizing spatial and bit resolution through resizing and normalization) so that input images are ready for AI model training or inferencing (AI prediction).",
+  "AcceptanceCriteria": [
+    "Pre-processing should successfully be implemented on images with the following bit representations: 1-bit, 8-bit,16-bit, 24-bit, 32-bit.",
+    "The pre-processing system shall be able to resize the input images into the resolution required by the AI model.",
+    "The pre-processing system shall be able to normalize the input image data into appropriate pixel datatype required by the AI model.",
+    "When pre-processing is successful for the training dataset, the data shall be sent further for batch creation.",
+    "When pre-processing is successful for inferencing (prediction) dataset, the data shall be sent for model inferencing."
+  ]
+}
+

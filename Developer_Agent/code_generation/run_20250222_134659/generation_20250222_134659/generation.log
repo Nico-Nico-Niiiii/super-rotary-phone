@@ -1,0 +1,53 @@
+2025-02-22 13:46:59,652 - INFO - Starting code generation process...
+2025-02-22 13:47:00,540 - ERROR - Error in model generation: 1 validation error for ChatGenerationChunk
+message
+  Input should be a valid dictionary or instance of BaseMessageChunk [type=model_type, input_value=AIMessage(content='System...}, response_metadata={}), input_type=AIMessage]
+    For further information visit https://errors.pydantic.dev/2.10/v/model_type
+Traceback (most recent call last):
+  File "/tmp/ipykernel_146171/1302597178.py", line 105, in _generate
+    generation = ChatGenerationChunk(
+        message=AIMessage(content=response_text),
+        generation_info={"finish_reason": "stop"}
+    )
+  File "/home/airangers/anaconda3/envs/e/lib/python3.13/site-packages/langchain_core/load/serializable.py", line 125, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/airangers/anaconda3/envs/e/lib/python3.13/site-packages/pydantic/main.py", line 214, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 1 validation error for ChatGenerationChunk
+message
+  Input should be a valid dictionary or instance of BaseMessageChunk [type=model_type, input_value=AIMessage(content='System...}, response_metadata={}), input_type=AIMessage]
+    For further information visit https://errors.pydantic.dev/2.10/v/model_type
+2025-02-22 13:47:00,542 - ERROR - Error generating code: 1 validation error for ChatGenerationChunk
+message
+  Input should be a valid dictionary or instance of BaseMessageChunk [type=model_type, input_value=AIMessage(content='Error ...}, response_metadata={}), input_type=AIMessage]
+    For further information visit https://errors.pydantic.dev/2.10/v/model_type
+Traceback (most recent call last):
+  File "/tmp/ipykernel_146171/1302597178.py", line 262, in developer
+    response = self.model._generate(messages)
+  File "/tmp/ipykernel_146171/1302597178.py", line 117, in _generate
+    ChatGenerationChunk(
+    ~~~~~~~~~~~~~~~~~~~^
+        message=AIMessage(content="Error generating response"),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        generation_info={"finish_reason": "error"}
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/airangers/anaconda3/envs/e/lib/python3.13/site-packages/langchain_core/load/serializable.py", line 125, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/airangers/anaconda3/envs/e/lib/python3.13/site-packages/pydantic/main.py", line 214, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 1 validation error for ChatGenerationChunk
+message
+  Input should be a valid dictionary or instance of BaseMessageChunk [type=model_type, input_value=AIMessage(content='Error ...}, response_metadata={}), input_type=AIMessage]
+    For further information visit https://errors.pydantic.dev/2.10/v/model_type
+2025-02-22 13:47:00,544 - ERROR - Error in code generation: 'attempt_number'
+Traceback (most recent call last):
+  File "/tmp/ipykernel_146171/1302597178.py", line 494, in generate_code
+    f.write(f"\nAttempt {event['attempt_number']}:\n")
+                         ~~~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'attempt_number'
+2025-02-22 13:47:00,544 - ERROR - Failed to generate valid code
+2025-02-22 13:47:00,545 - ERROR - Error: 'attempt_number'
