@@ -1,0 +1,33 @@
+# Core dependencies
+python-dotenv
+pydantic
+
+# Azure OpenAI
+openai
+azure-identity
+
+# LangChain & LangGraph
+langchain
+langchain-openai
+langchain-core
+langchain-community
+langchain-experimental
+langgraph
+
+# Image processing
+pillow
+numpy
+
+# PDF processing
+pdf2image
+PyPDF2
+pymupdf
+
+# Vector database
+chromadb
+
+# Utilities
+loguru
+tenacity
+tqdm
+argparse

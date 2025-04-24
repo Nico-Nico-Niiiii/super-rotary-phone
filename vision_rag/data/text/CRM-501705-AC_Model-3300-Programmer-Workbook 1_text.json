@@ -1,0 +1,236 @@
+[
+  {
+    "page_num": 1,
+    "content": "WORKBOOK\nwww.bostonscientific.eu\nLATITUDE\n™ \nPROGRAMMING SYSTEM, MODEL 3300\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 2,
+    "content": "i\nINTRODUCTION\t\nProgrammer Interface Enhancements ............................................................................................. i\nWorkbook Layout ............................................................................................................................... i\nUsing Demo Mode ............................................................................................................................ ii\nINTERROGATE AND DATA MANAGEMENT\t\nPrinting and Saving........................................................................................................................... 1\nSummary Pop-up Screen.................................................................................................................. 2\nSummary Screen............................................................................................................................... 3\nREVIEW SUMMARY PAGE\nTachy Mode........................................................................................................................................ 4\nEnhanced EGM Functionality .......................................................................................................... 5\nBattery ............................................................................................................................................... 6\nREVIEW TRENDS DATA, EVENTS, AND PATIENT DIAGNOSTICS\t\nTrends................................................................................................................................................. 7\nTrends (continued)............................................................................................................................. 8 \nArrhythmia Logbook......................................................................................................................... 9\nStored VF Event EGM...................................................................................................................... 10\nPatient Diagnostics.......................................................................................................................... 11\nBrady/CRT Counters........................................................................................................................ 12\nHeart Rate Variability....................................................................................................................... 13\nTachy Counters................................................................................................................................ 14\nPERFORM TESTS\t\nLead Tests......................................................................................................................................... 15\nLV Threshold Test Options.............................................................................................................. 16\nLV VectorGuide™.............................................................................................................................. 17\nEP Tests ........................................................................................................................................... 18\nTemporary Brady Screen................................................................................................................ 19\nManual Rhythm ID........................................................................................................................... 20\n15-20\n4-6\nTABLE OF CONTENTS\ni-ii\n1-3\nLATITUDETM Programming System, Model 3300\n7-14\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 3,
+    "content": "TABLE OF CONTENTS\n     34\n30-33\nLATITUDETM Programming System, Model 3300\n21-29\nPARAMETER / FEATURE ENHANCEMENTS\t\nSettings Summary .......................................................................................................................... 21\nVentricular Detection Enhancements............................................................................................. 22\nAtrial Tachy Therapy....................................................................................................................... 23\nBrady/CRT Parameters.................................................................................................................... 24 \nRYTHMIQ™........................................................................................................................................ 25\nParameter Interactions ................................................................................................................... 26\nAV Search + ..................................................................................................................................... 27\nSmartDelay™ CRT ............................................................................................................................ 28\t\nRate Adaptive Sensor Data ............................................................................................................ 29\nEND SESSION\nView Changes.................................................................................................................................. 30\nPrinting and Saving Reports........................................................................................................... 31\nEnd Session Confirmation.............................................................................................................. 32\nExport, Read, Delete........................................................................................................................ 33\nINDICATIONS, SAFETY AND WARNINGS\nLATITUDETM Programming System, Model 3300.......................................................................... 34\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 4,
+    "content": "INTRODUCTION\nLATITUDETM Programming System, Model 3300\ni\nProgrammer Interface Enhancements\nThe user interface of the LATITUDETM Programming System, Model 3300 balances \nfamiliarity with workflow-enhancing updates. Physicians and allied health professionals \nprovided input to the design of this interface to help busy clinicians be more efficient \nat implant and follow-up.\nWorkbook Layout\nThis hands-on guide will familiarize you with the software screens encountered during \nnavigation of a typical follow-up for BSC devices. It is designed to be used with the \nBrady and Tachy demo mode on the programmer and with de-identified patient case \nstudies which can be provided by your local BSC representative.\n■  If the demo mode is used no data will be present.\n■  \u0007De-identified patient case studies consist of stored EGMs, diagnostic data, and up to \none year of trending information.\nUse the Table of Contents to quickly locate specific information or to gain an overall \nunderstanding of the topics/screens contained in the workbook. Note that the topics \nhave been assigned different colors and are organized by these colors throughout the \nguide.\nBelow each software illustration is a brief description of what is being displayed on \nscreen and/or steps for you to follow. \nThe Information contained here is not intended to replace the Instruction (or other) manual. Please refer to the manual for the full instructions for use \nincluding the contraindications, warnings, precautions, and adverse events. \n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 5,
+    "content": "INTRODUCTION\nLATITUDETM Programming System, Model 3300\nii\nTurn on the programmer.\nSelect PG .\nSelect ICD/CRT-D Support App .\nThen Select Demo .\n\nUsing Demo Mode\n\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 6,
+    "content": "INTERROGATE AND DATA MANAGEMENT\nLATITUDETM Programming System, Model 3300\n Clinician selects desired Reports,  Episodes, and  Events, \n Options to Print,  Save and  Transfer Data can be selected.\nPrinting and Saving\n\n\n\n\n1\n\n \u0007It is recommended to make \nprinter selections and method \nto save patient data before  \ndevice interrogation. \nSelect Patient Data Management.\n\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 7,
+    "content": "INTERROGATE AND DATA MANAGEMENT\nLATITUDETM Programming System, Model 3300\n2\nUpon interrogation, a Summary pop-up screen  \nwill give you the status of:\n Leads\n Battery\n Events\n \u0007Issue Status \n \u0007Note: The following screens are shown using stored de-identified patient data from Patient \nData Management. The information is representative only.\nSummary Pop-up Screen\nSelect Close  on the Summary pop-up \nscreen to continue with the follow-up.\n\n\n\n\n\n\n1\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 8,
+    "content": "INTERROGATE AND DATA MANAGEMENT\nLATITUDETM Programming System, Model 3300\nThe Summary screen provides an  \noverview of device and patient data.\nSummary Screen\nSelect the relevant icon   \nfor more detailed information.\n\n\n\n\n\n3\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 9,
+    "content": "REVIEW SUMMARY PAGE\nLATITUDETM Programming System, Model 3300\nAs with previous devices, Tachy Mode  can be changed from \nthe top of the screen.\nTachy Mode\n4\n\n4\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 10,
+    "content": "REVIEW SUMMARY PAGE\nLATITUDETM Programming System, Model 3300\nThe nominal display setting is surface and  \nthree EGMs .\nAn LV EGM is available under Real Time Trace \nSelection .\nEnhanced EGM Functionality\nSelect Details button  to enlarge \nthe four lead channels.\n\n\n5\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 11,
+    "content": "REVIEW SUMMARY PAGE\nLATITUDETM Programming System, Model 3300\nBattery\n6\n Review the Time to Explant Gauge on the SUMMARY  tab upon device interrogation.\n Select Battery Icon for more detail.\n \u0003\nSelect Battery Detail button for information  of power consumption,  percent of power \nused vs. nominal settings,  charge remaining, and last  delivered shock information.  \n \u0003\nThis is where the Beep when Explant can be reprogrammed.\n\n\n\n\n\n\n\n\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 12,
+    "content": "REVIEW TRENDS, EVENTS, AND PATIENT DIAGNOSTICS\nLATITUDETM Programming System, Model 3300\nFrom the EVENTS tab, select the  \nTrends tab.\nCustomize the display by:\n View\n Select Trends\n \u0007Move the scroll bar to highlight \ninformation displayed on left panel.\n \u0007Use the macro view to scroll back \nin time to find earlier episodes.\nTrends\n7\n\n\n\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 13,
+    "content": "REVIEW TRENDS, EVENTS, AND PATIENT DIAGNOSTICS\nLATITUDETM Programming System, Model 3300\nTrends (continued)\n \u0007Select Custom to display any three \nTrends at one time.\n \u0003\nTrend data are recorded daily.  \nUp to one year of data is stored. \n\n\n8\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 14,
+    "content": "REVIEW TRENDS, EVENTS, AND PATIENT DIAGNOSTICS\nLATITUDETM Programming System, Model 3300\nSelect the column headings to sort by:\n Event\n Date/Time\n Type\n Therapy\n Duration\nChoose an event by selecting the respective icon for more details.\nIn this example, we are going to look at V-4 . \nCheck which episodes you want to Save  to Hard Drive or USB.\nArrhythmia Logbook\n\n\n9\n\n\n\n\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 15,
+    "content": "REVIEW TRENDS, EVENTS, AND PATIENT DIAGNOSTICS\nLATITUDETM Programming System, Model 3300\nStored VF Event EGM\n \u0007A 31J shock was delivered after a charge time  of 6.0 sec. with successful conversion  \nof the rhythm. The intervals  present a visual representation of the rates measured  \nduring the episode. \n Note: the zones are indicated by horizontal lines.\n\n10\n\n\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 16,
+    "content": "REVIEW TRENDS, EVENTS, AND PATIENT DIAGNOSTICS\nLATITUDETM Programming System, Model 3300\nPatient Diagnostics\n From the EVENTS tab, select the Patient Diagnostics tab.\n To see Histogram activity select the Details button. \n Select the Rate Counts Details button for information of all chambers. \n See Rate Counts for chamber selected. \n\n\n\n11\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 17,
+    "content": "REVIEW TRENDS, EVENTS, AND PATIENT DIAGNOSTICS\nLATITUDETM Programming System, Model 3300\nBrady/CRT Counters\nSelect the Brady/CRT Counters Details button to see additional information since last reset \nand reset before last. \n \u0007Note: Atrial arrhythmias are segmented in percentage and total time in hours,  \nas well as by Duration.\n% LV Paced \nalso provided\nPVC definition \nbased on RV \nsensed events\nResults available \nsince last reset and \nreset before last\n12\n\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 18,
+    "content": "REVIEW TRENDS, EVENTS, AND PATIENT DIAGNOSTICS\nLATITUDETM Programming System, Model 3300\nHeart Rate Variability\nSelect the Details  button for Heart Rate Variability to view pacing parameters   \nand specific heart failure diagnostic information. \n Note: Last measured includes a 24 hour period of averaged “5-minute” intervals.  \n The Reference plot is stored underneath for comparison.\n13\n\n\n\n\n\n\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 19,
+    "content": "REVIEW TRENDS, EVENTS, AND PATIENT DIAGNOSTICS\nLATITUDETM Programming System, Model 3300\nTachy Counters\n Select the Tachy Counter Detail button to view specific information regarding treated and \nnon-treated episodes.  \nTherapy was not \navailable— e.g., \nMonitor Only \nZones, magnet \napplied during epi-\nsode, Tachy Mode \nMonitor Only\nCounters can be \nreset on this screen \nas well as others\nTherapy was available, but diverted—e.g., user diverted, \nchanged tachy therapy mode, divert reconfirm, etc.\n14\n\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 20,
+    "content": "PERFORM TESTS\nLATITUDETM Programming System, Model 3300\nAll lead tests may be performed from this screen.\nSelect Run All Tests  for automatic intrinsic amplitude and pacing impedance measurements.\nEach test can also be run independently for manual tests . \nIn this example, the LV Threshold Test , has been slected.\n\u0007Select Start Threshold Test .\nNote: Screens depicted are now using a live device demo on a simulator.\nLead Tests\n\n\n15\n\nAny round button  \ncan be held down \nfor multiple   \ncontinuous  \nmeasurements \n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 21,
+    "content": "PERFORM TESTS\nLATITUDETM Programming System, Model 3300\nL\u0007V lead configuration can be temporarily changed during threshold testing .\nReview the threshold test results on Real-time Log .\nPacing Threshold Test results can be edited before printing for accurate documentation .\nLV Threshold Test Options\n\n\n16\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 22,
+    "content": "PERFORM TESTS\nLATITUDETM Programming System, Model 3300\nLV VectorGuide™\nLV VectorGuide™ streamlines LV quadripolar testing to determine the optimal LV Pacing Lead  \nconfiguration for each individual patient. One screen is used for initiating tests, sorting results, \nand programming the selected Pace Vector.\nRun RVS-LVS Delay  and Impedence  on all.\nThen Select Pace Vectors with the longest RVS-LVS Delay. (Note: > 70 ms if possible)\nThen Perform PNS test  on those pace vectors.\nNext, for those vectors with no PNS, perform LV Threshold .\nLast, program to optimal Pace Vector .\n\n\n\n\n17\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 23,
+    "content": "PERFORM TESTS\nLATITUDETM Programming System, Model 3300\nEP Tests\nThis screen provides the options for induction and termination of arrhythmias.\n18\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 24,
+    "content": "PERFORM TESTS\nLATITUDETM Programming System, Model 3300\nThese parameters are activated with Start button . \nTemp Brady includes only the features shown on the screen,  \ne.g., Rate Smoothing automatically disabled during Temp Brady. \nTemporary Brady Screen\n19\n\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 25,
+    "content": "PERFORM TESTS\nLATITUDETM Programming System, Model 3300\nManual Rhythm ID\nWhen selected, programmable pacing parameters  temporarily change to update the \nRhythm ID Template.\nLast successful update is available on this screen. \n20\n\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 26,
+    "content": "PARAMETER / FEATURE ENHANCEMENTS\nLATITUDETM Programming System, Model 3300\nIncrease or decrease rate zone cut-offs by:\n Move the slider bar grips up and down to propose zone change.\n Select number to view a list of available values.\n Review summary of currently programmed parameters.\nSelect relevant icon to review and modify brady and other tachy settings.\nSettings Summary\n\n\n21\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 27,
+    "content": "PARAMETER / FEATURE ENHANCEMENTS\nLATITUDETM Programming System, Model 3300\nVentricular Detection Enhancements\n \u0007Clinician has 2 options of ventricular detection enhancement type:  \nRhythm ID or Onset/Stability.\n22\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 28,
+    "content": "PARAMETER / FEATURE ENHANCEMENTS\nLATITUDETM Programming System, Model 3300\nAtrial Tachy Therapy\n These parameters are designed to tailor ATR mode switch to the patient's needs.\n \u0007Notice that Ventricular Rate Regulation (VRR) and BiV Trigger  can be programmed \nto be active only during an ATR mode switch, or \n BiV Trigger can also be programmed on independently.\n If the device is programmed to VVI or VVI(R), VRR can be active at all times.\n23\n\n\n\n\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 29,
+    "content": "PARAMETER / FEATURE ENHANCEMENTS\nLATITUDETM Programming System, Model 3300\nBrady/CRT Parameters\nBrady parameters to tailor to meet patient's needs.\n24\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 30,
+    "content": "PARAMETER / FEATURE ENHANCEMENTS\nLATITUDETM Programming System, Model 3300\nRYTHMIQTM\n25\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 31,
+    "content": "PARAMETER / FEATURE ENHANCEMENTS\nLATITUDETM Programming System, Model 3300\nParameter Interactions\nColor coding identifies interactive limit (red, green, yellow).\nFix Others addresses interactive parameters and gives suggested \nchanges to resolve interactions .\n\n26\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 32,
+    "content": "PARAMETER / FEATURE ENHANCEMENTS\nLATITUDETM Programming System, Model 3300\nAV Search +\n Select Settings tab, then Timing, Rate Enhancements, Magnet and Noise. \n \u0007AV Search + features an advanced algorithm designed to promote intrinsic ventricular  \nconduction without dropping ventricular beats. \n27\n\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 33,
+    "content": "PARAMETER / FEATURE ENHANCEMENTS\nLATITUDETM Programming System, Model 3300\nSmartDelay™ CRT \n \u0007SmartDelay provides recommended settings for programming PAV and SAV Delay based  \non measurements of: \n• Intrinsic AV intervals \n• Interventricular timing \n• LV lead location\nSelect Temporary Paced LRL \nSelect Start Test \n \u0007System status as test is running.\n\n\n28\n\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 34,
+    "content": "PARAMETER / FEATURE ENHANCEMENTS\nLATITUDETM Programming System, Model 3300\nRate Adaptive Sensor Data\nSensor and Trending Data are found by selecting relevant icon .\n\n29\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 35,
+    "content": "END SESSION\nLATITUDETM Programming System, Model 3300\nThe View Changes window displays old values  \nand new values during a programming session.\nYou can sort by:\n Status\n Parameter\n Old Value\n New Value\n \u0007Load Initials will reset all device programming \nand patient information entered during that  \ninterrogation session with the original  \ninterrogated values.\n\u0007 \u0007Cancel Changes if proposed programming \nnot desired. \n \u0007Select Program on screen or on the  \nprogrammer itself anytime to apply changes.\nView Changes\n\n\n30\n\n\nThis screen will be  \nvisible if user has  \nalready completed  \nprogramming.\nThis screen will be  \nvisible if user has  \nnot yet completed  \nprogramming.\n\n\n\n\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 36,
+    "content": "END SESSION\nLATITUDETM Programming System, Model 3300\n\n\n\n \u0007Reports:  \n• Select desired reports \n• Report description included \n \u0007Episodes:  \n• Select desired episodes\n \u0007Real-time Log:  \n• Select events (snapshot, real-time recorder, automatic)\n \u0007Print:  \n• USB Printer \n• Bluetooth® enabled printer \n \u0007Save:  \n• Hard drive \n• USB pen drive \n \u0007Data transfer:  \n• Bluetooth® enabled PC with Latitude Link™ Data Management System\nPrinting and Saving Reports\n31\n\n\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 37,
+    "content": "END SESSION\nLATITUDETM Programming System, Model 3300\nEnd Session Confirmation\n32\nThe End Session confirmation will alert the user for Tachy Mode, Programming, Counters \nReset and Real-time Log saving.\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 38,
+    "content": "END SESSION\nLATITUDETM Programming System, Model 3300\nExport, Read, Delete\n\n\n\n\n\n33\n \u0007Select Patient Data Management \nwhen PG is application is closed.\n \u0007Export via Data transfer to PC with \nLATITUDE™ Link.\n \u0007Read from USB or Programmer  \nhard drive.\n \u0007Delete from Hard Drive or USB.\n \u0007Purge All Data – used to cryptologically erase Patient Data from the Programmer.\n \u0007Unlike Model 3120 Programmer, cannot print from this screen. Additionally, the  \nprogrammer limits patient data stored on the hard drive by automatically deleting  \nit after 14 days. There is no notification to the user that the deletion has occurred.\n\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  },
+  {
+    "page_num": 39,
+    "content": "INDICATIONS, SAFETY AND WARNINGS\nLATITUDETM Programming System, Model 3300\nLATITUDE™ PROGRAMMER\nIntended Use The LATITUDE Programming System is intended for use in hospital and clinical environments to communicate with Boston Scientific implantable systems. The software in use controls all communication \nfunctions for the PG. For detailed software application instructions, refer to the associated product literature for the PG being interrogated.\n Contraindications The LATITUDE Programming System is contraindicated for use with any PG other than a Boston Scientific PG. For contraindications for use related to the PG, refer to the associated product literature \nfor the PG being interrogated. \nThe PSA application is contraindicated for use with any programming system other than the Boston Scientific Model 3300 LATITUDE Programming System.\nThe following uses of the PSA are contraindicated:\n• With AV conduction disorders; atrial single-chamber pacing\n• With competing intrinsic rhythms; asynchronous modes\n• With chronic atrial tachycardia as well as chronic atrial fibrillation or flutter; modes with atrial control (DDD, VDD)\n• With poor tolerance of high ventricular rates (e.g., with angina pectoris); tracking modes (i.e., atrial control modes) and propensity for atrial tachycardia\n• Use as an external pacemaker\nWarnings The use of any cables or accessories with the LATITUDE Programming System other than those specified by Boston Scientific could result in increased electromagnetic emissions, decreased electromagnetic \nimmunity, or electrical shock of the LATITUDE Programming System. Keep all RF communications equipment at least 30 cm (12 in) away from the Model 3300 Programmer. Do not simultaneously touch the patient and any \naccessible LATITUDE Programming System connector or exposed conductor.  To avoid the risk of electric shock, only connect the Programmer’s Model 6689 Power Adapter to a grounded/earthed power outlet. When accessing \nthe battery, ensure that power to the Programmer is turned off. Do not touch the metal clips on the patient cable or the pacing lead. Discharge any electrical static charge on your person by touching a grounded metal surface \nbefore touching the patient, the patient cables, or the device. Unused PSA cable connections contacting conductive surfaces can induce electrical currents into the patient’s heart. Electrocautery can induce electrical currents \nin the PSA cables that can be conducted into the patient’s heart. Never stack the Programmer on top of an electrocautery system or associated components. Do not drape electrocautery components or cables on or near the \nProgrammer or associated cables and components.  Whenever possible disconnect the PSA cables from the pacing leads when performing an electrocautery procedure. If the Programmer is connected to the patient during an \nelectrocautery procedure, check its operation afterwards. If the Programmer experiences an issue that causes an error condition, the Programmer will need to be power cycled. Use of the Model 3300 Programmer adjacent or \nstacked with other equipment should be avoided because it could result in improper operation. The Programmer is non-sterile and cannot be sterilized. Operation of the LATITUDE Programming System with physiological signals \nthat are lower than the minimum detectable amplitude may cause inaccurate results. The LATITUDE Programming System is MR Unsafe and must  remain outside the MRI site Zone III (and higher) as defined by the American \nCollege of Radiology Guidance Document for Safe MR Practices. When activating PSA Burst Pacing, which may cause unpredictable arrhythmias, always have cardiac emergency equipment in an operational status available \nfor immediate life support.   The LATITUDE Programming System is designed and tested to be defibrillation safe. The PSA cable must be disconnected from the lead(s) before using external defibrillation. If the patient is pacer \ndependent and the Programmer encounters a fault condition, pacing operation continues unless the fault was in the PSA component itself. For this reason, always have external pacing equipment available for patient back-up. \nOperating the Programmer with a depleted internal battery or no battery can suspend Programmer function if AC power is temporarily interrupted. Always have external cardiac pacing equipment in an operational status avail-\nable for immediate life support. Always have external defibrillation equipment and medical personnel skilled in CPR available during implant and follow up testing. If not terminated in a timely fashion, an induced ventricular \ntachyarrhythmia can result in the patient’s death. Single chamber atrial modes are contraindicated for patients with impaired AV conduction. Abruptly terminating pacing may result in extended periods of asystole in some \npatients. Pacing threshold testing implies loss of capture. Incorrect positioning of the protective silicone rubber sleeves over the PSA cable clip(s) can cause unintended electrical connections that can impair cable function and \nendanger the patient. Moisture or wet cables can impair cable function and endanger the patient.  Before cleaning and disinfecting the Programmer surfaces, power down the device and disconnect the external power supply.  \nIf this equipment is used in a residential environment, the equipment might not offer adequate protection to radio-frequency communication services. The Model 6753 Battery is a Lithium-ion battery and as such, is deemed a \nDangerous Good in regards to shipping. Do not touch the screen while the Programmer is powering up, as this may cause the area that you touched to become unresponsive when pressed later on. \nPrecautions For specific information on precautions, read the following sections of the product labeling: General, Preparations for Use, Maintenance, Troubleshooting and Handling.\nAdverse Effects The following list includes the possible adverse effects associated with programming pulse generators described in this information: Asystole, Atrial arrhythmia, Bradycardia, Tachycardia and  \nVentricular arrhythmia.\n92436264 (Rev. A)\nCaution Federal law (USA) restricts this device to sale by or on the order of a physician. Rx only. Prior to use, please see the complete “Directions for Use” for more information on Indications, Contraindications, Warn-\nings, Precautions, Adverse Events, and Operator’s Instructions\n34\nRhythm Management \n300 Boston Scientific Way \nMarlborough, MA 01752-1234 \nwww.bostonscientific.com\nMedical Professionals:  \n1.800.CARDIAC (227.3422) \nPatients and Families:  \n1.866.484.3268\n© 2020 Boston Scientific Corporation  \nor its affiliates. All rights reserved. \nCRM-501705-AC\n",
+    "pdf_source": "C:\\Users\\ADITYANJ\\Downloads\\CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf",
+    "pdf_filename": "CRM-501705-AC_Model-3300-Programmer-Workbook 1.pdf"
+  }
+]
