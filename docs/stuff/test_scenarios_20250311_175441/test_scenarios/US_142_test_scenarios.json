@@ -1,0 +1,97 @@
+{
+  "module_id": "US_142",
+  "test_suite_name": "Test Scenarios for US_142",
+  "summary": "This test suite validates the ability of the module to extract image data from local storage or external hard drives in supported formats, handle errors gracefully, and integrate with an external validation module for inferencing. Tests cover functional correctness, alternative flows, edge cases, error handling, and integration points.",
+  "test_scenarios": [
+    {
+      "id": "TS-US_142-001",
+      "name": "Validate File Path for Local Storage",
+      "category": "functional",
+      "description": "Ensures the module accurately validates file paths in the user-specified directory.",
+      "test_objective": "Verify that the file paths exist, are within the local storage, and do not contain unsafe path traversal patterns.",
+      "expected_outcome": "The system correctly identifies valid file paths and rejects invalid or unsafe paths with proper error messages logged.",
+      "relevant_requirements": "File Path Validation"
+    },
+    {
+      "id": "TS-US_142-002",
+      "name": "Process Batch of Valid Image Files",
+      "category": "functional",
+      "description": "Tests the ability of the module to process a batch of files in supported formats concurrently.",
+      "test_objective": "Verify that the module extracts data from valid files in `.jpg`, `.png`, `.bmp`, and `.dcm` formats efficiently.",
+      "expected_outcome": "All valid files are successfully processed, image data is extracted, and batch results summarize processed files along with any skipped ones.",
+      "relevant_requirements": "Batch Processing, Image Data Extraction"
+    },
+    {
+      "id": "TS-US_142-003",
+      "name": "Handle Directory with Mixed File Types",
+      "category": "edge_case",
+      "description": "Tests the module's behavior when the input directory contains a mix of supported and unsupported file types.",
+      "test_objective": "Ensure that unsupported files are skipped and properly logged while supported files are processed without issues.",
+      "expected_outcome": "Supported formats are processed successfully, unsupported formats result in a skip with appropriate warnings logged.",
+      "relevant_requirements": "Edge Case Handling"
+    },
+    {
+      "id": "TS-US_142-004",
+      "name": "Extract Image Data from Corrupted Files",
+      "category": "error",
+      "description": "Simulates corrupted files in the batch to test error handling during image data extraction.",
+      "test_objective": "Verify that the system detects corrupted files, skips them appropriately, and logs meaningful error messages.",
+      "expected_outcome": "Corrupted files are skipped, errors are logged with context, and the batch continues processing other files.",
+      "relevant_requirements": "Error Handling"
+    },
+    {
+      "id": "TS-US_142-005",
+      "name": "Integration with Validation Module via REST API",
+      "category": "integration",
+      "description": "Tests communication between the module and the external validation module after image data extraction.",
+      "test_objective": "Ensure extracted image data is correctly formatted, sent via HTTPS, and validated by the external module.",
+      "expected_outcome": "Successful responses are logged, and errors on API failure are handled gracefully with retry logic if applicable.",
+      "relevant_requirements": "Integration with Validation Module"
+    },
+    {
+      "id": "TS-US_142-006",
+      "name": "Batch Processing Size Limit Enforcement",
+      "category": "functional",
+      "description": "Tests the module's ability to enforce the batch size limit of 100 files.",
+      "test_objective": "Verify that only the first 100 files in a batch are processed and users are notified of the limit.",
+      "expected_outcome": "Batch processing correctly stops after 100 files, logs a warning about the limit, and processes no additional files.",
+      "relevant_requirements": "Batch Processing"
+    },
+    {
+      "id": "TS-US_142-007",
+      "name": "Empty Directory Input Handling",
+      "category": "edge_case",
+      "description": "Tests the module's behavior when the input directory contains no valid image files.",
+      "test_objective": "Ensure that the module detects and gracefully handles empty directories.",
+      "expected_outcome": "Appropriate error messages are generated, no files are processed, and the result object reflects no operations.",
+      "relevant_requirements": "Edge Case Handling"
+    },
+    {
+      "id": "TS-US_142-008",
+      "name": "Handle Network Timeout during API Communication",
+      "category": "error",
+      "description": "Tests how the module manages network timeouts or connectivity failures during external validation requests.",
+      "test_objective": "Verify that failed API requests are logged with context, and batch processing continues for other files.",
+      "expected_outcome": "Error messages for connectivity issues are logged, user is notified, and the module processes remaining files.",
+      "relevant_requirements": "Integration with Validation Module, Error Handling"
+    }
+  ],
+  "coverage": {
+    "functional_areas": [
+      "File Path Validation",
+      "File Format Validation",
+      "Image Data Extraction",
+      "Batch Processing",
+      "Integration with Validation Module"
+    ],
+    "edge_cases": [
+      "Empty Directory Handling",
+      "Mixed File Types",
+      "Corrupted Files during Extraction"
+    ],
+    "not_covered": [
+      "Retries for Network Failures in API Calls",
+      "Scalability for Batch Sizes >100 Files"
+    ]
+  }
+}

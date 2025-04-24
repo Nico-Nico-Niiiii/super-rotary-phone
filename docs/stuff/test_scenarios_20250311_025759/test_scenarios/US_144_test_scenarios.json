@@ -1,0 +1,98 @@
+{
+  "module_id": "US_144",
+  "test_suite_name": "Test Scenarios for US_144",
+  "summary": "This test suite verifies the image data validation module, focusing on functional correctness, robustness in handling errors, support for edge cases, and integration with external systems like AWS S3 and logging. It ensures compliance with user story requirements and technical specifications.",
+  "test_scenarios": [
+    {
+      "id": "TS-US_144-001",
+      "name": "Validation of supported image file formats",
+      "category": "functional",
+      "description": "Verify that the system correctly accepts JPEG, BMP, PNG, and DICOM file formats.",
+      "test_objective": "Ensure supported file formats pass validation and return a success response.",
+      "expected_outcome": "Files of supported formats return a success message in the validation results.",
+      "relevant_requirements": "1.1 (Validate supported file formats), Acceptance Criteria 1"
+    },
+    {
+      "id": "TS-US_144-002",
+      "name": "Rejection of unsupported file formats",
+      "category": "error",
+      "description": "Verify that unsupported file formats (e.g., GIF, TIFF) are rejected with appropriate error messages.",
+      "test_objective": "Ensure that unsupported formats trigger a specific error response.",
+      "expected_outcome": "Validation results contain error entries for unsupported formats with a descriptive error message.",
+      "relevant_requirements": "1.2 (Reject unsupported formats), Acceptance Criteria 2"
+    },
+    {
+      "id": "TS-US_144-003",
+      "name": "Handling corrupted image files",
+      "category": "edge_case",
+      "description": "Verify that corrupted or unreadable files are identified during validation and logged with error details.",
+      "test_objective": "Ensure corrupted files are detected, rejected, and accompanied by meaningful error messages.",
+      "expected_outcome": "Validation results indicate errors for corrupted files, including relevant error codes and messages.",
+      "relevant_requirements": "1.3 (Detect corrupted images), Acceptance Criteria 3"
+    },
+    {
+      "id": "TS-US_144-004",
+      "name": "Validation of metadata alignment with AI model use-case",
+      "category": "functional",
+      "description": "Verify that metadata provided with a DICOM file aligns with the AI model's expected type and modality.",
+      "test_objective": "Ensure metadata mismatches trigger appropriate validation errors.",
+      "expected_outcome": "Validation results indicate errors for files with incompatible metadata fields, such as model type or modality mismatch.",
+      "relevant_requirements": "1.4 (Validate metadata), Acceptance Criteria 4"
+    },
+    {
+      "id": "TS-US_144-005",
+      "name": "Successful batch validation and S3 upload",
+      "category": "integration",
+      "description": "Verify that a batch with valid files is processed successfully and the files are uploaded to AWS S3.",
+      "test_objective": "Confirm that valid files are forwarded for image quality checks and uploaded to S3.",
+      "expected_outcome": "The validation results reflect successful processing, and the valid files are found in the S3 bucket.",
+      "relevant_requirements": "6.2 (Integration with AWS S3), Acceptance Criteria 5"
+    },
+    {
+      "id": "TS-US_144-006",
+      "name": "Error handling for missing files in batch upload",
+      "category": "error",
+      "description": "Verify that the system can handle empty batches or missing file fields gracefully.",
+      "test_objective": "Ensure the system returns a meaningful error when no files are uploaded or are missing from the request.",
+      "expected_outcome": "The API responds with an error code and a descriptive message indicating empty or invalid input.",
+      "relevant_requirements": "1.7 (Handle edge cases like empty input)"
+    },
+    {
+      "id": "TS-US_144-007",
+      "name": "Handling mixed validity in batch uploads",
+      "category": "edge_case",
+      "description": "Verify that a batch containing both valid and invalid files is processed correctly, with each file validated independently.",
+      "test_objective": "Ensure valid files are processed successfully and errors are logged for invalid files in a mixed-validity batch.",
+      "expected_outcome": "Validation results contain success entries for valid files and error entries for invalid ones.",
+      "relevant_requirements": "1.6 (Process images independently in batches)"
+    },
+    {
+      "id": "TS-US_144-008",
+      "name": "Retrieving validation logs via logs API",
+      "category": "functional",
+      "description": "Verify that the logs endpoint retrieves validation summaries correctly, either for all files or specific files.",
+      "test_objective": "Ensure the /api/v1/logs API functions as expected, providing accurate log data in JSON format.",
+      "expected_outcome": "API returns all logs or logs for the specified file, with accurate file names, statuses, and timestamps.",
+      "relevant_requirements": "7.1 (Provide logs for validation activities)"
+    }
+  ],
+  "coverage": {
+    "functional_areas": [
+      "File format validation",
+      "Metadata alignment",
+      "Batch validation",
+      "Log retrieval",
+      "AWS S3 integration"
+    ],
+    "edge_cases": [
+      "Corrupted files",
+      "Mixed-validity batches",
+      "Empty input"
+    ],
+    "not_covered": [
+      "Performance testing for large-scale batch uploads",
+      "Localization of error messages",
+      "Asynchronous or distributed processing (multiprocessing impact)"
+    ]
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "module_id": "US_143",
+  "test_suite_name": "Test Scenarios for US_143",
+  "summary": "This test suite validates the functionality, error handling, edge cases, and integration points of the image data retrieval, preprocessing, and AI transmission workflow described in user story ID 143. It ensures compliance with technical specifications and acceptance criteria, focusing on patient ID-based queries, PACS interactions, image validation, preprocessing, and error logging.",
+  "test_scenarios": [
+    {
+      "id": "TS-US_143-001",
+      "name": "Successful image retrieval and preprocessing",
+      "category": "functional",
+      "description": "Validate that the system successfully retrieves images for a valid patient ID from PACS, performs image validation and preprocessing, and packages the images as a zip file.",
+      "test_objective": "To confirm that image retrieval, validation, and preprocessing workflows function correctly for valid input.",
+      "expected_outcome": "The system returns a success message with a zip file containing validated and preprocessed images.",
+      "relevant_requirements": "Acceptance Criteria 1, 5"
+    },
+    {
+      "id": "TS-US_143-002",
+      "name": "Invalid PATIENT_ID error handling",
+      "category": "error",
+      "description": "Send a PATIENT_ID that does not exist in the PACS and validate that an appropriate error message is returned.",
+      "test_objective": "To verify that the system handles invalid patient IDs gracefully and returns a helpful error message.",
+      "expected_outcome": "The system returns an error message indicating that the patient ID was not found.",
+      "relevant_requirements": "Acceptance Criteria 2"
+    },
+    {
+      "id": "TS-US_143-003",
+      "name": "PATIENT_ID with no relevant images",
+      "category": "error",
+      "description": "Send a PATIENT_ID that exists in PACS but has no associated images and ensure the system handles it correctly.",
+      "test_objective": "To check that the system correctly detects the absence of image records for a patient and returns an appropriate error message.",
+      "expected_outcome": "The system returns an error message indicating that no relevant image records were found for the patient.",
+      "relevant_requirements": "Acceptance Criteria 3"
+    },
+    {
+      "id": "TS-US_143-004",
+      "name": "Retrieve multiple images for a single PATIENT_ID",
+      "category": "functional",
+      "description": "Validate the system's ability to retrieve and process multiple images associated with a single PATIENT_ID.",
+      "test_objective": "To confirm support for fetching and processing multiple images for a single patient ID in a batch workflow.",
+      "expected_outcome": "The system retrieves multiple images, successfully validates and preprocesses them, and packages them as a zip file.",
+      "relevant_requirements": "Acceptance Criteria 4"
+    },
+    {
+      "id": "TS-US_143-005",
+      "name": "PACS query retry mechanism",
+      "category": "edge_case",
+      "description": "Simulate a PACS connection failure and validate the retry mechanism with exponential backoff as specified.",
+      "test_objective": "To ensure the retry mechanism functions correctly and does not exceed the set retry limits while attempting to connect to PACS.",
+      "expected_outcome": "The system attempts up to 3 retries with increasing intervals and eventually either succeeds or provides an appropriate error message.",
+      "relevant_requirements": "Technical Requirement 3"
+    },
+    {
+      "id": "TS-US_143-006",
+      "name": "Graceful handling of invalid or corrupt image files",
+      "category": "error",
+      "description": "Send invalid or corrupt image files to the validation pipeline and ensure the system handles them without crashing.",
+      "test_objective": "To confirm that the system detects invalid or corrupt images, logs the errors, and skips those files.",
+      "expected_outcome": "Corrupt images are logged, skipped from further processing, and the system continues with valid images.",
+      "relevant_requirements": "Technical Requirement 3, 5"
+    },
+    {
+      "id": "TS-US_143-007",
+      "name": "AI transmission for preprocessed images",
+      "category": "integration",
+      "description": "Validate that preprocessed images are successfully transmitted to the external AI service via the REST API.",
+      "test_objective": "To verify seamless integration between preprocessed images and AI module API endpoints.",
+      "expected_outcome": "The system returns a confirmation response from the AI service indicating successful transmission.",
+      "relevant_requirements": "Technical Requirement 4"
+    },
+    {
+      "id": "TS-US_143-008",
+      "name": "Image Quality assessment during pre-processing",
+      "category": "functional",
+      "description": "Verify preprocessing operations like resizing, contrast adjustment, and JPEG conversion for images retrieved from PACS.",
+      "test_objective": "To ensure proper image quality transformations during preprocessing.",
+      "expected_outcome": "The system produces preprocessed images with the specified format, resolution, and enhanced properties.",
+      "relevant_requirements": "Technical Requirement 2, 5"
+    }
+  ],
+  "coverage": {
+    "functional_areas": [
+      "Image data retrieval from PACS and local storage",
+      "Batch processing for multiple image files",
+      "Image validation and metadata extraction",
+      "Image preprocessing workflows for AI"
+    ],
+    "edge_cases": [
+      "Retry mechanism for PACS failures",
+      "Handling invalid or corrupt images"
+    ],
+    "not_covered": [
+      "Scenarios involving PACS-specific authentication issues",
+      "Queries exceeding PACS server rate limits"
+    ]
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "generation_timestamp": "2025-03-11T02:57:53.060901",
+  "modules_analyzed": 7,
+  "test_cases_generated": 43,
+  "modules": [
+    {
+      "id": "US_141",
+      "purpose": "This code implements an API service that validates, processes, and uploads datasets to AWS S3 storage. It supports dataset uploads for classification and segmentation tasks and ensures proper structure and format through validation routines.",
+      "test_count": 6,
+      "test_categories": [
+        "error",
+        "performance",
+        "functional"
+      ]
+    },
+    {
+      "id": "US_142",
+      "purpose": "This code is an image processing module designed to validate and extract image data from various file formats and communicate with a remote validation module over REST API for further processing. It handles file sorting, extraction, validation, and error logging for digital image files, including DICOM medical imaging formats.",
+      "test_count": 6,
+      "test_categories": [
+        "error",
+        "performance",
+        "boundary",
+        "functional",
+        "integration"
+      ]
+    },
+    {
+      "id": "US_143",
+      "purpose": "The code is designed to process medical images retrieved from a PACS (Picture Archiving and Communication System) or local storage, validate them, preprocess them for AI inference, and send them to an AI service for further analysis. It also includes logging, error handling, database integration, and API endpoints for user requests.",
+      "test_count": 7,
+      "test_categories": [
+        "integration",
+        "error",
+        "performance",
+        "functional"
+      ]
+    },
+    {
+      "id": "US_144",
+      "purpose": "An image data validation system that performs file validation (format, size, metadata, corruption) for images including DICOM and common image formats (JPEG, BMP, PNG). It also supports batch processing of image files, uploading validated files to AWS S3, logging validation outcomes in SQLite, and fetching validation logs via REST APIs built using Flask.",
+      "test_count": 5,
+      "test_categories": [
+        "integration",
+        "error",
+        "functional"
+      ]
+    },
+    {
+      "id": "US_145",
+      "purpose": "This code implements an image validation system using FastAPI. It validates medical images, ensuring compliance with resolution requirements, detecting blank images, identifying duplicate DICOM files, and extracting metadata from DICOM files. It provides endpoints to process and validate these images as part of a medical image preprocessing pipeline.",
+      "test_count": 6,
+      "test_categories": [
+        "integration",
+        "boundary",
+        "error",
+        "functional"
+      ]
+    },
+    {
+      "id": "US_146",
+      "purpose": "This Python script provides a modular framework for image preprocessing, including validation, decoding, resizing, normalization, and routing. It supports batch processing for scalability, making it suitable for machine learning workflows like training and inference.",
+      "test_count": 7,
+      "test_categories": [
+        "integration",
+        "boundary",
+        "error",
+        "functional"
+      ]
+    },
+    {
+      "id": "US_147",
+      "purpose": "The code provides a comprehensive pipeline for creating and preprocessing batches of image data for machine learning model training. It handles dataset validation, batch creation, image preprocessing, and logging of issues (like corrupted files or missing labels).",
+      "test_count": 6,
+      "test_categories": [
+        "boundary",
+        "error",
+        "performance",
+        "functional"
+      ]
+    }
+  ]
+}

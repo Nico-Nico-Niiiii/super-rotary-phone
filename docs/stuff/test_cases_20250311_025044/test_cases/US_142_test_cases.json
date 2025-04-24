@@ -1,0 +1,156 @@
+{
+  "module_id": "US_142",
+  "test_suite_name": "Test Suite for US_142",
+  "summary": "This test suite validates the functionality of the image processing module for local storage and external hard drive inputs. It covers file path and format validation, image data extraction, batch processing, integration with the remote validation module, and error handling across multiple scenarios, including edge cases.",
+  "test_cases": [
+    {
+      "id": "TC-US_142-001",
+      "name": "Valid file path and supported format image extraction",
+      "category": "functional",
+      "priority": "high",
+      "preconditions": "The input file exists in the specified path and is in one of the supported formats (.jpg, .png, .bmp, .dcm).",
+      "inputs": {
+        "file_path": "local_storage/images/sample.jpg"
+      },
+      "steps": [
+        "Call the validate_file_path function with the provided file_path.",
+        "Call the validate_file_format function with the provided file_path.",
+        "Call the extract_image_data function with the file metadata returned from validations."
+      ],
+      "expected_results": [
+        "File validation is successful and returns true.",
+        "File format validation is successful and returns true.",
+        "Image data extraction completes without error and returns byte data for the image."
+      ],
+      "traceability": "User Story Acceptance Criteria 1; Technical Specification: File Path Validation, File Format Validation, Image Data Extraction"
+    },
+    {
+      "id": "TC-US_142-002",
+      "name": "Unsupported file format detection and appropriate error logging",
+      "category": "error",
+      "priority": "high",
+      "preconditions": "The file exists but is in an unsupported format, e.g., .txt.",
+      "inputs": {
+        "file_path": "local_storage/files/document.txt"
+      },
+      "steps": [
+        "Call the validate_file_path function with the provided file_path.",
+        "Call the validate_file_format function with the provided file_path.",
+        "Attempt to extract image data after format validation fails."
+      ],
+      "expected_results": [
+        "File validation is successful and returns true.",
+        "File format validation fails and logs an error message in JSON format.",
+        "Image data extraction is skipped due to unsupported format."
+      ],
+      "traceability": "User Story Acceptance Criteria 3; Technical Specification: File Format Validation, Error Handling"
+    },
+    {
+      "id": "TC-US_142-003",
+      "name": "Batch processing with mixed supported and unsupported file formats",
+      "category": "boundary",
+      "priority": "medium",
+      "preconditions": "A directory contains a mix of valid image files (.jpg, .png) and unsupported files (.txt, .exe).",
+      "inputs": {
+        "directory_path": "local_storage/images_mix/"
+      },
+      "steps": [
+        "Call the handle_directory_input function with the directory path.",
+        "Validate file paths and formats for all files in the directory.",
+        "Process valid files and skip unsupported formats."
+      ],
+      "expected_results": [
+        "Valid paths for all files are confirmed.",
+        "Supported files are processed, and unsupported files are skipped with errors logged for each unsupported file.",
+        "BatchResult contains lists of processed, skipped, and error entries."
+      ],
+      "traceability": "User Story Acceptance Criteria 1 and 3; Technical Specification: Batch Processing, Edge Case Handling"
+    },
+    {
+      "id": "TC-US_142-004",
+      "name": "Communication with validation module for valid image data",
+      "category": "integration",
+      "priority": "high",
+      "preconditions": "The extracted image data is valid and ready for API submission.",
+      "inputs": {
+        "image_data": "<base64-encoded-image>",
+        "metadata": {
+          "file_name": "sample.jpg",
+          "file_extension": ".jpg",
+          "file_size": 5120
+        }
+      },
+      "steps": [
+        "Format API payload with image_data and metadata.",
+        "Send payload to /validate-image endpoint using POST request.",
+        "Handle success or error responses from the API."
+      ],
+      "expected_results": [
+        "Payload is formatted correctly and sent successfully over HTTPS.",
+        "API returns success response with status 'success' for valid image data.",
+        "Errors in communication or invalid data are logged gracefully."
+      ],
+      "traceability": "User Story Acceptance Criteria 2; Technical Specification: Integration with Validation Module"
+    },
+    {
+      "id": "TC-US_142-005",
+      "name": "Handling empty directory input",
+      "category": "error",
+      "priority": "medium",
+      "preconditions": "The specified input directory is empty.",
+      "inputs": {
+        "directory_path": "local_storage/empty_folder/"
+      },
+      "steps": [
+        "Call the handle_directory_input function with the empty directory path.",
+        "Attempt to list all files in the directory.",
+        "Log an appropriate error message and return a response indicating empty directory."
+      ],
+      "expected_results": [
+        "No files are found in the directory.",
+        "An error message is logged: 'Error: No valid image files found in the directory.'",
+        "Processing is halted without crashing the system."
+      ],
+      "traceability": "User Story Acceptance Criteria 3; Technical Specification: Edge Case Handling"
+    },
+    {
+      "id": "TC-US_142-006",
+      "name": "Performance test for batch processing of 100 files",
+      "category": "performance",
+      "priority": "low",
+      "preconditions": "A batch containing 100 valid files exists in a directory.",
+      "inputs": {
+        "directory_path": "local_storage/batch_test/"
+      },
+      "steps": [
+        "Call the handle_directory_input function with the batch directory path.",
+        "Process all files using ThreadPoolExecutor.",
+        "Record time taken to process all files and log results."
+      ],
+      "expected_results": [
+        "Batch processing completes successfully for all 100 files.",
+        "Time taken per file does not exceed 200ms.",
+        "Logs contain a summary of batch results with no skipped files."
+      ],
+      "traceability": "Technical Limits: Batch Processing Limitations; Performance Constraints"
+    }
+  ],
+  "test_coverage": {
+    "functional_areas_covered": [
+      "File path validation",
+      "File format validation",
+      "Image data extraction",
+      "Batch processing",
+      "Integration with validation module"
+    ],
+    "edge_cases_covered": [
+      "Handling empty directories",
+      "Mixed file types in a batch",
+      "Unsupported file formats"
+    ],
+    "not_covered": [
+      "Handling network/cloud paths",
+      "Scalability testing for batch sizes greater than 100 files"
+    ]
+  }
+}

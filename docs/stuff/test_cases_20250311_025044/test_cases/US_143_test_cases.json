@@ -1,0 +1,187 @@
+{
+  "module_id": "US_143",
+  "test_suite_name": "Test Suite for US_143",
+  "summary": "This test suite validates the full functionality of the image retrieval, validation, pre-processing, and integration aspects of the module. It includes functional tests for happy paths, edge cases, error scenarios, boundary conditions, and integration with external PACS and AI services.",
+  "test_cases": [
+    {
+      "id": "TC-US_143-001",
+      "name": "Verify image data retrieval for a valid PATIENT_ID from PACS",
+      "category": "functional",
+      "priority": "high",
+      "preconditions": "Ensure the PACS server is running and contains valid images for PATIENT_ID 'PAT12345'.",
+      "inputs": {
+        "patient_id": "PAT12345",
+        "source": "PACS"
+      },
+      "steps": [
+        "Send a POST request to the '/retrieve-images' endpoint with PATIENT_ID 'PAT12345'.",
+        "Verify that the response returns a status code of 200.",
+        "Verify that the retrieved image metadata contains valid entries (e.g., file format is 'DICOM')."
+      ],
+      "expected_results": [
+        "Response status is 200.",
+        "The 'images' field contains metadata for images retrieved from PACS, including image_id, file_path, and format.",
+        "The images are valid and passed validation."
+      ],
+      "traceability": "Acceptance Criteria 1, 4"
+    },
+    {
+      "id": "TC-US_143-002",
+      "name": "Return error when a non-existing PATIENT_ID is queried",
+      "category": "error",
+      "priority": "high",
+      "preconditions": "Ensure the PACS server does not contain any data for PATIENT_ID 'PAT99999'.",
+      "inputs": {
+        "patient_id": "PAT99999",
+        "source": "PACS"
+      },
+      "steps": [
+        "Send a POST request to the '/retrieve-images' endpoint with PATIENT_ID 'PAT99999'.",
+        "Verify that an error response is returned."
+      ],
+      "expected_results": [
+        "Response status is 404.",
+        "Error message is: 'Patient ID not found in PACS.'"
+      ],
+      "traceability": "Acceptance Criteria 2"
+    },
+    {
+      "id": "TC-US_143-003",
+      "name": "Handle scenario when no images are available for a valid PATIENT_ID in PACS",
+      "category": "error",
+      "priority": "medium",
+      "preconditions": "Ensure the PACS server has a record for PATIENT_ID 'PAT56789' but contains no image data for the patient.",
+      "inputs": {
+        "patient_id": "PAT56789",
+        "source": "PACS"
+      },
+      "steps": [
+        "Send a POST request to the '/retrieve-images' endpoint with PATIENT_ID 'PAT56789'.",
+        "Verify that an appropriate error message is returned."
+      ],
+      "expected_results": [
+        "Response status is 404.",
+        "Error message is: 'No relevant image records available in PACS for the specified PATIENT_ID.'"
+      ],
+      "traceability": "Acceptance Criteria 3"
+    },
+    {
+      "id": "TC-US_143-004",
+      "name": "Verify multiple images retrieved and pre-processed for a valid PATIENT_ID",
+      "category": "integration",
+      "priority": "high",
+      "preconditions": "Ensure the PACS server contains multiple images associated with PATIENT_ID 'PAT24680'.",
+      "inputs": {
+        "patient_id": "PAT24680",
+        "source": "PACS"
+      },
+      "steps": [
+        "Send a POST request to the '/retrieve-images' endpoint with PATIENT_ID 'PAT24680'.",
+        "Verify that multiple image metadata entries are returned for the patient.",
+        "Verify the logs entry for retrieved images includes the patient_id and the number of successful validations.",
+        "Confirm that the retrieved images are preprocessed and packaged into a .zip file."
+      ],
+      "expected_results": [
+        "Response status is 200.",
+        "Multiple retrieved images are listed in the metadata.",
+        "Images are resized to 256x256 resolution, enhanced, converted to JPEG, and zipped.",
+        "The packaged .zip file path is included in the response."
+      ],
+      "traceability": "Acceptance Criteria 1, 4, 5"
+    },
+    {
+      "id": "TC-US_143-005",
+      "name": "Verify retry mechanism for transient PACS retrieval failures",
+      "category": "performance",
+      "priority": "medium",
+      "preconditions": "Simulate transient connectivity issues with the PACS server.",
+      "inputs": {
+        "patient_id": "PAT12345",
+        "source": "PACS"
+      },
+      "steps": [
+        "Disable the PACS server connection temporarily.",
+        "Send a POST request to the '/retrieve-images' endpoint with PATIENT_ID 'PAT12345'.",
+        "Track the retry attempts in logs.",
+        "Re-enable the PACS server connection before maximum retry limit is reached."
+      ],
+      "expected_results": [
+        "The service retries PACS retrieval with exponential backoff intervals (5s, 10s, 20s).",
+        "Upon re-establishment of connectivity, the request succeeds and retrieves images for the patient.",
+        "Logs indicate the retry mechanism was triggered."
+      ],
+      "traceability": "Technical Requirement 3"
+    },
+    {
+      "id": "TC-US_143-006",
+      "name": "Validate image pre-processing output quality and naming convention",
+      "category": "functional",
+      "priority": "medium",
+      "preconditions": "Retrieve images for a valid PATIENT_ID and allow them to be pre-processed.",
+      "inputs": {
+        "patient_id": "PAT12345",
+        "source": "local"
+      },
+      "steps": [
+        "Send a POST request to the '/retrieve-images' endpoint with PATIENT_ID 'PAT12345'.",
+        "Check the processed images stored in the local directory.",
+        "Verify resolution is standardized to 256x256 pixels.",
+        "Verify converted images are in JPEG format and filenames follow the convention `<patient_id>_<image_id>.jpeg`."
+      ],
+      "expected_results": [
+        "Pre-processed images are resized to 256x256 resolution.",
+        "Images are converted to JPEG format with enhanced contrast.",
+        "Images are named following the convention '<patient_id>_<image_id>.jpeg'."
+      ],
+      "traceability": "Technical Requirements 2, 4"
+    },
+    {
+      "id": "TC-US_143-007",
+      "name": "Test concurrent requests for image retrieval and validation",
+      "category": "performance",
+      "priority": "high",
+      "preconditions": "Ensure the PACS server contains sufficient data for 10 unique PATIENT_IDs.",
+      "inputs": {
+        "patient_ids": [
+          "PAT1001",
+          "PAT1002",
+          "PAT1003",
+          "PAT1004",
+          "PAT1005",
+          "PAT1006",
+          "PAT1007",
+          "PAT1008",
+          "PAT1009",
+          "PAT1010"
+        ]
+      },
+      "steps": [
+        "Send 10 concurrent POST requests to the '/retrieve-images' endpoint, each with a distinct PATIENT_ID.",
+        "Monitor system resource utilization during processing.",
+        "Validate successful retrieval and storage of all patient image data."
+      ],
+      "expected_results": [
+        "All requests are processed asynchronously with no bottleneck.",
+        "System handles up to 100 concurrent requests as specified in the performance requirements.",
+        "Images are validated and processed for each patient."
+      ],
+      "traceability": "Technical Requirement 5"
+    }
+  ],
+  "test_coverage": {
+    "functional_areas_covered": [
+      "PACS integration and retrieval",
+      "Error handling in image retrieval",
+      "Image validation and pre-processing",
+      "AI inferencing integration"
+    ],
+    "edge_cases_covered": [
+      "Non-existing patient ID",
+      "No images available for a valid patient ID",
+      "Transient PACS connection failures"
+    ],
+    "not_covered": [
+      "Handling complex image transformations for specialized AI models"
+    ]
+  }
+}

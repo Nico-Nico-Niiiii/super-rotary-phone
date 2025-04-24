@@ -1,0 +1,112 @@
+{
+  "module_name": "ImageProcessor.py",
+  "overall_purpose": "This Python script processes image files in batches, validates their paths and formats, extracts image data (including converting DICOM formats), and sends them to an external validation module for further processing. It incorporates multi-threading for efficient batch processing and robust error logging.",
+  "architecture": {
+    "description": "The architecture is modular, separating core functionalities into distinct classes and functions. It utilizes a centralized logging mechanism for error tracking and event logging, and it employs thread-based parallelism for batch processing.",
+    "patterns_used": [
+      "Factory Method for FileMetadata instantiation",
+      "Observer pattern for logging",
+      "Thread Pooling for asynchronous task execution"
+    ]
+  },
+  "key_components": [
+    {
+      "name": "FileMetadata",
+      "type": "class",
+      "purpose": "Holds metadata about individual image files, including path, name, and extension.",
+      "functionality": "Stores essential attributes required for file validation and processing. Instances of this class are created for each image file being processed."
+    },
+    {
+      "name": "BatchResult",
+      "type": "class",
+      "purpose": "Aggregates the results of a batch processing run, including lists of processed, skipped, and errored files.",
+      "functionality": "Maintains structured results for batch operations, facilitating downstream reporting and analytics."
+    },
+    {
+      "name": "log_event",
+      "type": "function",
+      "purpose": "Logs events or errors into a structured file-based JSON log system.",
+      "functionality": "Formats log entries with timestamps, statuses, and messages, then writes them to the rotating log file using the configured logger."
+    },
+    {
+      "name": "validate_file_path",
+      "type": "function",
+      "purpose": "Checks if a file path is valid and safe.",
+      "functionality": "Ensures the file exists, is not a directory, and does not contain malicious or unsupported patterns such as traversal symbols or null bytes."
+    },
+    {
+      "name": "validate_file_format",
+      "type": "function",
+      "purpose": "Ensures the file uses a supported format.",
+      "functionality": "Validates that the file extension matches one of the predefined formats (.jpg, .jpeg, .png, .bmp, .dcm)."
+    },
+    {
+      "name": "extract_image_data",
+      "type": "function",
+      "purpose": "Extracts image data from a valid file.",
+      "functionality": "Processes standard image files via the PIL library and DICOM files via pydicom. Handles corrupted files gracefully."
+    },
+    {
+      "name": "process_batch",
+      "type": "function",
+      "purpose": "Processes a batch of image files concurrently.",
+      "functionality": "Spawns threads for parallel validation and extraction using ThreadPoolExecutor. Limits batch size to 100 files for efficiency and logs detailed results upon completion."
+    },
+    {
+      "name": "validate_and_extract",
+      "type": "function",
+      "purpose": "Performs validation and image data extraction for a single file.",
+      "functionality": "Combines file validation steps with extraction logic, ensuring unsupported formats or invalid paths are skipped while logging errors."
+    },
+    {
+      "name": "send_to_validation_module",
+      "type": "function",
+      "purpose": "Dispatches image data to an external validation module via POST requests.",
+      "functionality": "Sends data securely using the HTTPS protocol to the REST API endpoint, handles request failures, and logs communication errors."
+    },
+    {
+      "name": "handle_directory_input",
+      "type": "function",
+      "purpose": "Processes all valid files within a specified directory.",
+      "functionality": "Checks the validity of the directory, collects file paths, and invokes batch processing for those files. Handles empty directories gracefully."
+    }
+  ],
+  "data_flow": "The code begins with input validation (file paths, formats). It then extracts image data using various methods depending on the format. Extracted data is processed and optionally sent to an external validation module. Results are aggregated in a structured BatchResult object and logged to a JSON file.",
+  "input_handling": "The script validates file paths and directory inputs for existence and supported formats, rejecting unsafe or unsupported files. It processes `.jpg`, `.jpeg`, `.png`, `.bmp`, and `.dcm` file formats.",
+  "output_handling": "Processed image files are recorded in logs, and structured batch results are returned to the caller, either for direct use or further processing.",
+  "error_handling": "The code includes robust error logging mechanisms through the `log_event` function. It gracefully handles corrupted images, invalid file paths, unsupported formats, and network issues by logging detailed error messages without disrupting overall execution.",
+  "dependencies": [
+    "os",
+    "pathlib",
+    "logging",
+    "PIL",
+    "pydicom",
+    "requests",
+    "json",
+    "concurrent.futures",
+    "base64",
+    "time"
+  ],
+  "notable_algorithms": [
+    {
+      "name": "Multi-threaded Batch Processing",
+      "purpose": "Enhances the scalability and efficiency of batch file processing.",
+      "description": "Uses `ThreadPoolExecutor` to validate and process files concurrently, ensuring optimal use of system resources."
+    },
+    {
+      "name": "Image Verification and Extraction",
+      "purpose": "Ensures the integrity of image files and extracts their pixel data.",
+      "description": "Leverages the `PIL.Image.verify()` method for standard image formats and the `pydicom.dcmread()` function for DICOM files."
+    }
+  ],
+  "configuration": "The script configures logging to store JSON logs in `/var/logs/extraction/` with rotation up to 5 backup files and a maximum size of 10MB each. The external validation module URL is hardcoded as `https://validation-module.local/validate-image`.",
+  "assumptions": [
+    "Input file paths are provided in a list or located in valid directories.",
+    "The validation module URL and endpoint are correctly configured and accessible."
+  ],
+  "limitations": [
+    "The batch size is capped at 100 files at a time.",
+    "Validation module URL is hardcoded, making it less flexible.",
+    "Error handling relies heavily on logging but doesn't provide real-time corrective actions."
+  ]
+}

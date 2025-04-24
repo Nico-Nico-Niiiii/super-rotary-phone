@@ -1,0 +1,117 @@
+{
+  "module_id": "US_147",
+  "test_suite_name": "Test Scenarios for US_147",
+  "summary": "This test suite ensures the batch data preparation module functions as expected across functional, edge case, error handling, and integration scenarios. It tests proper dataset validation, batch creation, image preprocessing, training step calculation, logging integrity, and error tolerance.",
+  "test_scenarios": [
+    {
+      "id": "TS-US_147-001",
+      "name": "Validate Dataset Path and Input Parameters",
+      "category": "functional",
+      "description": "Tests if the system validates the provided dataset path and input parameters correctly.",
+      "test_objective": "Ensure invalid paths or unsupported image formats are rejected, and appropriate error messages are returned.",
+      "expected_outcome": "System throws an error for invalid paths or unsupported formats; valid paths load successfully.",
+      "relevant_requirements": [
+        "TR-001",
+        "TR-006"
+      ]
+    },
+    {
+      "id": "TS-US_147-002",
+      "name": "Batch Creation with Sufficient Images",
+      "category": "functional",
+      "description": "Tests if the system distributes a valid dataset into batches according to the provided batch size.",
+      "test_objective": "Verify batch creation logic ensures all images are appropriately grouped into batches, including handling incomplete last batches.",
+      "expected_outcome": "Dataset is divided into batches, with proper handling for the last batch if the dataset size is not a multiple of the batch size.",
+      "relevant_requirements": [
+        "TR-002"
+      ]
+    },
+    {
+      "id": "TS-US_147-003",
+      "name": "Edge Case: Batch Size Larger Than Dataset",
+      "category": "edge_case",
+      "description": "Tests the system\u2019s behavior when the provided batch size exceeds the total number of images in the dataset.",
+      "test_objective": "Validate that an appropriate error message is returned, as per the user story acceptance criteria.",
+      "expected_outcome": "The system throws an error stating that the batch size exceeds the dataset size.",
+      "relevant_requirements": [
+        "Acceptance Criteria #1"
+      ]
+    },
+    {
+      "id": "TS-US_147-004",
+      "name": "Parallel Preprocessing of Images",
+      "category": "performance",
+      "description": "Tests if the preprocessing module efficiently processes images in batches using threading.",
+      "test_objective": "Verify performance improvement through parallel preprocessing and correctness of processed images.",
+      "expected_outcome": "Images are resized and normalized correctly, with preprocessing times reduced due to parallel processing.",
+      "relevant_requirements": [
+        "TR-002",
+        "Subtask #3"
+      ]
+    },
+    {
+      "id": "TS-US_147-005",
+      "name": "Error Handling for Corrupted Files in Preprocessing",
+      "category": "error",
+      "description": "Tests whether corrupted files in the dataset are skipped during preprocessing and logged correctly.",
+      "test_objective": "Ensure corrupted files are identified and skipped without terminating the pipeline.",
+      "expected_outcome": "Corrupted files are logged, preprocessing continues for the remaining images, and the pipeline completes successfully.",
+      "relevant_requirements": [
+        "TR-005",
+        "TR-003"
+      ]
+    },
+    {
+      "id": "TS-US_147-006",
+      "name": "Verify Training Step Calculation Logic",
+      "category": "functional",
+      "description": "Tests the dynamic calculation of training steps based on total image count and batch size.",
+      "test_objective": "Validate that the number of steps is rounded up for incomplete batches using the ceiling function.",
+      "expected_outcome": "The calculated training steps match the formula `ceil(total_images / batch_size)`.",
+      "relevant_requirements": [
+        "TR-005",
+        "Subtask #2"
+      ]
+    },
+    {
+      "id": "TS-US_147-007",
+      "name": "Integration Test for Batch Data Pipeline",
+      "category": "integration",
+      "description": "Tests the end-to-end functionality of the pipeline, including validation, batch creation, preprocessing, logging, and training step calculation.",
+      "test_objective": "Ensure all components work together seamlessly to prepare batch data for model training.",
+      "expected_outcome": "The pipeline completes successfully, generates valid batches, preprocesses images, logs outputs, and calculates training steps.",
+      "relevant_requirements": [
+        "Technical Requirements Overview",
+        "Subtasks #1\u2013#4"
+      ]
+    },
+    {
+      "id": "TS-US_147-008",
+      "name": "Log File Completeness and Structure",
+      "category": "functional",
+      "description": "Tests whether generated JSON logs include information on corrupted files, missing labels, and batch metadata.",
+      "test_objective": "Validate the format and completeness of generated logs for traceability and debugging.",
+      "expected_outcome": "Log files contain accurate information on corrupted files, missing labels, batch details, and other relevant data in JSON format.",
+      "relevant_requirements": [
+        "TR-003"
+      ]
+    }
+  ],
+  "coverage": {
+    "functional_areas": [
+      "Dataset validation",
+      "Batch creation",
+      "Image preprocessing",
+      "Training step calculation",
+      "Logging"
+    ],
+    "edge_cases": [
+      "Batch size larger than dataset",
+      "Empty dataset"
+    ],
+    "not_covered": [
+      "Limited support for non-standard image formats",
+      "Reliance on filename labeling conventions"
+    ]
+  }
+}

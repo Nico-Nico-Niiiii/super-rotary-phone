@@ -1,0 +1,97 @@
+{
+  "module_id": "US_142",
+  "test_suite_name": "Test Scenarios for US_142",
+  "summary": "This test suite ensures ImageProcessor.py fulfills its intended functionality for image extraction, validation, and integration with the validation module. The suite covers core functionalities, alternative flows, edge cases, and error scenarios to ensure robustness and compliance with user story requirements.",
+  "test_scenarios": [
+    {
+      "id": "TS-US_142-001",
+      "name": "Validate image file path format and existence",
+      "category": "functional",
+      "description": "Test the module's ability to verify the validity of provided file paths, ensuring the files exist and are accessible.",
+      "test_objective": "Ensure the file path validation logic works correctly, rejecting non-existent, inaccessible, or unsafe paths.",
+      "expected_outcome": "Valid file paths are successfully verified; invalid paths return errors logged in JSON format without disrupting execution.",
+      "relevant_requirements": "File Path Validation; Error Handling"
+    },
+    {
+      "id": "TS-US_142-002",
+      "name": "Validate file format compatibility for image extraction",
+      "category": "functional",
+      "description": "Test whether the module correctly identifies and accepts supported file formats (.jpg, .png, .bmp, .dcm).",
+      "test_objective": "Verify that unsupported files are rejected while supported formats are allowed for processing.",
+      "expected_outcome": "Files with compatible formats are processed as expected; unsupported formats are skipped with appropriate error logs.",
+      "relevant_requirements": "File Format Validation; Error Handling"
+    },
+    {
+      "id": "TS-US_142-003",
+      "name": "Process batch of image files concurrently with thread pooling",
+      "category": "functional",
+      "description": "Test the batch processing capability, ensuring up to 100 files are processed concurrently using thread pooling for efficiency.",
+      "test_objective": "Verify that the module efficiently processes batches within size limits while handling errors for invalid files.",
+      "expected_outcome": "Valid images are processed concurrently; batch results summarize processed, skipped, and errored files.",
+      "relevant_requirements": "Batch Processing; Edge Case Handling"
+    },
+    {
+      "id": "TS-US_142-004",
+      "name": "Extract image data for both standard and DICOM formats",
+      "category": "functional",
+      "description": "Test the image data extraction engine, ensuring it handles standard formats using PIL and DICOM formats using pydicom.",
+      "test_objective": "Verify successful extraction of image data from valid files and correct handling of corrupted or unreadable files.",
+      "expected_outcome": "Valid files are successfully extracted; unreadable/corrupted files are skipped and logged with detailed error messages.",
+      "relevant_requirements": "Image Data Extraction; Error Handling"
+    },
+    {
+      "id": "TS-US_142-005",
+      "name": "Handle empty input directories gracefully",
+      "category": "edge_case",
+      "description": "Test the module's ability to process an empty directory input without crashing or misbehaving.",
+      "test_objective": "Ensure the module handles empty directories by returning appropriate error messages and logging the event.",
+      "expected_outcome": "Error message: 'No valid image files found in the directory' is returned and logged; no processing attempts are made.",
+      "relevant_requirements": "Edge Case Handling; Error Handling"
+    },
+    {
+      "id": "TS-US_142-006",
+      "name": "Integrate with external validation module for successful images",
+      "category": "integration",
+      "description": "Test the integration layer sends extracted image data securely via HTTPS to the external validation module.",
+      "test_objective": "Verify image data is sent correctly as per the API payload format and success/failure responses are logged appropriately.",
+      "expected_outcome": "Extracted image data is securely sent and validated; success and failure responses are logged accurately.",
+      "relevant_requirements": "Integration with Validation Module; Logging"
+    },
+    {
+      "id": "TS-US_142-007",
+      "name": "Handle unsupported file formats in a batch",
+      "category": "edge_case",
+      "description": "Test whether unsupported file formats (e.g., .txt, .pdf) are skipped in batch processing without errors.",
+      "test_objective": "Ensure unsupported formats are identified and excluded from processing with meaningful logs.",
+      "expected_outcome": "Unsupported formats are excluded; error logs describe the reason for skipping each unsupported file.",
+      "relevant_requirements": "File Format Validation; Batch Processing; Error Handling"
+    },
+    {
+      "id": "TS-US_142-008",
+      "name": "Process disconnected external drives gracefully during execution",
+      "category": "error",
+      "description": "Test how the module reacts when accessing files on disconnected external drives.",
+      "test_objective": "Verify retry mechanism handles transient storage issues and logs errors when the drive remains disconnected.",
+      "expected_outcome": "Retry mechanism logs attempts; if drive remains disconnected, appropriate error messages are logged and processing halts gracefully.",
+      "relevant_requirements": "Edge Case Handling; Error Handling"
+    }
+  ],
+  "coverage": {
+    "functional_areas": [
+      "File Path Validation",
+      "File Format Validation",
+      "Image Data Extraction",
+      "Batch Processing",
+      "Integration with Validation Module"
+    ],
+    "edge_cases": [
+      "Empty Directory Input",
+      "Unsupported File Formats",
+      "Disconnected External Drive"
+    ],
+    "not_covered": [
+      "Processing file formats beyond the current supported list",
+      "Real-time corrective actions for errors instead of logs"
+    ]
+  }
+}

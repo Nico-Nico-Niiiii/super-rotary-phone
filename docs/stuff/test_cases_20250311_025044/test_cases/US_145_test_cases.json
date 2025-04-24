@@ -1,0 +1,178 @@
+{
+  "module_id": "US_145",
+  "test_suite_name": "Test Suite for US_145",
+  "summary": "This suite validates the functionality, error handling, boundary conditions, and integration of the image quality validation module implemented as part of the AI/ML preprocessing pipeline. The suite ensures compliance with resolution requirements, detects blank images, identifies duplicate DICOM files, and validates the interface for metadata extraction and preprocessing.",
+  "test_cases": [
+    {
+      "id": "TC-US_145-001",
+      "name": "Validate image resolution above threshold (512x512)",
+      "category": "functional",
+      "priority": "high",
+      "preconditions": "Set up FastAPI server. Ensure Redis is running locally.",
+      "inputs": {
+        "operation_type": "TRAINING",
+        "images": [
+          {
+            "image_id": "IMG001",
+            "file_path": "tests/images/high_res_image.jpg"
+          }
+        ]
+      },
+      "steps": [
+        "Send a POST request to the '/validate' endpoint with the image file path and operation type TRAINING.",
+        "Monitor the server response."
+      ],
+      "expected_results": [
+        "Response status should be SUCCESS.",
+        "Validation status of the image should be VALID.",
+        "No error messages in the response."
+      ],
+      "traceability": "Acceptance Criteria 1"
+    },
+    {
+      "id": "TC-US_145-002",
+      "name": "Validate image resolution below threshold (e.g., 400x300)",
+      "category": "boundary",
+      "priority": "high",
+      "preconditions": "Set up FastAPI server. Ensure Redis is running locally.",
+      "inputs": {
+        "operation_type": "TRAINING",
+        "images": [
+          {
+            "image_id": "IMG002",
+            "file_path": "tests/images/low_res_image.jpg"
+          }
+        ]
+      },
+      "steps": [
+        "Send a POST request to the '/validate' endpoint with the image file path and operation type TRAINING.",
+        "Monitor the server response."
+      ],
+      "expected_results": [
+        "Response status should be SUCCESS.",
+        "Validation status of the image should be INVALID.",
+        "Error message: 'Image resolution is below the required minimum of 512x512 pixels.'"
+      ],
+      "traceability": "Acceptance Criteria 2"
+    },
+    {
+      "id": "TC-US_145-003",
+      "name": "Detect blank image for AI model inferencing",
+      "category": "error",
+      "priority": "high",
+      "preconditions": "Set up FastAPI server. Ensure Redis is running locally.",
+      "inputs": {
+        "operation_type": "INFERENCING",
+        "images": [
+          {
+            "image_id": "IMG003",
+            "file_path": "tests/images/blank_image.jpg"
+          }
+        ]
+      },
+      "steps": [
+        "Send a POST request to the '/validate' endpoint with the blank image file path and operation type INFERENCING.",
+        "Monitor the server response."
+      ],
+      "expected_results": [
+        "Response status should be SUCCESS.",
+        "Validation status of the image should be INVALID.",
+        "Error message: 'Blank image detected. Inferencing cannot proceed with blank images.'"
+      ],
+      "traceability": "Acceptance Criteria 4"
+    },
+    {
+      "id": "TC-US_145-004",
+      "name": "Detect duplicate DICOM images in training dataset",
+      "category": "functional",
+      "priority": "high",
+      "preconditions": "Set up FastAPI server. Ensure Redis is running locally and preloaded SOP Instance UIDs include a duplicate UID.",
+      "inputs": {
+        "operation_type": "TRAINING",
+        "images": [
+          {
+            "image_id": "IMG004",
+            "file_path": "tests/dicom_images/duplicate_image.dcm"
+          },
+          {
+            "image_id": "IMG005",
+            "file_path": "tests/dicom_images/duplicate_image.dcm"
+          }
+        ]
+      },
+      "steps": [
+        "Send a POST request to the '/validate' endpoint with a dataset containing duplicate DICOM files.",
+        "Monitor the server response."
+      ],
+      "expected_results": [
+        "Response status should be SUCCESS.",
+        "Validation status of the duplicate image should be INVALID.",
+        "Error message: 'Duplicate DICOM image detected. SOP Instance UID: {UID}.'",
+        "Validation status of the non-duplicate image should be VALID."
+      ],
+      "traceability": "Acceptance Criteria 5"
+    },
+    {
+      "id": "TC-US_145-005",
+      "name": "Validate metadata extraction for DICOM file",
+      "category": "functional",
+      "priority": "medium",
+      "preconditions": "Set up FastAPI server. Ensure Redis is running locally.",
+      "inputs": {
+        "file_path": "tests/dicom_images/valid_image.dcm"
+      },
+      "steps": [
+        "Send a POST request to the '/metadata/dicom' endpoint with the file path of a valid DICOM image.",
+        "Monitor the server response."
+      ],
+      "expected_results": [
+        "Response status should be SUCCESS.",
+        "Metadata should include SOP Instance UID.",
+        "No error messages in the response."
+      ],
+      "traceability": "Technical Specification - Metadata Extraction"
+    },
+    {
+      "id": "TC-US_145-006",
+      "name": "Push validated images for preprocessing after successful validation",
+      "category": "integration",
+      "priority": "medium",
+      "preconditions": "Validated images available from a previous test with VALID status.",
+      "inputs": {
+        "validated_images": [
+          {
+            "image_id": "IMG001",
+            "file_path": "tests/images/high_res_image.jpg"
+          }
+        ]
+      },
+      "steps": [
+        "Send a POST request to the '/preprocess' endpoint with the validated images.",
+        "Monitor the server response."
+      ],
+      "expected_results": [
+        "Response status should be SUCCESS.",
+        "Message: 'Data transferred for image preprocessing.'"
+      ],
+      "traceability": "Acceptance Criteria 6"
+    }
+  ],
+  "test_coverage": {
+    "functional_areas_covered": [
+      "Image resolution validation",
+      "Blank image detection",
+      "Duplicate DICOM detection",
+      "Metadata extraction",
+      "Preprocessing integration"
+    ],
+    "edge_cases_covered": [
+      "Blank images in training and inference",
+      "Resolution below threshold",
+      "Duplicate detection in Redis cache"
+    ],
+    "not_covered": [
+      "Unsupported image formats (e.g., TIFF or BMP)",
+      "Failure scenarios for Redis connection"
+    ]
+  }
+}

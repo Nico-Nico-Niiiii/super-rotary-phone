@@ -1,0 +1,2798 @@
+{
+  "US_141": {
+    "name": "US_141",
+    "docstring": "No module documentation available.",
+    "imports": [
+      {
+        "module": "fastapi",
+        "name": "FastAPI",
+        "alias": null
+      },
+      {
+        "module": "fastapi",
+        "name": "UploadFile",
+        "alias": null
+      },
+      {
+        "module": "fastapi",
+        "name": "HTTPException",
+        "alias": null
+      },
+      {
+        "module": "fastapi",
+        "name": "Form",
+        "alias": null
+      },
+      {
+        "module": "fastapi",
+        "name": "Depends",
+        "alias": null
+      },
+      {
+        "module": "fastapi",
+        "name": "Security",
+        "alias": null
+      },
+      {
+        "module": "fastapi",
+        "name": "BackgroundTasks",
+        "alias": null
+      },
+      {
+        "module": "fastapi.security",
+        "name": "HTTPBearer",
+        "alias": null
+      },
+      {
+        "module": "fastapi.security",
+        "name": "HTTPAuthorizationCredentials",
+        "alias": null
+      },
+      {
+        "module": "pydantic",
+        "name": "BaseModel",
+        "alias": null
+      },
+      {
+        "module": "typing",
+        "name": "List",
+        "alias": null
+      },
+      {
+        "module": "typing",
+        "name": "Dict",
+        "alias": null
+      },
+      {
+        "module": "typing",
+        "name": "Union",
+        "alias": null
+      },
+      {
+        "module": "zipfile",
+        "name": "ZipFile",
+        "alias": null
+      },
+      {
+        "module": "zipfile",
+        "name": "is_zipfile",
+        "alias": null
+      },
+      {
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null
+      },
+      {
+        "module": "tempfile",
+        "alias": null
+      },
+      {
+        "module": "shutil",
+        "alias": null
+      },
+      {
+        "module": "os",
+        "alias": null
+      },
+      {
+        "module": "boto3",
+        "alias": null
+      },
+      {
+        "module": "botocore.exceptions",
+        "name": "ClientError",
+        "alias": null
+      },
+      {
+        "module": "PIL",
+        "name": "Image",
+        "alias": null
+      },
+      {
+        "module": "logging",
+        "alias": null
+      },
+      {
+        "module": "traceback",
+        "alias": null
+      }
+    ],
+    "global_vars": [
+      {
+        "name": "app",
+        "value": "FastAPI()"
+      },
+      {
+        "name": "MAX_ZIP_FILE_SIZE",
+        "value": "5 * 1024 * 1024 * 1024"
+      },
+      {
+        "name": "ALLOWED_IMAGE_FORMATS",
+        "value": "{'JPEG', 'PNG'}"
+      },
+      {
+        "name": "AWS_S3_BUCKET",
+        "value": "'your-s3-bucket-name'"
+      },
+      {
+        "name": "AWS_REGION",
+        "value": "'your-region'"
+      },
+      {
+        "name": "AWS_ACCESS_KEY",
+        "value": "'your-access-key'"
+      },
+      {
+        "name": "AWS_SECRET_KEY",
+        "value": "'your-secret-key'"
+      },
+      {
+        "name": "authentication",
+        "value": "HTTPBearer()"
+      },
+      {
+        "name": "ROLES",
+        "value": "{'admin': {'can_upload_dataset': True}, 'user': {'can_upload_dataset': False}}"
+      },
+      {
+        "name": "file_size",
+        "value": "file.file.tell()"
+      },
+      {
+        "name": "zip_path",
+        "value": "os.path.join(temp_dir, file.filename)"
+      },
+      {
+        "name": "extracted_path",
+        "value": "Path(temp_dir) / 'extracted'"
+      },
+      {
+        "name": "validation_result",
+        "value": "validate_dataset_structure(extracted_path, dataset_type)"
+      }
+    ],
+    "functions": [
+      {
+        "name": "get_user_role",
+        "docstring": "Mock function to check user role based on token; replace in production with actual RBAC check.",
+        "parameters": [
+          {
+            "name": "credentials",
+            "type": "HTTPAuthorizationCredentials",
+            "description": "Parameter description not available."
+          }
+        ],
+        "returns": "str",
+        "relationships": {
+          "calls_functions": [
+            "mock_user_roles.get",
+            "Security",
+            "HTTPException"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [
+            "mock_user_roles.get"
+          ],
+          "called_by": []
+        }
+      },
+      {
+        "name": "validate_dataset_structure",
+        "docstring": "Validates dataset directory structure based on dataset type.\n\n    Args:\n        dataset_path (Path): Path of the extracted dataset.\n        dataset_type (str): The type of dataset: 'classification' or 'segmentation'.\n\n    Returns:\n        dict: Validation result containing status and details.",
+        "parameters": [
+          {
+            "name": "dataset_path",
+            "type": "Path",
+            "description": "Parameter description not available."
+          },
+          {
+            "name": "dataset_type",
+            "type": "str",
+            "description": "Parameter description not available."
+          }
+        ],
+        "returns": "dict",
+        "relationships": {
+          "calls_functions": [
+            "logging.error",
+            "validation_details.append",
+            "any",
+            "validate_image_file",
+            "f.is_dir",
+            "masks_folder.iterdir",
+            "traceback.format_exc",
+            "str",
+            "dataset_path.iterdir",
+            "masks_folder.exists",
+            "subfolder.iterdir",
+            "images_folder.exists",
+            "images_folder.iterdir"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [
+            "logging.error",
+            "validation_details.append",
+            "f.is_dir",
+            "masks_folder.iterdir",
+            "traceback.format_exc",
+            "dataset_path.iterdir",
+            "masks_folder.exists",
+            "subfolder.iterdir",
+            "images_folder.exists",
+            "images_folder.iterdir"
+          ],
+          "called_by": []
+        }
+      },
+      {
+        "name": "validate_image_file",
+        "docstring": "Check if the file is a valid image format.\n\n    Args:\n        image_path (Path): File path of the image.\n\n    Returns:\n        bool: True if valid image file, False otherwise.",
+        "parameters": [
+          {
+            "name": "image_path",
+            "type": "Path",
+            "description": "Parameter description not available."
+          }
+        ],
+        "returns": "bool",
+        "relationships": {
+          "calls_functions": [
+            "Image.open"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [
+            "Image.open"
+          ],
+          "called_by": [
+            "validate_dataset_structure"
+          ]
+        }
+      },
+      {
+        "name": "upload_to_s3",
+        "docstring": "Upload validated dataset to AWS S3.\n\n    Args:\n        dataset_path (Path): Path of the validated dataset.\n        dataset_type (str): Type of dataset being uploaded.",
+        "parameters": [
+          {
+            "name": "dataset_path",
+            "type": "Path",
+            "description": "Parameter description not available."
+          },
+          {
+            "name": "dataset_type",
+            "type": "str",
+            "description": "Parameter description not available."
+          }
+        ],
+        "returns": null,
+        "relationships": {
+          "calls_functions": [
+            "logging.error",
+            "s3_client.upload_file",
+            "os.walk",
+            "logging.info",
+            "boto3.client"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [
+            "logging.error",
+            "s3_client.upload_file",
+            "os.walk",
+            "logging.info",
+            "boto3.client"
+          ],
+          "called_by": []
+        }
+      },
+      {
+        "name": "post_upload_validation",
+        "docstring": "Trigger post-upload dataset quality checks in the cloud (Stub implementation).\n\n    Args:\n        dataset_path (Path): Path of the dataset.",
+        "parameters": [
+          {
+            "name": "dataset_path",
+            "type": "Path",
+            "description": "Parameter description not available."
+          }
+        ],
+        "returns": null,
+        "relationships": {
+          "calls_functions": [
+            "logging.info"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [
+            "logging.info"
+          ],
+          "called_by": []
+        }
+      }
+    ],
+    "classes": [
+      {
+        "name": "ValidationResult",
+        "docstring": "No documentation available.",
+        "bases": [
+          "BaseModel"
+        ],
+        "methods": [],
+        "relationships": {
+          "inherits_from": [
+            "BaseModel"
+          ],
+          "used_by_functions": [],
+          "instantiated_by": []
+        }
+      },
+      {
+        "name": "S3UploadMetadata",
+        "docstring": "No documentation available.",
+        "bases": [
+          "BaseModel"
+        ],
+        "methods": [],
+        "relationships": {
+          "inherits_from": [
+            "BaseModel"
+          ],
+          "used_by_functions": [],
+          "instantiated_by": []
+        }
+      }
+    ],
+    "relationships": {
+      "dependencies": {
+        "imports": [
+          "fastapi",
+          "fastapi",
+          "fastapi",
+          "fastapi",
+          "fastapi",
+          "fastapi",
+          "fastapi",
+          "fastapi.security",
+          "fastapi.security",
+          "pydantic",
+          "typing",
+          "typing",
+          "typing",
+          "zipfile",
+          "zipfile",
+          "pathlib",
+          "tempfile",
+          "shutil",
+          "os",
+          "boto3",
+          "botocore.exceptions",
+          "PIL",
+          "logging",
+          "traceback"
+        ],
+        "from_imports": [
+          "fastapi.FastAPI",
+          "fastapi.UploadFile",
+          "fastapi.HTTPException",
+          "fastapi.Form",
+          "fastapi.Depends",
+          "fastapi.Security",
+          "fastapi.BackgroundTasks",
+          "fastapi.security.HTTPBearer",
+          "fastapi.security.HTTPAuthorizationCredentials",
+          "pydantic.BaseModel",
+          "typing.List",
+          "typing.Dict",
+          "typing.Union",
+          "zipfile.ZipFile",
+          "zipfile.is_zipfile",
+          "pathlib.Path",
+          "botocore.exceptions.ClientError",
+          "PIL.Image"
+        ]
+      },
+      "entry_points": [
+        "get_user_role",
+        "validate_dataset_structure",
+        "upload_to_s3",
+        "post_upload_validation"
+      ]
+    }
+  },
+  "US_142": {
+    "name": "image_processing_module",
+    "docstring": null,
+    "imports": [
+      {
+        "module": "os",
+        "alias": null
+      },
+      {
+        "module": "pathlib",
+        "alias": null
+      },
+      {
+        "module": "logging",
+        "alias": null
+      },
+      {
+        "module": "json",
+        "alias": null
+      },
+      {
+        "module": "logging.handlers",
+        "alias": null
+      },
+      {
+        "module": "concurrent.futures",
+        "alias": null
+      },
+      {
+        "module": "PIL.Image",
+        "alias": null
+      },
+      {
+        "module": "PIL.UnidentifiedImageError",
+        "alias": null
+      },
+      {
+        "module": "pydicom",
+        "alias": null
+      },
+      {
+        "module": "pydicom.errors.InvalidDicomError",
+        "alias": null
+      },
+      {
+        "module": "typing",
+        "alias": null
+      },
+      {
+        "module": "base64",
+        "alias": null
+      },
+      {
+        "module": "requests",
+        "alias": null
+      },
+      {
+        "module": "time",
+        "alias": null
+      }
+    ],
+    "global_vars": [
+      {
+        "name": "LOG_DIR",
+        "value": "\"/var/logs/extraction/\""
+      },
+      {
+        "name": "LOG_FILE",
+        "value": "os.path.join(LOG_DIR, \"extraction.json\")"
+      },
+      {
+        "name": "formatter",
+        "value": "logging.Formatter('%(message)s')"
+      },
+      {
+        "name": "handler",
+        "value": "RotatingFileHandler(LOG_FILE, maxBytes=10 * 1024 * 1024, backupCount=5)"
+      },
+      {
+        "name": "logger",
+        "value": "logging.getLogger(\"ImageProcessor\")"
+      }
+    ],
+    "functions": [
+      {
+        "name": "log_event",
+        "docstring": null,
+        "parameters": [
+          {
+            "name": "level",
+            "type": "str",
+            "description": "Log level (e.g., 'info', 'error')"
+          },
+          {
+            "name": "file_name",
+            "type": "str",
+            "description": "Name of the file being logged"
+          },
+          {
+            "name": "message",
+            "type": "str",
+            "description": "Log message"
+          }
+        ],
+        "returns": null,
+        "relationships": {
+          "calls_functions": [
+            "time.strftime",
+            "logger.info",
+            "json.dumps"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "validate_file_path",
+            "extract_image_data",
+            "process_batch",
+            "validate_and_extract",
+            "send_to_validation_module",
+            "handle_directory_input"
+          ]
+        }
+      },
+      {
+        "name": "validate_file_path",
+        "docstring": "Validates the given file path.\n- Ensures the file exists.\n- Rejects network paths, traversal patterns, and null bytes.",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "Path to the file to validate"
+          }
+        ],
+        "returns": "bool",
+        "relationships": {
+          "calls_functions": [
+            "os.path.exists",
+            "Path.is_dir",
+            "log_event"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "validate_and_extract"
+          ]
+        }
+      },
+      {
+        "name": "validate_file_format",
+        "docstring": "Validates the file format to ensure it's one of the supported formats.",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "Path to the file to validate"
+          }
+        ],
+        "returns": "bool",
+        "relationships": {
+          "calls_functions": [
+            "Path.suffix"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "validate_and_extract"
+          ]
+        }
+      },
+      {
+        "name": "extract_image_data",
+        "docstring": "Extracts image data from the provided file based on its format.\n- Handles corrupted files gracefully.\n- Converts `.dcm` files to a compatible format first.",
+        "parameters": [
+          {
+            "name": "file_metadata",
+            "type": "FileMetadata",
+            "description": "Metadata of the file to extract data from"
+          }
+        ],
+        "returns": "Optional[bytes]",
+        "relationships": {
+          "calls_functions": [
+            "Image.open",
+            "pydicom.dcmread",
+            "log_event"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [
+            "file_metadata.file_extension",
+            "file_metadata.file_path"
+          ],
+          "called_by": [
+            "validate_and_extract"
+          ]
+        }
+      },
+      {
+        "name": "process_batch",
+        "docstring": "Processes a batch of file paths.\n- Validates support and existence.\n- Extracts data from valid image files.\n- Logs errors and warnings.",
+        "parameters": [
+          {
+            "name": "file_paths",
+            "type": "List[str]",
+            "description": "List of file paths to process"
+          }
+        ],
+        "returns": "BatchResult",
+        "relationships": {
+          "calls_functions": [
+            "log_event",
+            "validate_and_extract",
+            "as_completed"
+          ],
+          "instantiates_classes": [
+            "BatchResult"
+          ],
+          "accesses_attributes": [],
+          "called_by": [
+            "handle_directory_input"
+          ]
+        }
+      },
+      {
+        "name": "validate_and_extract",
+        "docstring": "Validates the file and extracts its image data if valid.\nReturns None for unsupported or invalid files.",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "Path to the file to validate and extract"
+          }
+        ],
+        "returns": "Optional[Dict]",
+        "relationships": {
+          "calls_functions": [
+            "validate_file_path",
+            "validate_file_format",
+            "extract_image_data",
+            "log_event"
+          ],
+          "instantiates_classes": [
+            "FileMetadata"
+          ],
+          "accesses_attributes": [],
+          "called_by": [
+            "process_batch"
+          ]
+        }
+      },
+      {
+        "name": "send_to_validation_module",
+        "docstring": "Sends the extracted image data to the validation module via REST API.\nEnforces HTTPS communication and handles errors gracefully.",
+        "parameters": [
+          {
+            "name": "image_data",
+            "type": "bytes",
+            "description": "Extracted image data to send"
+          },
+          {
+            "name": "metadata",
+            "type": "FileMetadata",
+            "description": "Metadata of the file being validated"
+          }
+        ],
+        "returns": "Dict",
+        "relationships": {
+          "calls_functions": [
+            "base64.b64encode",
+            "os.path.getsize",
+            "requests.post",
+            "log_event"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [
+            "metadata.file_name",
+            "metadata.file_extension",
+            "metadata.file_path"
+          ],
+          "called_by": []
+        }
+      },
+      {
+        "name": "handle_directory_input",
+        "docstring": "Handles a directory input, processing all valid files within.",
+        "parameters": [
+          {
+            "name": "directory",
+            "type": "str",
+            "description": "Path to the directory to process"
+          }
+        ],
+        "returns": "BatchResult",
+        "relationships": {
+          "calls_functions": [
+            "os.path.exists",
+            "os.path.isdir",
+            "os.listdir",
+            "os.path.isfile",
+            "log_event",
+            "process_batch"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "__main__"
+          ]
+        }
+      }
+    ],
+    "classes": [
+      {
+        "name": "FileMetadata",
+        "docstring": null,
+        "bases": [],
+        "methods": [],
+        "relationships": {
+          "inherits_from": [],
+          "used_by_functions": [
+            "validate_and_extract",
+            "extract_image_data",
+            "send_to_validation_module"
+          ],
+          "instantiated_by": [
+            "validate_and_extract"
+          ]
+        }
+      },
+      {
+        "name": "BatchResult",
+        "docstring": null,
+        "bases": [],
+        "methods": [],
+        "relationships": {
+          "inherits_from": [],
+          "used_by_functions": [
+            "process_batch",
+            "handle_directory_input"
+          ],
+          "instantiated_by": [
+            "process_batch",
+            "handle_directory_input"
+          ]
+        }
+      }
+    ],
+    "relationships": {
+      "dependencies": {
+        "imports": [
+          "os",
+          "pathlib",
+          "logging",
+          "json",
+          "logging.handlers",
+          "concurrent.futures",
+          "PIL.Image",
+          "PIL.UnidentifiedImageError",
+          "pydicom",
+          "pydicom.errors.InvalidDicomError",
+          "typing",
+          "base64",
+          "requests",
+          "time"
+        ],
+        "from_imports": []
+      },
+      "entry_points": [
+        "__main__"
+      ]
+    }
+  },
+  "US_143": {
+    "name": "US_143",
+    "docstring": "No module documentation available.",
+    "imports": [
+      {
+        "module": "logging",
+        "alias": null
+      },
+      {
+        "module": "os",
+        "alias": null
+      },
+      {
+        "module": "hashlib",
+        "alias": null
+      },
+      {
+        "module": "asyncio",
+        "alias": null
+      },
+      {
+        "module": "fastapi",
+        "name": "FastAPI",
+        "alias": null
+      },
+      {
+        "module": "fastapi",
+        "name": "HTTPException",
+        "alias": null
+      },
+      {
+        "module": "fastapi",
+        "name": "BackgroundTasks",
+        "alias": null
+      },
+      {
+        "module": "fastapi",
+        "name": "Request",
+        "alias": null
+      },
+      {
+        "module": "fastapi.responses",
+        "name": "JSONResponse",
+        "alias": null
+      },
+      {
+        "module": "pydantic",
+        "name": "BaseModel",
+        "alias": null
+      },
+      {
+        "module": "typing",
+        "name": "List",
+        "alias": null
+      },
+      {
+        "module": "typing",
+        "name": "Dict",
+        "alias": null
+      },
+      {
+        "module": "datetime",
+        "name": "datetime",
+        "alias": null
+      },
+      {
+        "module": "aiohttp",
+        "alias": null
+      },
+      {
+        "module": "shutil",
+        "alias": null
+      },
+      {
+        "module": "PIL",
+        "name": "Image",
+        "alias": null
+      },
+      {
+        "module": "PIL",
+        "name": "ImageEnhance",
+        "alias": null
+      },
+      {
+        "module": "pydicom",
+        "alias": null
+      },
+      {
+        "module": "pathlib",
+        "name": "Path",
+        "alias": null
+      },
+      {
+        "module": "zipfile",
+        "alias": null
+      },
+      {
+        "module": "sqlalchemy",
+        "name": "create_engine",
+        "alias": null
+      },
+      {
+        "module": "sqlalchemy",
+        "name": "Column",
+        "alias": null
+      },
+      {
+        "module": "sqlalchemy",
+        "name": "Integer",
+        "alias": null
+      },
+      {
+        "module": "sqlalchemy",
+        "name": "String",
+        "alias": null
+      },
+      {
+        "module": "sqlalchemy",
+        "name": "DateTime",
+        "alias": null
+      },
+      {
+        "module": "sqlalchemy",
+        "name": "Text",
+        "alias": null
+      },
+      {
+        "module": "sqlalchemy.ext.declarative",
+        "name": "declarative_base",
+        "alias": null
+      },
+      {
+        "module": "sqlalchemy.orm",
+        "name": "sessionmaker",
+        "alias": null
+      },
+      {
+        "module": "sqlalchemy.exc",
+        "name": "SQLAlchemyError",
+        "alias": null
+      }
+    ],
+    "global_vars": [
+      {
+        "name": "LOG_PATH",
+        "value": "'logs'"
+      },
+      {
+        "name": "IMAGE_PROCESSING_TMP_DIR",
+        "value": "'processed_images'"
+      },
+      {
+        "name": "DATABASE_URL",
+        "value": "'postgresql://user:password@localhost/db_name'"
+      },
+      {
+        "name": "AI_API_ENDPOINT",
+        "value": "'https://ai_service_inferencing_endpoint'"
+      },
+      {
+        "name": "MAX_RETRIES",
+        "value": "3"
+      },
+      {
+        "name": "Base",
+        "value": "declarative_base()"
+      },
+      {
+        "name": "engine",
+        "value": "create_engine(DATABASE_URL)"
+      },
+      {
+        "name": "SessionLocal",
+        "value": "sessionmaker(autocommit=False, autoflush=False, bind=engine)"
+      },
+      {
+        "name": "app",
+        "value": "FastAPI()"
+      },
+      {
+        "name": "patient_id",
+        "value": "''"
+      },
+      {
+        "name": "ds",
+        "value": "pydicom.dcmread(file_path)"
+      },
+      {
+        "name": "checksum",
+        "value": "hashlib.md5(open(file_path, 'rb').read()).hexdigest()"
+      },
+      {
+        "name": "metadata",
+        "value": "{'study_date': str(ds.get('StudyDate', '')), 'resolution': f'{ds.Columns}x{ds.Rows}', 'checksum': checksum}"
+      },
+      {
+        "name": "patient_id",
+        "value": "ds.PatientID"
+      },
+      {
+        "name": "img",
+        "value": "Image.open(file_path)"
+      },
+      {
+        "name": "checksum",
+        "value": "hashlib.md5(open(file_path, 'rb').read()).hexdigest()"
+      },
+      {
+        "name": "metadata",
+        "value": "{'study_date': None, 'resolution': f'{img.size[0]}x{img.size[1]}', 'checksum': checksum}"
+      },
+      {
+        "name": "data",
+        "value": "{'patient_id': patient_id, 'processed_images': images}"
+      },
+      {
+        "name": "result",
+        "value": "await response.json()"
+      },
+      {
+        "name": "images",
+        "value": "[]"
+      },
+      {
+        "name": "headers",
+        "value": "{'Authorization': f'Bearer {Config.PACS_OAUTH_TOKEN}'}"
+      },
+      {
+        "name": "pacs_data",
+        "value": "await response.json()"
+      },
+      {
+        "name": "images",
+        "value": "pacs_data.get('images', [])"
+      },
+      {
+        "name": "images_dir",
+        "value": "f'./local_data/{request.patient_id}'"
+      },
+      {
+        "name": "images",
+        "value": "[str(file) for file in Path(images_dir).rglob('*') if file.is_file()]"
+      },
+      {
+        "name": "processed_images_metadata",
+        "value": "[]"
+      },
+      {
+        "name": "validation",
+        "value": "await validate_image(image)"
+      },
+      {
+        "name": "prepared_images",
+        "value": "[]"
+      },
+      {
+        "name": "dest_path",
+        "value": "os.path.join(IMAGE_PROCESSING_TMP_DIR, os.path.basename(meta['file_path']).replace(' ', '_') + '.jpeg')"
+      },
+      {
+        "name": "zip_path",
+        "value": "os.path.join(IMAGE_PROCESSING_TMP_DIR, f'{request.patient_id}_images.zip')"
+      },
+      {
+        "name": "response",
+        "value": "await send_images_to_ai(request.patient_id, request.processed_images)"
+      }
+    ],
+    "functions": [
+      {
+        "name": "log_error",
+        "docstring": "No documentation available.",
+        "parameters": [
+          {
+            "name": "patient_id",
+            "type": null,
+            "description": "Parameter description not available."
+          },
+          {
+            "name": "status",
+            "type": null,
+            "description": "Parameter description not available."
+          },
+          {
+            "name": "message",
+            "type": null,
+            "description": "Parameter description not available."
+          }
+        ],
+        "returns": null,
+        "relationships": {
+          "calls_functions": [
+            "logging.error",
+            "Log",
+            "session.close",
+            "SessionLocal",
+            "str",
+            "session.add",
+            "session.commit"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [
+            "logging.error",
+            "session.commit",
+            "session.close",
+            "session.add"
+          ],
+          "called_by": []
+        }
+      },
+      {
+        "name": "preprocess_image",
+        "docstring": "No documentation available.",
+        "parameters": [
+          {
+            "name": "src_path",
+            "type": "str",
+            "description": "Parameter description not available."
+          },
+          {
+            "name": "dest_path",
+            "type": "str",
+            "description": "Parameter description not available."
+          }
+        ],
+        "returns": null,
+        "relationships": {
+          "calls_functions": [
+            "ImageEnhance.Contrast",
+            "img.resize",
+            "Image.open",
+            "img.convert",
+            "enhancer.enhance",
+            "img.save"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [
+            "ImageEnhance.Contrast",
+            "img.resize",
+            "Image.open",
+            "img.convert",
+            "enhancer.enhance",
+            "img.save"
+          ],
+          "called_by": []
+        }
+      }
+    ],
+    "classes": [
+      {
+        "name": "Config",
+        "docstring": "No documentation available.",
+        "bases": [],
+        "methods": [],
+        "relationships": {
+          "inherits_from": [],
+          "used_by_functions": [],
+          "instantiated_by": []
+        }
+      },
+      {
+        "name": "Log",
+        "docstring": "No documentation available.",
+        "bases": [
+          "Base"
+        ],
+        "methods": [],
+        "relationships": {
+          "inherits_from": [
+            "Base"
+          ],
+          "used_by_functions": [],
+          "instantiated_by": []
+        }
+      },
+      {
+        "name": "ImageMetadata",
+        "docstring": "No documentation available.",
+        "bases": [
+          "Base"
+        ],
+        "methods": [],
+        "relationships": {
+          "inherits_from": [
+            "Base"
+          ],
+          "used_by_functions": [],
+          "instantiated_by": []
+        }
+      },
+      {
+        "name": "RetrieveImagesRequest",
+        "docstring": "No documentation available.",
+        "bases": [
+          "BaseModel"
+        ],
+        "methods": [],
+        "relationships": {
+          "inherits_from": [
+            "BaseModel"
+          ],
+          "used_by_functions": [],
+          "instantiated_by": []
+        }
+      },
+      {
+        "name": "SendToAIRequest",
+        "docstring": "No documentation available.",
+        "bases": [
+          "BaseModel"
+        ],
+        "methods": [],
+        "relationships": {
+          "inherits_from": [
+            "BaseModel"
+          ],
+          "used_by_functions": [],
+          "instantiated_by": []
+        }
+      }
+    ],
+    "relationships": {
+      "dependencies": {
+        "imports": [
+          "logging",
+          "os",
+          "hashlib",
+          "asyncio",
+          "fastapi",
+          "fastapi",
+          "fastapi",
+          "fastapi",
+          "fastapi.responses",
+          "pydantic",
+          "typing",
+          "typing",
+          "datetime",
+          "aiohttp",
+          "shutil",
+          "PIL",
+          "PIL",
+          "pydicom",
+          "pathlib",
+          "zipfile",
+          "sqlalchemy",
+          "sqlalchemy",
+          "sqlalchemy",
+          "sqlalchemy",
+          "sqlalchemy",
+          "sqlalchemy",
+          "sqlalchemy.ext.declarative",
+          "sqlalchemy.orm",
+          "sqlalchemy.exc"
+        ],
+        "from_imports": [
+          "fastapi.FastAPI",
+          "fastapi.HTTPException",
+          "fastapi.BackgroundTasks",
+          "fastapi.Request",
+          "fastapi.responses.JSONResponse",
+          "pydantic.BaseModel",
+          "typing.List",
+          "typing.Dict",
+          "datetime.datetime",
+          "PIL.Image",
+          "PIL.ImageEnhance",
+          "pathlib.Path",
+          "sqlalchemy.create_engine",
+          "sqlalchemy.Column",
+          "sqlalchemy.Integer",
+          "sqlalchemy.String",
+          "sqlalchemy.DateTime",
+          "sqlalchemy.Text",
+          "sqlalchemy.ext.declarative.declarative_base",
+          "sqlalchemy.orm.sessionmaker",
+          "sqlalchemy.exc.SQLAlchemyError"
+        ]
+      },
+      "entry_points": [
+        "log_error",
+        "preprocess_image"
+      ]
+    }
+  },
+  "US_144": {
+    "name": "image_data_validation_system",
+    "docstring": "A Python module for validating image data, including format, metadata, corruption, and size constraints. It also provides APIs for uploading images and fetching validation logs.",
+    "imports": [
+      {
+        "module": "os",
+        "alias": null
+      },
+      {
+        "module": "datetime",
+        "alias": null
+      },
+      {
+        "module": "typing",
+        "alias": null
+      },
+      {
+        "module": "PIL.Image",
+        "alias": null
+      },
+      {
+        "module": "pydicom",
+        "alias": null
+      },
+      {
+        "module": "pydicom.errors",
+        "alias": null
+      },
+      {
+        "module": "flask",
+        "alias": null
+      },
+      {
+        "module": "logging",
+        "alias": null
+      },
+      {
+        "module": "shutil",
+        "alias": null
+      },
+      {
+        "module": "boto3",
+        "alias": null
+      },
+      {
+        "module": "sqlite3",
+        "alias": null
+      },
+      {
+        "module": "uuid",
+        "alias": null
+      }
+    ],
+    "global_vars": [
+      {
+        "name": "logger",
+        "value": "logging.getLogger(__name__)"
+      },
+      {
+        "name": "SUPPORTED_FORMATS",
+        "value": "[\"JPEG\", \"BMP\", \"PNG\", \"DICOM\"]"
+      },
+      {
+        "name": "MAX_FILE_SIZE_MB",
+        "value": "50"
+      },
+      {
+        "name": "ERROR_CODES",
+        "value": "{...}"
+      },
+      {
+        "name": "SUCCESS_CODE",
+        "value": "\"000\""
+      },
+      {
+        "name": "CHUNK_SIZE",
+        "value": "10"
+      },
+      {
+        "name": "UPLOAD_FOLDER",
+        "value": "'temp_uploads'"
+      },
+      {
+        "name": "AWS_S3_BUCKET",
+        "value": "'your-s3-bucket-name'"
+      },
+      {
+        "name": "DATABASE_FILE",
+        "value": "'validation_logs.db'"
+      },
+      {
+        "name": "app",
+        "value": "Flask(__name__)"
+      },
+      {
+        "name": "s3_client",
+        "value": "boto3.client('s3')"
+      }
+    ],
+    "functions": [
+      {
+        "name": "initialize_database",
+        "docstring": "Initializes the SQLite database with tables for validation logs and uploaded files.",
+        "parameters": [],
+        "returns": "None",
+        "relationships": {
+          "calls_functions": [
+            "sqlite3.connect"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "__main__"
+          ]
+        }
+      },
+      {
+        "name": "generate_error_message",
+        "docstring": "Generates a formatted error message.",
+        "parameters": [
+          {
+            "name": "status",
+            "type": "str",
+            "description": "The status of the error."
+          },
+          {
+            "name": "code",
+            "type": "int",
+            "description": "The error code."
+          },
+          {
+            "name": "file_name",
+            "type": "str",
+            "description": "The name of the file."
+          }
+        ],
+        "returns": "str",
+        "relationships": {
+          "calls_functions": [],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "validate_batch"
+          ]
+        }
+      },
+      {
+        "name": "upload_to_s3",
+        "docstring": "Uploads a file to an S3 bucket.",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "The path to the file."
+          },
+          {
+            "name": "bucket_name",
+            "type": "str",
+            "description": "The name of the S3 bucket."
+          },
+          {
+            "name": "object_name",
+            "type": "str",
+            "description": "The name of the object in S3."
+          }
+        ],
+        "returns": "bool",
+        "relationships": {
+          "calls_functions": [
+            "s3_client.upload_file",
+            "logger.error"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "validate_batch"
+          ]
+        }
+      },
+      {
+        "name": "log_validation_result",
+        "docstring": "Logs the validation result to the SQLite database.",
+        "parameters": [
+          {
+            "name": "file_name",
+            "type": "str",
+            "description": "The name of the file."
+          },
+          {
+            "name": "status",
+            "type": "str",
+            "description": "The validation status."
+          },
+          {
+            "name": "error_code",
+            "type": "str",
+            "description": "The error code, if any."
+          }
+        ],
+        "returns": "None",
+        "relationships": {
+          "calls_functions": [
+            "sqlite3.connect",
+            "logger.error"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "validate_batch"
+          ]
+        }
+      },
+      {
+        "name": "validate_batch",
+        "docstring": "Validates a batch of files for format, metadata, corruption, and size constraints.",
+        "parameters": [
+          {
+            "name": "files",
+            "type": "List[str]",
+            "description": "List of file paths to validate."
+          },
+          {
+            "name": "metadata",
+            "type": "Dict",
+            "description": "Metadata for validation."
+          },
+          {
+            "name": "chunk_size",
+            "type": "int",
+            "description": "Number of files to process in a chunk."
+          }
+        ],
+        "returns": "List[ValidationResult]",
+        "relationships": {
+          "calls_functions": [
+            "ValidationEngine.validate_file_size",
+            "ValidationEngine.validate_image_format",
+            "ValidationEngine.validate_metadata",
+            "generate_error_message",
+            "upload_to_s3",
+            "log_validation_result",
+            "logger.error"
+          ],
+          "instantiates_classes": [
+            "ValidationResult"
+          ],
+          "accesses_attributes": [],
+          "called_by": [
+            "upload_images"
+          ]
+        }
+      }
+    ],
+    "classes": [
+      {
+        "name": "ValidationResult",
+        "docstring": "Stores validation results for input files (success/error).",
+        "bases": [],
+        "methods": [
+          {
+            "name": "__init__",
+            "docstring": "Initializes a ValidationResult instance.",
+            "parameters": [
+              {
+                "name": "self",
+                "type": null,
+                "description": "Instance reference."
+              },
+              {
+                "name": "file_name",
+                "type": "str",
+                "description": "The name of the file."
+              },
+              {
+                "name": "status",
+                "type": "str",
+                "description": "The validation status."
+              },
+              {
+                "name": "message",
+                "type": "str",
+                "description": "The validation message."
+              }
+            ],
+            "returns": "None",
+            "relationships": {
+              "calls_functions": [],
+              "instantiates_classes": [],
+              "accesses_attributes": [
+                "self.file_name",
+                "self.status",
+                "self.message"
+              ],
+              "called_by": [
+                "validate_batch"
+              ]
+            }
+          },
+          {
+            "name": "to_dict",
+            "docstring": "Converts the ValidationResult instance to a dictionary.",
+            "parameters": [
+              {
+                "name": "self",
+                "type": null,
+                "description": "Instance reference."
+              }
+            ],
+            "returns": "Dict",
+            "relationships": {
+              "calls_functions": [],
+              "instantiates_classes": [],
+              "accesses_attributes": [
+                "self.file_name",
+                "self.status",
+                "self.message"
+              ],
+              "called_by": [
+                "upload_images"
+              ]
+            }
+          }
+        ],
+        "relationships": {
+          "inherits_from": [],
+          "used_by_functions": [
+            "validate_batch"
+          ],
+          "instantiated_by": [
+            "validate_batch"
+          ]
+        }
+      },
+      {
+        "name": "ValidationEngine",
+        "docstring": "Handles file validation including format, metadata, corruption, and size constraints.",
+        "bases": [],
+        "methods": [
+          {
+            "name": "validate_image_format",
+            "docstring": "Validates the format of an image file.",
+            "parameters": [
+              {
+                "name": "file_path",
+                "type": "str",
+                "description": "The path to the image file."
+              }
+            ],
+            "returns": "Tuple[bool, str]",
+            "relationships": {
+              "calls_functions": [
+                "pydicom.dcmread",
+                "Image.open",
+                "logger.error"
+              ],
+              "instantiates_classes": [],
+              "accesses_attributes": [],
+              "called_by": [
+                "validate_batch"
+              ]
+            }
+          },
+          {
+            "name": "validate_metadata",
+            "docstring": "Validates the metadata of a file.",
+            "parameters": [
+              {
+                "name": "file_type",
+                "type": "str",
+                "description": "The type of the file."
+              },
+              {
+                "name": "metadata",
+                "type": "Dict",
+                "description": "The metadata to validate."
+              }
+            ],
+            "returns": "bool",
+            "relationships": {
+              "calls_functions": [],
+              "instantiates_classes": [],
+              "accesses_attributes": [],
+              "called_by": [
+                "validate_batch"
+              ]
+            }
+          },
+          {
+            "name": "validate_file_size",
+            "docstring": "Validates the size of a file.",
+            "parameters": [
+              {
+                "name": "file_path",
+                "type": "str",
+                "description": "The path to the file."
+              }
+            ],
+            "returns": "bool",
+            "relationships": {
+              "calls_functions": [
+                "os.path.getsize"
+              ],
+              "instantiates_classes": [],
+              "accesses_attributes": [],
+              "called_by": [
+                "validate_batch"
+              ]
+            }
+          }
+        ],
+        "relationships": {
+          "inherits_from": [],
+          "used_by_functions": [
+            "validate_batch"
+          ],
+          "instantiated_by": []
+        }
+      }
+    ],
+    "relationships": {
+      "dependencies": {
+        "imports": [
+          "os",
+          "datetime",
+          "typing",
+          "PIL.Image",
+          "pydicom",
+          "pydicom.errors",
+          "flask",
+          "logging",
+          "shutil",
+          "boto3",
+          "sqlite3",
+          "uuid"
+        ],
+        "from_imports": []
+      },
+      "entry_points": [
+        "__main__"
+      ]
+    }
+  },
+  "US_145": {
+    "name": "US_145",
+    "docstring": "No module documentation available.",
+    "imports": [
+      {
+        "module": "fastapi",
+        "name": "FastAPI",
+        "alias": null
+      },
+      {
+        "module": "fastapi",
+        "name": "HTTPException",
+        "alias": null
+      },
+      {
+        "module": "fastapi",
+        "name": "File",
+        "alias": null
+      },
+      {
+        "module": "fastapi",
+        "name": "Form",
+        "alias": null
+      },
+      {
+        "module": "concurrent.futures",
+        "name": "ThreadPoolExecutor",
+        "alias": null
+      },
+      {
+        "module": "pydantic",
+        "name": "BaseModel",
+        "alias": null
+      },
+      {
+        "module": "typing",
+        "name": "List",
+        "alias": null
+      },
+      {
+        "module": "typing",
+        "name": "Dict",
+        "alias": null
+      },
+      {
+        "module": "typing",
+        "name": "Optional",
+        "alias": null
+      },
+      {
+        "module": "redis",
+        "name": "Redis",
+        "alias": null
+      },
+      {
+        "module": "cv2",
+        "alias": null
+      },
+      {
+        "module": "numpy",
+        "alias": "np"
+      },
+      {
+        "module": "pydicom",
+        "alias": null
+      },
+      {
+        "module": "os",
+        "alias": null
+      },
+      {
+        "module": "uvicorn",
+        "alias": null
+      },
+      {
+        "module": "PIL",
+        "name": "Image",
+        "alias": null
+      },
+      {
+        "module": "fastapi.responses",
+        "name": "JSONResponse",
+        "alias": null
+      }
+    ],
+    "global_vars": [
+      {
+        "name": "app",
+        "value": "FastAPI()"
+      },
+      {
+        "name": "redis_client",
+        "value": "Redis(host='localhost', port=6379, decode_responses=True)"
+      },
+      {
+        "name": "MIN_RESOLUTION",
+        "value": "(512, 512)"
+      },
+      {
+        "name": "BLANK_THRESHOLD",
+        "value": "90.0"
+      },
+      {
+        "name": "validated_images",
+        "value": "[]"
+      },
+      {
+        "name": "image_id",
+        "value": "image_info['image_id']"
+      },
+      {
+        "name": "file_path",
+        "value": "image_info['file_path']"
+      },
+      {
+        "name": "file_format",
+        "value": "os.path.splitext(file_path)[1].lower()[1:]"
+      },
+      {
+        "name": "error_messages",
+        "value": "[]"
+      },
+      {
+        "name": "resolution_error",
+        "value": "validate_resolution(file_path)"
+      },
+      {
+        "name": "blank_error",
+        "value": "detect_blank_image(file_path)"
+      },
+      {
+        "name": "duplicate_error",
+        "value": "detect_duplicate_dicom(file_path)"
+      },
+      {
+        "name": "validation_status",
+        "value": "'VALID' if not error_messages else 'INVALID'"
+      },
+      {
+        "name": "summary",
+        "value": "{'total_images': len(request.images), 'valid_images': sum((1 for val in validated_images if val['validation_status'] == 'VALID')), 'invalid_images': sum((1 for val in validated_images if val['validation_status'] == 'INVALID')), 'errors': sum((len(val['error_messages']) for val in validated_images if val['error_messages']))}"
+      },
+      {
+        "name": "dataset",
+        "value": "pydicom.dcmread(request.file_path)"
+      }
+    ],
+    "functions": [
+      {
+        "name": "validate_resolution",
+        "docstring": "Validate the resolution of an image file.\n    Returns an error message if the resolution is below the threshold, else None.",
+        "parameters": [
+          {
+            "name": "image_path",
+            "type": "str",
+            "description": "Parameter description not available."
+          }
+        ],
+        "returns": "Optional[str]",
+        "relationships": {
+          "calls_functions": [
+            "str",
+            "cv2.imread"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [
+            "cv2.imread"
+          ],
+          "called_by": []
+        }
+      },
+      {
+        "name": "detect_blank_image",
+        "docstring": "Detect if an image is completely or predominantly blank based on pixel intensity distribution.\n    Returns an error message if the image is blank, else None.",
+        "parameters": [
+          {
+            "name": "image_path",
+            "type": "str",
+            "description": "Parameter description not available."
+          }
+        ],
+        "returns": "Optional[str]",
+        "relationships": {
+          "calls_functions": [
+            "np.array",
+            "str",
+            "np.sum",
+            "cv2.imread"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [
+            "np.array",
+            "np.sum",
+            "cv2.imread"
+          ],
+          "called_by": []
+        }
+      },
+      {
+        "name": "detect_duplicate_dicom",
+        "docstring": "Detect duplicates based on SOPInstanceUID from the DICOM metadata.\n    Returns an error message if a duplicate is found, else None.",
+        "parameters": [
+          {
+            "name": "dicom_path",
+            "type": "str",
+            "description": "Parameter description not available."
+          }
+        ],
+        "returns": "Optional[str]",
+        "relationships": {
+          "calls_functions": [
+            "redis_client.get",
+            "pydicom.dcmread",
+            "hasattr",
+            "str",
+            "redis_client.set"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [
+            "pydicom.dcmread",
+            "redis_client.get",
+            "redis_client.set"
+          ],
+          "called_by": []
+        }
+      }
+    ],
+    "classes": [
+      {
+        "name": "ImageMetadata",
+        "docstring": "No documentation available.",
+        "bases": [
+          "BaseModel"
+        ],
+        "methods": [],
+        "relationships": {
+          "inherits_from": [
+            "BaseModel"
+          ],
+          "used_by_functions": [],
+          "instantiated_by": []
+        }
+      },
+      {
+        "name": "ValidationRequest",
+        "docstring": "No documentation available.",
+        "bases": [
+          "BaseModel"
+        ],
+        "methods": [],
+        "relationships": {
+          "inherits_from": [
+            "BaseModel"
+          ],
+          "used_by_functions": [],
+          "instantiated_by": []
+        }
+      },
+      {
+        "name": "MetadataExtractionRequest",
+        "docstring": "No documentation available.",
+        "bases": [
+          "BaseModel"
+        ],
+        "methods": [],
+        "relationships": {
+          "inherits_from": [
+            "BaseModel"
+          ],
+          "used_by_functions": [],
+          "instantiated_by": []
+        }
+      },
+      {
+        "name": "PreprocessingRequest",
+        "docstring": "No documentation available.",
+        "bases": [
+          "BaseModel"
+        ],
+        "methods": [],
+        "relationships": {
+          "inherits_from": [
+            "BaseModel"
+          ],
+          "used_by_functions": [],
+          "instantiated_by": []
+        }
+      }
+    ],
+    "relationships": {
+      "dependencies": {
+        "imports": [
+          "fastapi",
+          "fastapi",
+          "fastapi",
+          "fastapi",
+          "concurrent.futures",
+          "pydantic",
+          "typing",
+          "typing",
+          "typing",
+          "redis",
+          "cv2",
+          "numpy",
+          "pydicom",
+          "os",
+          "uvicorn",
+          "PIL",
+          "fastapi.responses"
+        ],
+        "from_imports": [
+          "fastapi.FastAPI",
+          "fastapi.HTTPException",
+          "fastapi.File",
+          "fastapi.Form",
+          "concurrent.futures.ThreadPoolExecutor",
+          "pydantic.BaseModel",
+          "typing.List",
+          "typing.Dict",
+          "typing.Optional",
+          "redis.Redis",
+          "PIL.Image",
+          "fastapi.responses.JSONResponse"
+        ]
+      },
+      "entry_points": [
+        "validate_resolution",
+        "detect_blank_image",
+        "detect_duplicate_dicom"
+      ]
+    }
+  },
+  "US_146": {
+    "name": "image_processing_module",
+    "docstring": null,
+    "imports": [
+      {
+        "module": "os",
+        "alias": null
+      },
+      {
+        "module": "cv2",
+        "alias": null
+      },
+      {
+        "module": "numpy",
+        "alias": "np"
+      },
+      {
+        "module": "PIL.Image",
+        "alias": null
+      },
+      {
+        "module": "PIL.UnidentifiedImageError",
+        "alias": null
+      },
+      {
+        "module": "typing.Dict",
+        "alias": null
+      },
+      {
+        "module": "typing.Any",
+        "alias": null
+      },
+      {
+        "module": "logging",
+        "alias": null
+      },
+      {
+        "module": "dask.bag",
+        "alias": "db"
+      }
+    ],
+    "global_vars": [
+      {
+        "name": "MIN_RESOLUTION",
+        "value": "(32, 32)"
+      },
+      {
+        "name": "MAX_RESOLUTION",
+        "value": "(4096, 4096)"
+      },
+      {
+        "name": "DEFAULT_RESOLUTION",
+        "value": "(224, 224)"
+      },
+      {
+        "name": "SUPPORTED_PIXEL_DATATYPES",
+        "value": "[\"uint8\", \"float32\", \"float64\"]"
+      },
+      {
+        "name": "DEFAULT_PIXEL_DATATYPE",
+        "value": "\"float32\""
+      },
+      {
+        "name": "TRANSFORMATIONS",
+        "value": "{\"mean_sub\": 127.5, \"std_scale\": 1/127.5}"
+      },
+      {
+        "name": "logger",
+        "value": "logging.getLogger(__name__)"
+      }
+    ],
+    "functions": [
+      {
+        "name": "log_and_raise",
+        "docstring": "Logs an error message and raises an exception.",
+        "parameters": [
+          {
+            "name": "exception",
+            "type": "Exception",
+            "description": "The exception class to raise."
+          },
+          {
+            "name": "message",
+            "type": "str",
+            "description": "The error message to log and raise."
+          }
+        ],
+        "returns": null,
+        "relationships": {
+          "calls_functions": [
+            "logger.error"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "decode_image",
+            "resize_image",
+            "normalize_image",
+            "route_data"
+          ]
+        }
+      },
+      {
+        "name": "validate_input",
+        "docstring": "Validates the input parameters for image preprocessing.",
+        "parameters": [
+          {
+            "name": "image_file",
+            "type": "str",
+            "description": "Path to the image file."
+          },
+          {
+            "name": "resolution",
+            "type": "dict",
+            "description": "Resolution dictionary with 'width' and 'height'."
+          },
+          {
+            "name": "pixel_datatype",
+            "type": "str",
+            "description": "Datatype of the image pixels."
+          },
+          {
+            "name": "use_case",
+            "type": "str",
+            "description": "Use case, either 'training' or 'inference'."
+          }
+        ],
+        "returns": "Dict[str, Any]",
+        "relationships": {
+          "calls_functions": [
+            "logger.info"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "__main__"
+          ]
+        }
+      },
+      {
+        "name": "decode_image",
+        "docstring": "Decodes the image from the file into a NumPy ndarray.",
+        "parameters": [
+          {
+            "name": "image_file",
+            "type": "str",
+            "description": "Path to the image file."
+          }
+        ],
+        "returns": "np.ndarray",
+        "relationships": {
+          "calls_functions": [
+            "Image.open",
+            "Image.verify",
+            "log_and_raise"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "process_batch"
+          ]
+        }
+      },
+      {
+        "name": "resize_image",
+        "docstring": "Resizes image to the target resolution while maintaining aspect ratio with padding.",
+        "parameters": [
+          {
+            "name": "image_data",
+            "type": "np.ndarray",
+            "description": "The image data as a NumPy array."
+          },
+          {
+            "name": "resolution",
+            "type": "dict",
+            "description": "Resolution dictionary with 'width' and 'height'."
+          }
+        ],
+        "returns": "np.ndarray",
+        "relationships": {
+          "calls_functions": [
+            "cv2.resize",
+            "cv2.copyMakeBorder",
+            "log_and_raise"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "process_batch"
+          ]
+        }
+      },
+      {
+        "name": "normalize_image",
+        "docstring": "Normalizes the pixel values and converts the image datatype.",
+        "parameters": [
+          {
+            "name": "image_data",
+            "type": "np.ndarray",
+            "description": "The image data as a NumPy array."
+          },
+          {
+            "name": "pixel_datatype",
+            "type": "str",
+            "description": "Target pixel datatype."
+          }
+        ],
+        "returns": "np.ndarray",
+        "relationships": {
+          "calls_functions": [
+            "log_and_raise"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "process_batch"
+          ]
+        }
+      },
+      {
+        "name": "route_data",
+        "docstring": "Routes the processed image data to the appropriate endpoint using specified protocol.",
+        "parameters": [
+          {
+            "name": "image_data",
+            "type": "np.ndarray",
+            "description": "The processed image data."
+          },
+          {
+            "name": "use_case",
+            "type": "str",
+            "description": "Use case, either 'training' or 'inference'."
+          },
+          {
+            "name": "endpoint",
+            "type": "str",
+            "description": "The endpoint to route the data to."
+          },
+          {
+            "name": "protocol",
+            "type": "str",
+            "description": "The protocol to use for routing (e.g., 'http', 'grpc')."
+          }
+        ],
+        "returns": null,
+        "relationships": {
+          "calls_functions": [
+            "logger.info",
+            "logger.warning",
+            "log_and_raise"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": []
+        }
+      },
+      {
+        "name": "process_batch",
+        "docstring": "Processes images in parallel as a batch using Dask.",
+        "parameters": [
+          {
+            "name": "image_files",
+            "type": "list",
+            "description": "List of image file paths."
+          },
+          {
+            "name": "resolution",
+            "type": "dict",
+            "description": "Resolution dictionary with 'width' and 'height'."
+          },
+          {
+            "name": "pixel_datatype",
+            "type": "str",
+            "description": "Target pixel datatype."
+          }
+        ],
+        "returns": "list",
+        "relationships": {
+          "calls_functions": [
+            "decode_image",
+            "resize_image",
+            "normalize_image",
+            "logger.warning"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": []
+        }
+      }
+    ],
+    "classes": [],
+    "relationships": {
+      "dependencies": {
+        "imports": [
+          "os",
+          "cv2",
+          "numpy",
+          "PIL.Image",
+          "PIL.UnidentifiedImageError",
+          "logging",
+          "dask.bag"
+        ],
+        "from_imports": [
+          "typing.Dict",
+          "typing.Any"
+        ]
+      },
+      "entry_points": [
+        "__main__"
+      ]
+    }
+  },
+  "US_147": {
+    "name": "US_147",
+    "docstring": "No module documentation available.",
+    "imports": [
+      {
+        "module": "os",
+        "alias": null
+      },
+      {
+        "module": "json",
+        "alias": null
+      },
+      {
+        "module": "logging",
+        "alias": null
+      },
+      {
+        "module": "math",
+        "name": "ceil",
+        "alias": null
+      },
+      {
+        "module": "typing",
+        "name": "List",
+        "alias": null
+      },
+      {
+        "module": "typing",
+        "name": "Dict",
+        "alias": null
+      },
+      {
+        "module": "typing",
+        "name": "Optional",
+        "alias": null
+      },
+      {
+        "module": "typing",
+        "name": "Tuple",
+        "alias": null
+      },
+      {
+        "module": "concurrent.futures",
+        "name": "ThreadPoolExecutor",
+        "alias": null
+      },
+      {
+        "module": "PIL",
+        "name": "Image",
+        "alias": null
+      },
+      {
+        "module": "numpy",
+        "alias": "np"
+      }
+    ],
+    "global_vars": [
+      {
+        "name": "dataset_path",
+        "value": "'path/to/dataset'"
+      },
+      {
+        "name": "batch_size",
+        "value": "32"
+      },
+      {
+        "name": "preprocessing_config",
+        "value": "{'resize': (224, 224), 'normalize': True}"
+      },
+      {
+        "name": "pipeline",
+        "value": "BatchDataPipeline(dataset_path, batch_size, preprocessing_config)"
+      }
+    ],
+    "functions": [],
+    "classes": [
+      {
+        "name": "Logger",
+        "docstring": "Logger for JSON structured logging.",
+        "bases": [],
+        "methods": [
+          {
+            "name": "log_corrupted_file",
+            "docstring": "Log a corrupted file.",
+            "parameters": [
+              {
+                "name": "self",
+                "type": null,
+                "description": "Parameter description not available."
+              },
+              {
+                "name": "file_name",
+                "type": "str",
+                "description": "Parameter description not available."
+              }
+            ],
+            "returns": null,
+            "relationships": {
+              "calls_functions": [],
+              "instantiates_classes": [],
+              "accesses_attributes": [],
+              "called_by": []
+            }
+          },
+          {
+            "name": "log_missing_label",
+            "docstring": "Log a missing label.",
+            "parameters": [
+              {
+                "name": "self",
+                "type": null,
+                "description": "Parameter description not available."
+              },
+              {
+                "name": "file_name",
+                "type": "str",
+                "description": "Parameter description not available."
+              }
+            ],
+            "returns": null,
+            "relationships": {
+              "calls_functions": [],
+              "instantiates_classes": [],
+              "accesses_attributes": [],
+              "called_by": []
+            }
+          },
+          {
+            "name": "log_batch_info",
+            "docstring": "Log batch details.",
+            "parameters": [
+              {
+                "name": "self",
+                "type": null,
+                "description": "Parameter description not available."
+              },
+              {
+                "name": "batch_id",
+                "type": "int",
+                "description": "Parameter description not available."
+              },
+              {
+                "name": "image_count",
+                "type": "int",
+                "description": "Parameter description not available."
+              }
+            ],
+            "returns": null,
+            "relationships": {
+              "calls_functions": [],
+              "instantiates_classes": [],
+              "accesses_attributes": [],
+              "called_by": []
+            }
+          },
+          {
+            "name": "save",
+            "docstring": "Save logs to a JSON file.",
+            "parameters": [
+              {
+                "name": "self",
+                "type": null,
+                "description": "Parameter description not available."
+              }
+            ],
+            "returns": null,
+            "relationships": {
+              "calls_functions": [
+                "json.dump",
+                "open"
+              ],
+              "instantiates_classes": [],
+              "accesses_attributes": [
+                "json.dump"
+              ],
+              "called_by": []
+            }
+          }
+        ],
+        "relationships": {
+          "inherits_from": [],
+          "used_by_functions": [],
+          "instantiated_by": []
+        }
+      },
+      {
+        "name": "InputHandler",
+        "docstring": "Handles loading datasets, input validation, and reading image names and labels.",
+        "bases": [],
+        "methods": [
+          {
+            "name": "validate_dataset",
+            "docstring": "Validate dataset path and extract image names and labels.",
+            "parameters": [
+              {
+                "name": "path",
+                "type": "str",
+                "description": "Parameter description not available."
+              }
+            ],
+            "returns": "List[Dict[str, Optional[str]]]",
+            "relationships": {
+              "calls_functions": [
+                "dataset.append",
+                "file_name.lower",
+                "FileNotFoundError",
+                "os.listdir"
+              ],
+              "instantiates_classes": [],
+              "accesses_attributes": [
+                "dataset.append",
+                "file_name.lower",
+                "os.listdir"
+              ],
+              "called_by": []
+            }
+          }
+        ],
+        "relationships": {
+          "inherits_from": [],
+          "used_by_functions": [],
+          "instantiated_by": [
+            "BatchDataPipeline.run"
+          ]
+        }
+      },
+      {
+        "name": "BatchCreation",
+        "docstring": "Handles creation of training batches.",
+        "bases": [],
+        "methods": [
+          {
+            "name": "create_batches",
+            "docstring": "Split dataset into batches.",
+            "parameters": [
+              {
+                "name": "dataset",
+                "type": "List[Dict[str, Optional[str]]]",
+                "description": "Parameter description not available."
+              },
+              {
+                "name": "batch_size",
+                "type": "int",
+                "description": "Parameter description not available."
+              }
+            ],
+            "returns": "List[List[Dict[str, Optional[str]]]]",
+            "relationships": {
+              "calls_functions": [
+                "range",
+                "len",
+                "ValueError"
+              ],
+              "instantiates_classes": [],
+              "accesses_attributes": [],
+              "called_by": []
+            }
+          }
+        ],
+        "relationships": {
+          "inherits_from": [],
+          "used_by_functions": [],
+          "instantiated_by": [
+            "BatchDataPipeline.run"
+          ]
+        }
+      },
+      {
+        "name": "Preprocessor",
+        "docstring": "Applies preprocessing steps to images.",
+        "bases": [],
+        "methods": [
+          {
+            "name": "preprocess_image",
+            "docstring": "Resize, normalize, and preprocess an image.",
+            "parameters": [
+              {
+                "name": "image_path",
+                "type": "str",
+                "description": "Parameter description not available."
+              },
+              {
+                "name": "config",
+                "type": "Dict",
+                "description": "Parameter description not available."
+              }
+            ],
+            "returns": "Optional[np.ndarray]",
+            "relationships": {
+              "calls_functions": [
+                "logging.error",
+                "img.resize",
+                "config.get",
+                "Image.open",
+                "np.array"
+              ],
+              "instantiates_classes": [],
+              "accesses_attributes": [
+                "logging.error",
+                "img.resize",
+                "config.get",
+                "Image.open",
+                "np.array"
+              ],
+              "called_by": []
+            }
+          }
+        ],
+        "relationships": {
+          "inherits_from": [],
+          "used_by_functions": [],
+          "instantiated_by": []
+        }
+      },
+      {
+        "name": "TrainingStepCalculator",
+        "docstring": "Calculate the number of training steps dynamically.",
+        "bases": [],
+        "methods": [
+          {
+            "name": "calculate_steps",
+            "docstring": "Calculate steps for given dataset.",
+            "parameters": [
+              {
+                "name": "total_images",
+                "type": "int",
+                "description": "Parameter description not available."
+              },
+              {
+                "name": "batch_size",
+                "type": "int",
+                "description": "Parameter description not available."
+              }
+            ],
+            "returns": "int",
+            "relationships": {
+              "calls_functions": [
+                "ceil",
+                "ValueError"
+              ],
+              "instantiates_classes": [],
+              "accesses_attributes": [],
+              "called_by": []
+            }
+          }
+        ],
+        "relationships": {
+          "inherits_from": [],
+          "used_by_functions": [],
+          "instantiated_by": [
+            "BatchDataPipeline.run"
+          ]
+        }
+      },
+      {
+        "name": "BatchDataPipeline",
+        "docstring": "Main pipeline for batch data creation, processing, and logging.",
+        "bases": [],
+        "methods": [
+          {
+            "name": "run",
+            "docstring": "Execute the data creation and preprocessing pipeline.",
+            "parameters": [
+              {
+                "name": "self",
+                "type": null,
+                "description": "Parameter description not available."
+              }
+            ],
+            "returns": null,
+            "relationships": {
+              "calls_functions": [
+                "ThreadPoolExecutor",
+                "TrainingStepCalculator.calculate_steps",
+                "executor.submit",
+                "InputHandler.validate_dataset",
+                "img_future.result",
+                "zip",
+                "len",
+                "logging.info",
+                "BatchCreation.create_batches",
+                "processed_images.append",
+                "enumerate"
+              ],
+              "instantiates_classes": [
+                "InputHandler",
+                "BatchCreation",
+                "TrainingStepCalculator"
+              ],
+              "accesses_attributes": [
+                "TrainingStepCalculator.calculate_steps",
+                "executor.submit",
+                "img_future.result",
+                "InputHandler.validate_dataset",
+                "logging.info",
+                "BatchCreation.create_batches",
+                "processed_images.append"
+              ],
+              "called_by": []
+            }
+          }
+        ],
+        "relationships": {
+          "inherits_from": [],
+          "used_by_functions": [],
+          "instantiated_by": [
+            "global"
+          ]
+        }
+      }
+    ],
+    "relationships": {
+      "dependencies": {
+        "imports": [
+          "os",
+          "json",
+          "logging",
+          "math",
+          "typing",
+          "typing",
+          "typing",
+          "typing",
+          "concurrent.futures",
+          "PIL",
+          "numpy"
+        ],
+        "from_imports": [
+          "math.ceil",
+          "typing.List",
+          "typing.Dict",
+          "typing.Optional",
+          "typing.Tuple",
+          "concurrent.futures.ThreadPoolExecutor",
+          "PIL.Image"
+        ]
+      },
+      "entry_points": []
+    }
+  }
+}

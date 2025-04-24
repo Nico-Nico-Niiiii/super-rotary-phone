@@ -1,0 +1,94 @@
+{
+  "module_id": "US_141",
+  "test_suite_name": "Test Scenarios for US_141",
+  "summary": "This test suite validates the functionality, edge cases, error handling, and integration of the FastAPI-based dataset upload module, ensuring that datasets are uploaded, validated, and stored in AWS S3 as per the requirements of training AI models.",
+  "test_scenarios": [
+    {
+      "id": "TS-US_141-001",
+      "name": "Valid Classification Dataset Upload",
+      "category": "functional",
+      "description": "Validate that the module correctly handles the upload of a classification dataset with sub-folders representing classes containing valid images.",
+      "test_objective": "Verify successful dataset upload, validation of folder structure, and storage in AWS S3.",
+      "expected_outcome": "Validation passes, dataset is stored in AWS S3, and a success message is returned to the user.",
+      "relevant_requirements": "Acceptance Criteria 1, 2, 8"
+    },
+    {
+      "id": "TS-US_141-002",
+      "name": "Invalid Folder Structure for Classification Dataset",
+      "category": "error",
+      "description": "Test that the system returns an error message when the classification dataset folder does not contain sub-folders representing classes.",
+      "test_objective": "Ensure that the folder structure validation logic properly detects and reports errors for invalid classification dataset structures.",
+      "expected_outcome": "System returns an error message indicating that the classification dataset does not meet folder structure requirements.",
+      "relevant_requirements": "Acceptance Criteria 4"
+    },
+    {
+      "id": "TS-US_141-003",
+      "name": "Empty Sub-folders in Classification Dataset",
+      "category": "edge_case",
+      "description": "Test how the system handles a classification dataset with one or more empty sub-folders.",
+      "test_objective": "Verify that the dataset is uploaded to AWS S3 but the system issues a warning about empty sub-folders.",
+      "expected_outcome": "Dataset is stored in AWS S3 successfully, and a warning message is returned to the user.",
+      "relevant_requirements": "Acceptance Criteria 6"
+    },
+    {
+      "id": "TS-US_141-004",
+      "name": "Valid Segmentation Dataset Upload",
+      "category": "functional",
+      "description": "Validate that the module correctly handles the upload of a segmentation dataset containing 'images' and 'mask' folders with valid files.",
+      "test_objective": "Verify successful dataset upload, validation of folder structure, and storage in AWS S3.",
+      "expected_outcome": "Validation passes, dataset is stored in AWS S3, and a success message is returned to the user.",
+      "relevant_requirements": "Acceptance Criteria 3, 8"
+    },
+    {
+      "id": "TS-US_141-005",
+      "name": "Missing Mask Files in Segmentation Dataset",
+      "category": "error",
+      "description": "Test that the system returns an error message when the segmentation dataset contains images without corresponding mask files.",
+      "test_objective": "Ensure that the system properly detects and reports missing mask files in segmentation datasets.",
+      "expected_outcome": "System returns an error message indicating that mask files are missing.",
+      "relevant_requirements": "Acceptance Criteria 7"
+    },
+    {
+      "id": "TS-US_141-006",
+      "name": "Corrupt or Unsupported Image File Validation",
+      "category": "error",
+      "description": "Test the handling of datasets containing corrupt or unsupported image files.",
+      "test_objective": "Ensure that the module detects and rejects datasets with unsupported formats or corrupted files.",
+      "expected_outcome": "System returns an error message indicating unsupported image formats or corrupted files.",
+      "relevant_requirements": "Acceptance Criteria 5, 9"
+    },
+    {
+      "id": "TS-US_141-007",
+      "name": "Failure to Store Dataset in AWS S3",
+      "category": "error",
+      "description": "Simulate an AWS S3 storage failure and test how the module handles such scenarios.",
+      "test_objective": "Ensure that appropriate error messages are returned to the user when storing the dataset in AWS S3 fails.",
+      "expected_outcome": "System returns an error message indicating failure to upload the dataset to AWS S3.",
+      "relevant_requirements": "Acceptance Criteria 10"
+    },
+    {
+      "id": "TS-US_141-008",
+      "name": "Post-Upload Image Validation Trigger",
+      "category": "integration",
+      "description": "Verify that image data validation is triggered upon successful upload of the dataset to AWS S3.",
+      "test_objective": "Ensure that the system initiates post-upload validation tasks as a placeholder for cloud-based checks.",
+      "expected_outcome": "Backend logs indicate that post-upload image validation was triggered, and no errors are recorded.",
+      "relevant_requirements": "Acceptance Criteria 11"
+    }
+  ],
+  "coverage": {
+    "functional_areas": [
+      "Classification dataset upload and validation",
+      "Segmentation dataset upload and validation",
+      "AWS S3 storage"
+    ],
+    "edge_cases": [
+      "Empty sub-folders in classification dataset",
+      "Large datasets near maximum size limitations"
+    ],
+    "not_covered": [
+      "Concurrent dataset uploads (future scalability requirement)",
+      "Dynamic token-role mapping for RBAC"
+    ]
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "module_id": "US_144",
+  "test_suite_name": "Test Scenarios for US_144",
+  "summary": "This test suite evaluates the Image Data Validation System by testing its ability to validate image formats, metadata, and size, handle errors, and correctly integrate with related services. Tests cover functional requirements, edge cases, error handling, and integration with downstream systems.",
+  "test_scenarios": [
+    {
+      "id": "TS-US_144-001",
+      "name": "Validate supported image formats",
+      "category": "functional",
+      "description": "Validates that the system correctly identifies and accepts supported file formats (JPEG, BMP, PNG, DICOM).",
+      "test_objective": "Ensure that the system successfully processes files of all supported formats.",
+      "expected_outcome": "The system should return a success message for each file of a supported format.",
+      "relevant_requirements": "Acceptance Criteria #1"
+    },
+    {
+      "id": "TS-US_144-002",
+      "name": "Reject unsupported image formats",
+      "category": "error",
+      "description": "Tests how the system handles an unsupported file format being uploaded.",
+      "test_objective": "Verify that an unsupported format (e.g., TIFF, GIF) is rejected and an appropriate error message is returned.",
+      "expected_outcome": "The system returns an error message indicating unsupported file format.",
+      "relevant_requirements": "Acceptance Criteria #2"
+    },
+    {
+      "id": "TS-US_144-003",
+      "name": "Detect and reject corrupted image files",
+      "category": "error",
+      "description": "Tests the system's ability to detect corrupted files that cannot be read.",
+      "test_objective": "Ensure corrupted files do not pass validation and return a meaningful error message.",
+      "expected_outcome": "The system returns an error message stating that the file is corrupted.",
+      "relevant_requirements": "Acceptance Criteria #3"
+    },
+    {
+      "id": "TS-US_144-004",
+      "name": "Reject images for invalid AI model use-case",
+      "category": "functional",
+      "description": "Tests the system's ability to validate metadata alignment with the target model's use case.",
+      "test_objective": "Ensure images whose metadata does not match the AI model's expected configuration are rejected.",
+      "expected_outcome": "The system returns an error message stating that the image is not related to the target use-case.",
+      "relevant_requirements": "Acceptance Criteria #4"
+    },
+    {
+      "id": "TS-US_144-005",
+      "name": "Reject files exceeding maximum size limit",
+      "category": "functional",
+      "description": "Tests the system's enforcement of the 50MB maximum file size limit.",
+      "test_objective": "Ensure files exceeding the size limit are rejected with the correct error message.",
+      "expected_outcome": "The system returns an error message indicating that the file exceeds the size limit.",
+      "relevant_requirements": "Technical Requirements #4"
+    },
+    {
+      "id": "TS-US_144-006",
+      "name": "Handle batch upload with mixed validity",
+      "category": "edge_case",
+      "description": "Tests the system's behavior when a batch contains a mix of valid and invalid files.",
+      "test_objective": "Verify that valid files progress for further processing while invalid files are logged and appropriate error messages are returned.",
+      "expected_outcome": "The system validates each file independently and returns a mixed result (success for valid files, error messages for invalid files).",
+      "relevant_requirements": "Technical Requirements #6, Acceptance Criteria #1-4"
+    },
+    {
+      "id": "TS-US_144-007",
+      "name": "Retrieve validation logs for a specific file",
+      "category": "functional",
+      "description": "Tests the API's ability to fetch validation logs for a specified file.",
+      "test_objective": "Ensure the `/api/v1/logs` endpoint returns relevant logs for a specific file.",
+      "expected_outcome": "The system returns a JSON response containing logs for the specified file.",
+      "relevant_requirements": "Technical Requirements #8, API Specification `/api/v1/logs`"
+    },
+    {
+      "id": "TS-US_144-008",
+      "name": "Integration test for successful uploads to S3",
+      "category": "integration",
+      "description": "Tests the system's integration with Amazon S3 for uploading successfully validated files.",
+      "test_objective": "Ensure that validated files are reliably uploaded to the correct S3 bucket.",
+      "expected_outcome": "The system uploads the files successfully and updates the log with the upload status.",
+      "relevant_requirements": "Technical Requirements #7, Success Workflow"
+    },
+    {
+      "id": "TS-US_144-009",
+      "name": "Handle empty batch input gracefully",
+      "category": "edge_case",
+      "description": "Tests the system's behavior when no files are included in the batch upload.",
+      "test_objective": "Ensure that the system provides a meaningful error message and does not crash.",
+      "expected_outcome": "The system returns an error message indicating that no files were provided.",
+      "relevant_requirements": "Technical Requirements #8"
+    }
+  ],
+  "coverage": {
+    "functional_areas": [
+      "Supported formats validation",
+      "File size limit enforcement",
+      "Metadata validation",
+      "Logs retrieval"
+    ],
+    "edge_cases": [
+      "Mixed batches of valid and invalid files",
+      "Empty input batch"
+    ],
+    "not_covered": [
+      "Retry mechanism for S3 upload failures (limitation in implementation)",
+      "Support for additional file formats beyond JPEG, BMP, PNG, and DICOM"
+    ]
+  }
+}

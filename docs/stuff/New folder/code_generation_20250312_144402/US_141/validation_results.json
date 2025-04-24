@@ -1,0 +1,104 @@
+{
+  "validation_report": {
+    "overall_assessment": "Fail",
+    "issues_found": [
+      "The code does not handle edge cases for invalid dataset types beyond 'classification' and 'segmentation'.",
+      "The folder structure validation for 'segmentation' datasets is missing.",
+      "Temporary files extracted from the zip file are not cleaned up after validation, leading to potential storage issues.",
+      "The `post_upload_validation` function is a placeholder and lacks implementation.",
+      "Error handling for AWS S3 upload is generic and does not differentiate between specific errors like network issues or permission errors.",
+      "The `validate_zip_file` function assumes all extracted files are images, which could lead to errors if non-image files are present in the zip.",
+      "The `TEMP_STORAGE_DIR` is shared across all requests, which could lead to conflicts or security issues if multiple uploads occur simultaneously.",
+      "The code does not validate the zip file's contents against the dataset type (e.g., ensuring segmentation datasets have masks).",
+      "No mechanism exists to track or store the upload status for the `/api/upload-status/{dataset_id}` endpoint."
+    ],
+    "suggested_improvements": [
+      {
+        "description": "Implement folder structure validation for 'segmentation' datasets.",
+        "priority": "high"
+      },
+      {
+        "description": "Add cleanup logic to remove extracted files after validation.",
+        "priority": "high"
+      },
+      {
+        "description": "Implement the `post_upload_validation` function to perform meaningful checks on the uploaded dataset in S3.",
+        "priority": "medium"
+      },
+      {
+        "description": "Improve error handling for AWS S3 upload to differentiate between specific errors.",
+        "priority": "medium"
+      },
+      {
+        "description": "Validate the zip file's contents against the dataset type (e.g., masks for segmentation datasets).",
+        "priority": "high"
+      },
+      {
+        "description": "Use a unique temporary directory for each upload to avoid conflicts and improve security.",
+        "priority": "high"
+      },
+      {
+        "description": "Add logic to track and store the upload status for the `/api/upload-status/{dataset_id}` endpoint.",
+        "priority": "medium"
+      },
+      {
+        "description": "Handle non-image files gracefully during zip file validation.",
+        "priority": "medium"
+      },
+      {
+        "description": "Add more detailed error messages for invalid dataset types.",
+        "priority": "low"
+      }
+    ],
+    "implementation_vs_requirements": {
+      "match": false,
+      "details": [
+        {
+          "requirement_section": "Dataset Type Validation",
+          "status": "Partially Implemented",
+          "notes": "Validation exists for 'classification' but not for 'segmentation'."
+        },
+        {
+          "requirement_section": "Folder Structure Validation",
+          "status": "Partially Implemented",
+          "notes": "Only 'classification' folder structure is validated; 'segmentation' validation is missing."
+        },
+        {
+          "requirement_section": "Image Format Validation",
+          "status": "Implemented",
+          "notes": "Supported image formats are validated correctly."
+        },
+        {
+          "requirement_section": "Temporary File Management",
+          "status": "Not Implemented",
+          "notes": "Extracted files are not cleaned up after validation."
+        },
+        {
+          "requirement_section": "AWS S3 Upload",
+          "status": "Partially Implemented",
+          "notes": "Upload functionality works, but error handling is generic."
+        },
+        {
+          "requirement_section": "Post-Upload Validation",
+          "status": "Not Implemented",
+          "notes": "The function is a placeholder and lacks implementation."
+        },
+        {
+          "requirement_section": "Upload Status Endpoint",
+          "status": "Not Implemented",
+          "notes": "No mechanism exists to track or store upload status."
+        },
+        {
+          "requirement_section": "Security",
+          "status": "Partially Implemented",
+          "notes": "Shared temporary directory could lead to conflicts or security issues."
+        },
+        {
+          "requirement_section": "Error Handling",
+          "status": "Partially Implemented",
+          "notes": "Error handling is generic and lacks specificity for AWS S3 and dataset validation."
+        }
+      ]
+    }
+  }
+}

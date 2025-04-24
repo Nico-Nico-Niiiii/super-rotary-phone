@@ -1,0 +1,1036 @@
+{
+  "US_141": {
+    "name": "dataset_upload_api",
+    "docstring": "This module provides an API for uploading and validating datasets, supporting classification and segmentation types. It uses FastAPI for the API framework and AWS S3 for file storage.",
+    "imports": [
+      {
+        "module": "os",
+        "alias": null
+      },
+      {
+        "module": "shutil",
+        "alias": null
+      },
+      {
+        "module": "tempfile",
+        "alias": null
+      },
+      {
+        "module": "zipfile",
+        "alias": null
+      },
+      {
+        "module": "pathlib",
+        "alias": null
+      },
+      {
+        "module": "typing",
+        "alias": null
+      },
+      {
+        "module": "fastapi",
+        "alias": null
+      },
+      {
+        "module": "fastapi.responses",
+        "alias": null
+      },
+      {
+        "module": "boto3",
+        "alias": null
+      },
+      {
+        "module": "botocore.exceptions",
+        "alias": null
+      },
+      {
+        "module": "logging",
+        "alias": null
+      },
+      {
+        "module": "uuid",
+        "alias": null
+      }
+    ],
+    "global_vars": [
+      {
+        "name": "app",
+        "value": "FastAPI()"
+      },
+      {
+        "name": "logger",
+        "value": "logging.getLogger(__name__)"
+      },
+      {
+        "name": "AWS_BUCKET_NAME",
+        "value": "\"your-s3-bucket-name\""
+      },
+      {
+        "name": "AWS_REGION",
+        "value": "\"your-region\""
+      },
+      {
+        "name": "s3_client",
+        "value": "boto3.client(\"s3\", region_name=AWS_REGION)"
+      },
+      {
+        "name": "SUPPORTED_IMAGE_FORMATS",
+        "value": "{\".jpg\", \".jpeg\", \".png\"}"
+      },
+      {
+        "name": "upload_statuses",
+        "value": "{}"
+      }
+    ],
+    "functions": [
+      {
+        "name": "create_temp_dir",
+        "docstring": "Creates a unique temporary directory.",
+        "parameters": [],
+        "returns": "str",
+        "relationships": {
+          "calls_functions": [],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "validate_zip_file",
+            "upload_dataset"
+          ]
+        }
+      },
+      {
+        "name": "cleanup_temp_dir",
+        "docstring": "Cleans up the specified temporary directory if it exists.",
+        "parameters": [
+          {
+            "name": "temp_dir",
+            "type": "str",
+            "description": "Path to the temporary directory to clean up."
+          }
+        ],
+        "returns": "None",
+        "relationships": {
+          "calls_functions": [
+            "os.path.exists",
+            "shutil.rmtree"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "validate_zip_file",
+            "upload_dataset"
+          ]
+        }
+      },
+      {
+        "name": "validate_dataset_type",
+        "docstring": "Validates the dataset type. Raises an HTTPException if invalid.",
+        "parameters": [
+          {
+            "name": "dataset_type",
+            "type": "str",
+            "description": "The type of dataset to validate."
+          }
+        ],
+        "returns": "None",
+        "relationships": {
+          "calls_functions": [],
+          "instantiates_classes": [
+            "HTTPException"
+          ],
+          "accesses_attributes": [],
+          "called_by": [
+            "upload_dataset"
+          ]
+        }
+      },
+      {
+        "name": "validate_classification_structure",
+        "docstring": "Validates the folder structure for classification datasets.",
+        "parameters": [
+          {
+            "name": "temp_dir",
+            "type": "str",
+            "description": "Path to the temporary directory containing the dataset."
+          }
+        ],
+        "returns": "None",
+        "relationships": {
+          "calls_functions": [
+            "Path.iterdir",
+            "any"
+          ],
+          "instantiates_classes": [
+            "HTTPException"
+          ],
+          "accesses_attributes": [],
+          "called_by": [
+            "validate_zip_file"
+          ]
+        }
+      },
+      {
+        "name": "validate_segmentation_structure",
+        "docstring": "Validates the folder structure for segmentation datasets.",
+        "parameters": [
+          {
+            "name": "temp_dir",
+            "type": "str",
+            "description": "Path to the temporary directory containing the dataset."
+          }
+        ],
+        "returns": "None",
+        "relationships": {
+          "calls_functions": [
+            "Path.iterdir",
+            "any"
+          ],
+          "instantiates_classes": [
+            "HTTPException"
+          ],
+          "accesses_attributes": [],
+          "called_by": [
+            "validate_zip_file"
+          ]
+        }
+      },
+      {
+        "name": "validate_zip_file",
+        "docstring": "Validates the contents of a zip file based on the dataset type.",
+        "parameters": [
+          {
+            "name": "zip_path",
+            "type": "str",
+            "description": "Path to the zip file to validate."
+          },
+          {
+            "name": "dataset_type",
+            "type": "str",
+            "description": "The type of dataset contained in the zip file."
+          }
+        ],
+        "returns": "None",
+        "relationships": {
+          "calls_functions": [
+            "create_temp_dir",
+            "zipfile.ZipFile",
+            "validate_classification_structure",
+            "validate_segmentation_structure",
+            "cleanup_temp_dir"
+          ],
+          "instantiates_classes": [
+            "zipfile.ZipFile"
+          ],
+          "accesses_attributes": [],
+          "called_by": [
+            "upload_dataset"
+          ]
+        }
+      },
+      {
+        "name": "upload_to_s3",
+        "docstring": "Uploads a file to AWS S3.",
+        "parameters": [
+          {
+            "name": "file_path",
+            "type": "str",
+            "description": "Path to the file to upload."
+          },
+          {
+            "name": "s3_key",
+            "type": "str",
+            "description": "The S3 key under which to store the file."
+          }
+        ],
+        "returns": "None",
+        "relationships": {
+          "calls_functions": [
+            "s3_client.upload_file",
+            "logger.error"
+          ],
+          "instantiates_classes": [
+            "HTTPException"
+          ],
+          "accesses_attributes": [],
+          "called_by": [
+            "upload_dataset"
+          ]
+        }
+      },
+      {
+        "name": "post_upload_validation",
+        "docstring": "Performs post-upload validation for the uploaded dataset.",
+        "parameters": [
+          {
+            "name": "s3_key",
+            "type": "str",
+            "description": "The S3 key of the uploaded dataset."
+          }
+        ],
+        "returns": "None",
+        "relationships": {
+          "calls_functions": [
+            "logger.info"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "upload_dataset"
+          ]
+        }
+      },
+      {
+        "name": "upload_dataset",
+        "docstring": "API endpoint to upload and validate a dataset.",
+        "parameters": [
+          {
+            "name": "dataset_type",
+            "type": "str",
+            "description": "The type of dataset being uploaded."
+          },
+          {
+            "name": "file",
+            "type": "UploadFile",
+            "description": "The uploaded file."
+          }
+        ],
+        "returns": "JSONResponse",
+        "relationships": {
+          "calls_functions": [
+            "validate_dataset_type",
+            "create_temp_dir",
+            "validate_zip_file",
+            "upload_to_s3",
+            "post_upload_validation",
+            "cleanup_temp_dir",
+            "logger.error"
+          ],
+          "instantiates_classes": [
+            "uuid.uuid4",
+            "JSONResponse",
+            "HTTPException"
+          ],
+          "accesses_attributes": [
+            "upload_statuses"
+          ],
+          "called_by": []
+        }
+      },
+      {
+        "name": "get_upload_status",
+        "docstring": "API endpoint to retrieve the upload status of a dataset.",
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "type": "str",
+            "description": "The ID of the dataset to check."
+          }
+        ],
+        "returns": "JSONResponse",
+        "relationships": {
+          "calls_functions": [
+            "upload_statuses.get"
+          ],
+          "instantiates_classes": [
+            "HTTPException",
+            "JSONResponse"
+          ],
+          "accesses_attributes": [
+            "upload_statuses"
+          ],
+          "called_by": []
+        }
+      }
+    ],
+    "classes": [],
+    "relationships": {
+      "dependencies": {
+        "imports": [
+          "os",
+          "shutil",
+          "tempfile",
+          "zipfile",
+          "pathlib",
+          "typing",
+          "fastapi",
+          "fastapi.responses",
+          "boto3",
+          "botocore.exceptions",
+          "logging",
+          "uuid"
+        ],
+        "from_imports": []
+      },
+      "entry_points": [
+        "upload_dataset",
+        "get_upload_status"
+      ]
+    }
+  },
+  "US_142": {
+    "name": "dicom_processor_module",
+    "docstring": null,
+    "imports": [
+      {
+        "module": "os",
+        "alias": null
+      },
+      {
+        "module": "logging",
+        "alias": null
+      },
+      {
+        "module": "json",
+        "alias": null
+      },
+      {
+        "module": "requests",
+        "alias": null
+      },
+      {
+        "module": "pydicom",
+        "alias": null
+      },
+      {
+        "module": "typing",
+        "alias": null
+      }
+    ],
+    "global_vars": [
+      {
+        "name": "VALIDATION_API_URL",
+        "value": "os.getenv('VALIDATION_API_URL', 'https://example.com/validate')"
+      },
+      {
+        "name": "LOG_DIRECTORY",
+        "value": "os.getenv('LOG_DIRECTORY', './logs')"
+      },
+      {
+        "name": "SUPPORTED_FORMATS",
+        "value": "{'.dcm', '.dicom'}"
+      },
+      {
+        "name": "logger",
+        "value": "logging.getLogger(__name__)"
+      }
+    ],
+    "functions": [
+      {
+        "name": "test_validate_file_path",
+        "docstring": null,
+        "parameters": [],
+        "returns": null,
+        "relationships": {
+          "calls_functions": [
+            "DICOMProcessor.validate_file_path"
+          ],
+          "instantiates_classes": [
+            "DICOMProcessor"
+          ],
+          "accesses_attributes": [],
+          "called_by": []
+        }
+      },
+      {
+        "name": "test_extract_image_data",
+        "docstring": null,
+        "parameters": [],
+        "returns": null,
+        "relationships": {
+          "calls_functions": [
+            "DICOMProcessor.extract_image_data"
+          ],
+          "instantiates_classes": [
+            "DICOMProcessor"
+          ],
+          "accesses_attributes": [],
+          "called_by": []
+        }
+      },
+      {
+        "name": "test_send_to_validation_module",
+        "docstring": null,
+        "parameters": [],
+        "returns": null,
+        "relationships": {
+          "calls_functions": [
+            "DICOMProcessor.send_to_validation_module"
+          ],
+          "instantiates_classes": [
+            "DICOMProcessor"
+          ],
+          "accesses_attributes": [],
+          "called_by": []
+        }
+      },
+      {
+        "name": "test_process_batch",
+        "docstring": null,
+        "parameters": [],
+        "returns": null,
+        "relationships": {
+          "calls_functions": [
+            "DICOMProcessor.process_batch"
+          ],
+          "instantiates_classes": [
+            "DICOMProcessor"
+          ],
+          "accesses_attributes": [],
+          "called_by": []
+        }
+      },
+      {
+        "name": "__main__",
+        "docstring": null,
+        "parameters": [],
+        "returns": null,
+        "relationships": {
+          "calls_functions": [
+            "DICOMProcessor.process_batch",
+            "os.path.isdir",
+            "os.listdir",
+            "os.path.join"
+          ],
+          "instantiates_classes": [
+            "DICOMProcessor"
+          ],
+          "accesses_attributes": [
+            "logger.error",
+            "logger.info"
+          ],
+          "called_by": []
+        }
+      }
+    ],
+    "classes": [
+      {
+        "name": "DICOMProcessor",
+        "docstring": null,
+        "bases": [],
+        "methods": [
+          {
+            "name": "__init__",
+            "docstring": null,
+            "parameters": [
+              {
+                "name": "self",
+                "type": null,
+                "description": "Instance reference"
+              },
+              {
+                "name": "validation_api_url",
+                "type": "str",
+                "description": "URL for the validation API"
+              }
+            ],
+            "returns": null,
+            "relationships": {
+              "calls_functions": [],
+              "instantiates_classes": [],
+              "accesses_attributes": [
+                "self.validation_api_url"
+              ],
+              "called_by": [
+                "DICOMProcessor"
+              ]
+            }
+          },
+          {
+            "name": "validate_file_path",
+            "docstring": "Validates the file path to ensure it exists, is not a symbolic link, and is a supported format.",
+            "parameters": [
+              {
+                "name": "self",
+                "type": null,
+                "description": "Instance reference"
+              },
+              {
+                "name": "file_path",
+                "type": "str",
+                "description": "Path to the file to validate"
+              }
+            ],
+            "returns": "bool",
+            "relationships": {
+              "calls_functions": [
+                "os.path.exists",
+                "os.path.islink"
+              ],
+              "instantiates_classes": [],
+              "accesses_attributes": [
+                "logger.error"
+              ],
+              "called_by": [
+                "DICOMProcessor.process_batch"
+              ]
+            }
+          },
+          {
+            "name": "extract_image_data",
+            "docstring": "Extracts image data from a DICOM file. Handles cases where the file lacks a pixel array.",
+            "parameters": [
+              {
+                "name": "self",
+                "type": null,
+                "description": "Instance reference"
+              },
+              {
+                "name": "file_path",
+                "type": "str",
+                "description": "Path to the DICOM file"
+              }
+            ],
+            "returns": "Optional[Dict[str, Any]]",
+            "relationships": {
+              "calls_functions": [
+                "pydicom.dcmread",
+                "hasattr"
+              ],
+              "instantiates_classes": [],
+              "accesses_attributes": [
+                "logger.warning",
+                "logger.error"
+              ],
+              "called_by": [
+                "DICOMProcessor.process_batch"
+              ]
+            }
+          },
+          {
+            "name": "send_to_validation_module",
+            "docstring": "Sends data to the validation API and validates the response structure.",
+            "parameters": [
+              {
+                "name": "self",
+                "type": null,
+                "description": "Instance reference"
+              },
+              {
+                "name": "data",
+                "type": "Dict[str, Any]",
+                "description": "Data to send to the validation API"
+              }
+            ],
+            "returns": "Optional[Dict[str, Any]]",
+            "relationships": {
+              "calls_functions": [
+                "requests.post",
+                "response.raise_for_status",
+                "response.json"
+              ],
+              "instantiates_classes": [],
+              "accesses_attributes": [
+                "logger.error"
+              ],
+              "called_by": [
+                "DICOMProcessor.process_batch"
+              ]
+            }
+          },
+          {
+            "name": "process_batch",
+            "docstring": "Processes a batch of file paths. Handles empty input lists gracefully.",
+            "parameters": [
+              {
+                "name": "self",
+                "type": null,
+                "description": "Instance reference"
+              },
+              {
+                "name": "file_paths",
+                "type": "List[str]",
+                "description": "List of file paths to process"
+              }
+            ],
+            "returns": "List[Dict[str, Any]]",
+            "relationships": {
+              "calls_functions": [
+                "DICOMProcessor.validate_file_path",
+                "DICOMProcessor.extract_image_data",
+                "DICOMProcessor.send_to_validation_module"
+              ],
+              "instantiates_classes": [],
+              "accesses_attributes": [
+                "logger.warning"
+              ],
+              "called_by": [
+                "__main__"
+              ]
+            }
+          }
+        ],
+        "relationships": {
+          "inherits_from": [],
+          "used_by_functions": [
+            "test_validate_file_path",
+            "test_extract_image_data",
+            "test_send_to_validation_module",
+            "test_process_batch",
+            "__main__"
+          ],
+          "instantiated_by": [
+            "test_validate_file_path",
+            "test_extract_image_data",
+            "test_send_to_validation_module",
+            "test_process_batch",
+            "__main__"
+          ]
+        }
+      }
+    ],
+    "relationships": {
+      "dependencies": {
+        "imports": [
+          "os",
+          "logging",
+          "json",
+          "requests",
+          "pydicom"
+        ],
+        "from_imports": [
+          "typing.List",
+          "typing.Dict",
+          "typing.Any",
+          "typing.Optional"
+        ]
+      },
+      "entry_points": [
+        "__main__"
+      ]
+    }
+  },
+  "US_143": {
+    "name": "image_processing_api",
+    "docstring": null,
+    "imports": [
+      {
+        "module": "os",
+        "alias": null
+      },
+      {
+        "module": "logging",
+        "alias": null
+      },
+      {
+        "module": "shutil",
+        "alias": null
+      },
+      {
+        "module": "tempfile",
+        "alias": null
+      },
+      {
+        "module": "typing",
+        "alias": null
+      },
+      {
+        "module": "fastapi",
+        "alias": null
+      },
+      {
+        "module": "fastapi.security",
+        "alias": null
+      },
+      {
+        "module": "fastapi.limiter",
+        "alias": null
+      },
+      {
+        "module": "fastapi.limiter.depends",
+        "alias": null
+      },
+      {
+        "module": "pydantic",
+        "alias": null
+      },
+      {
+        "module": "dotenv",
+        "alias": null
+      },
+      {
+        "module": "pathlib",
+        "alias": null
+      },
+      {
+        "module": "requests",
+        "alias": null
+      },
+      {
+        "module": "json",
+        "alias": null
+      }
+    ],
+    "global_vars": [
+      {
+        "name": "DATABASE_URL",
+        "value": "os.getenv('DATABASE_URL')"
+      },
+      {
+        "name": "IMAGE_OUTPUT_DIR",
+        "value": "os.getenv('IMAGE_OUTPUT_DIR', './output')"
+      },
+      {
+        "name": "AI_MODULE_URL",
+        "value": "os.getenv('AI_MODULE_URL')"
+      },
+      {
+        "name": "PACS_API_URL",
+        "value": "os.getenv('PACS_API_URL')"
+      },
+      {
+        "name": "MAX_RETRIES",
+        "value": "3"
+      },
+      {
+        "name": "app",
+        "value": "FastAPI()"
+      },
+      {
+        "name": "security",
+        "value": "HTTPBasic()"
+      },
+      {
+        "name": "limiter",
+        "value": "Limiter(key_func=lambda: 'global', default_limits=['10/minute'])"
+      }
+    ],
+    "functions": [
+      {
+        "name": "validate_pacs_response",
+        "docstring": "Validates the structure of a PACS response using the PACSResponse model.",
+        "parameters": [
+          {
+            "name": "response",
+            "type": "Dict[str, Any]",
+            "description": "The PACS response to validate."
+          }
+        ],
+        "returns": "bool",
+        "relationships": {
+          "calls_functions": [
+            "PACSResponse"
+          ],
+          "instantiates_classes": [
+            "PACSResponse"
+          ],
+          "accesses_attributes": [],
+          "called_by": [
+            "process_image"
+          ]
+        }
+      },
+      {
+        "name": "send_to_ai_module",
+        "docstring": "Sends an image file to the AI module for processing.",
+        "parameters": [
+          {
+            "name": "image_path",
+            "type": "str",
+            "description": "Path to the image file to send."
+          }
+        ],
+        "returns": "Optional[Dict[str, Any]]",
+        "relationships": {
+          "calls_functions": [
+            "requests.post",
+            "response.raise_for_status",
+            "response.json"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "process_image"
+          ]
+        }
+      },
+      {
+        "name": "cleanup_temp_files",
+        "docstring": "Cleans up temporary files in the specified directory.",
+        "parameters": [
+          {
+            "name": "temp_dir",
+            "type": "str",
+            "description": "Path to the temporary directory to clean up."
+          }
+        ],
+        "returns": "None",
+        "relationships": {
+          "calls_functions": [
+            "shutil.rmtree"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "process_image"
+          ]
+        }
+      },
+      {
+        "name": "log_requests",
+        "docstring": "Middleware to log HTTP requests and responses.",
+        "parameters": [
+          {
+            "name": "request",
+            "type": null,
+            "description": "The incoming HTTP request."
+          },
+          {
+            "name": "call_next",
+            "type": null,
+            "description": "The next middleware or endpoint to call."
+          }
+        ],
+        "returns": "Response",
+        "relationships": {
+          "calls_functions": [
+            "call_next",
+            "logging.info"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": []
+        }
+      },
+      {
+        "name": "authenticate",
+        "docstring": "Authenticates a user using HTTP Basic credentials.",
+        "parameters": [
+          {
+            "name": "credentials",
+            "type": "HTTPBasicCredentials",
+            "description": "The HTTP Basic credentials provided by the user."
+          }
+        ],
+        "returns": "HTTPBasicCredentials",
+        "relationships": {
+          "calls_functions": [
+            "os.getenv"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "process_image"
+          ]
+        }
+      },
+      {
+        "name": "process_image",
+        "docstring": "Endpoint to process an image retrieved from PACS and send it to the AI module.",
+        "parameters": [
+          {
+            "name": "background_tasks",
+            "type": "BackgroundTasks",
+            "description": "Background tasks for cleanup."
+          },
+          {
+            "name": "credentials",
+            "type": "HTTPBasicCredentials",
+            "description": "User credentials for authentication."
+          }
+        ],
+        "returns": "Dict[str, Any]",
+        "relationships": {
+          "calls_functions": [
+            "requests.get",
+            "response.raise_for_status",
+            "response.json",
+            "validate_pacs_response",
+            "send_to_ai_module",
+            "shutil.copy",
+            "cleanup_temp_files"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": []
+        }
+      },
+      {
+        "name": "test_validate_pacs_response",
+        "docstring": "Unit test for the validate_pacs_response function.",
+        "parameters": [],
+        "returns": "None",
+        "relationships": {
+          "calls_functions": [
+            "validate_pacs_response"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": []
+        }
+      }
+    ],
+    "classes": [
+      {
+        "name": "PACSResponse",
+        "docstring": "Model for validating PACS response data.",
+        "bases": [
+          "BaseModel"
+        ],
+        "methods": [],
+        "relationships": {
+          "inherits_from": [
+            "BaseModel"
+          ],
+          "used_by_functions": [
+            "validate_pacs_response"
+          ],
+          "instantiated_by": [
+            "validate_pacs_response"
+          ]
+        }
+      },
+      {
+        "name": "AIResponse",
+        "docstring": "Model for validating AI module response data.",
+        "bases": [
+          "BaseModel"
+        ],
+        "methods": [],
+        "relationships": {
+          "inherits_from": [
+            "BaseModel"
+          ],
+          "used_by_functions": [],
+          "instantiated_by": []
+        }
+      }
+    ],
+    "relationships": {
+      "dependencies": {
+        "imports": [
+          "os",
+          "logging",
+          "shutil",
+          "tempfile",
+          "typing",
+          "fastapi",
+          "fastapi.security",
+          "fastapi.limiter",
+          "fastapi.limiter.depends",
+          "pydantic",
+          "dotenv",
+          "pathlib",
+          "requests",
+          "json"
+        ],
+        "from_imports": [
+          "fastapi.FastAPI",
+          "fastapi.HTTPException",
+          "fastapi.BackgroundTasks",
+          "fastapi.Depends",
+          "fastapi.security.HTTPBasic",
+          "fastapi.limiter.Limiter",
+          "fastapi.limiter.depends.RateLimiter",
+          "pydantic.BaseModel",
+          "pydantic.ValidationError",
+          "dotenv.load_dotenv",
+          "pathlib.Path"
+        ]
+      },
+      "entry_points": [
+        "process_image",
+        "test_validate_pacs_response"
+      ]
+    }
+  }
+}

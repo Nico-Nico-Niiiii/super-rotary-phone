@@ -1,0 +1,91 @@
+{
+  "module_name": "US_146_code.py",
+  "overall_purpose": "This Python script provides a modular framework for image preprocessing, including validation, decoding, resizing, normalization, and routing. It supports batch processing for scalability, making it suitable for machine learning workflows like training and inference.",
+  "architecture": {
+    "description": "The code follows a modular and procedural architecture where each preprocessing stage is encapsulated in separate functions for validation, decoding, resizing, normalization, and routing. Batch processing is implemented using Dask to enable parallel processing.",
+    "patterns_used": [
+      "Modular Design",
+      "Error-Handling Pattern",
+      "Batch Processing with Parallelism"
+    ]
+  },
+  "key_components": [
+    {
+      "name": "log_and_raise",
+      "type": "function",
+      "purpose": "Handles error logging and exception raising.",
+      "functionality": "Logs an error message using the logger and raises the specified exception with the provided message."
+    },
+    {
+      "name": "validate_input",
+      "type": "function",
+      "purpose": "Validates the input parameters for preprocessing.",
+      "functionality": "Checks if the file exists, whether resolution falls within supported limits, if the pixel datatype is recognized, and if the use case is valid. Returns a dictionary with validation results."
+    },
+    {
+      "name": "decode_image",
+      "type": "function",
+      "purpose": "Decodes an image file into a NumPy array.",
+      "functionality": "Uses PIL to open the image file, verifies its integrity, converts it to RGB format, and returns it as a NumPy array."
+    },
+    {
+      "name": "resize_image",
+      "type": "function",
+      "purpose": "Resizes an image to the specified resolution while maintaining its aspect ratio.",
+      "functionality": "Uses OpenCV to resize the image and adds padding to match exact dimensions of the target resolution."
+    },
+    {
+      "name": "normalize_image",
+      "type": "function",
+      "purpose": "Normalizes and converts image pixel values to the desired datatype.",
+      "functionality": "Subtracts a mean and scales pixel values according to predefined transformations. Converts the output to the specified pixel datatype ('uint8', 'float32', or 'float64')."
+    },
+    {
+      "name": "route_data",
+      "type": "function",
+      "purpose": "Routes preprocessed image data to a specified endpoint using HTTP or gRPC.",
+      "functionality": "Simulates routing of data to endpoints based on specified protocols and logs the action."
+    },
+    {
+      "name": "process_batch",
+      "type": "function",
+      "purpose": "Processes a batch of images in parallel using Dask.",
+      "functionality": "Utilizes a Dask bag to decode, resize, and normalize images concurrently. Returns a list of results with success or error information for each image."
+    }
+  ],
+  "data_flow": "The system processes data sequentially, starting with input validation, followed by image decoding, resizing, normalization, and routing. Batch processing uses Dask for parallelism and the results are returned as a list.",
+  "input_handling": "Inputs include image file paths, resolution parameters, pixel datatypes, and use case specifications. These are validated and logged before further processing.",
+  "output_handling": "Outputs consist of processed images (as NumPy arrays) and metadata on processing status (success or error). In the routing stage, images are sent to specified endpoints.",
+  "error_handling": "Errors are handled using the utility function 'log_and_raise', which logs the error and raises an exception. Validation errors return descriptive messages, enabling graceful degradation during processing.",
+  "dependencies": [
+    "os",
+    "cv2 (OpenCV)",
+    "numpy",
+    "PIL (Pillow)",
+    "logging",
+    "dask (for batch processing)"
+  ],
+  "notable_algorithms": [
+    {
+      "name": "Aspect Ratio-Based Resizing",
+      "purpose": "Resizes images while maintaining their aspect ratio and applies padding.",
+      "description": "Calculates scaling factors to fit the image within given resolution bounds, resizes using OpenCV, and then pads the image to meet exact resolution requirements."
+    },
+    {
+      "name": "Batch Image Processing",
+      "purpose": "Processes multiple images concurrently.",
+      "description": "Uses Dask's 'bag' module to parallelize image preprocessing steps across a list of files."
+    }
+  ],
+  "configuration": "Configuration is static and defined at the top of the script. Parameters include minimum and maximum resolution limits, default resolution, supported pixel datatypes, and transformation settings for normalization.",
+  "assumptions": [
+    "All image files are accessible from the file paths provided.",
+    "Images are in a supported format and not corrupted.",
+    "Input resolutions and pixel datatypes comply with predefined constraints."
+  ],
+  "limitations": [
+    "Routing functionality (HTTP, gRPC) is not fully implemented and only simulated.",
+    "No support for non-RGB image formats.",
+    "Dependent on PIL and OpenCV for image decoding and resizing, which limits compatibility with newer image standards."
+  ]
+}

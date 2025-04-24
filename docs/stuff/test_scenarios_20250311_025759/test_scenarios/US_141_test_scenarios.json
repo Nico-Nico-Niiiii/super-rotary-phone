@@ -1,0 +1,104 @@
+{
+  "module_id": "US_141",
+  "test_suite_name": "Test Scenarios for US_141",
+  "summary": "The test scenarios validate the end-to-end functionality, error handling, edge cases, and integration points of the FastAPI-based RESTful API module for uploading, validating, and storing datasets to a cloud training bucket. They ensure the system adheres to the acceptance criteria in the user story and technical specification, covering roles, validation requirements, and storage consistency.",
+  "test_scenarios": [
+    {
+      "id": "TS-US_141-001",
+      "name": "Upload valid classification dataset",
+      "category": "functional",
+      "description": "Testing the upload functionality with a valid classification dataset following the required folder structure.",
+      "test_objective": "Verify that a valid classification dataset is extracted, validated, uploaded to AWS S3, and a success message is returned.",
+      "expected_outcome": "The system validates the folder structure, uploads the dataset to AWS S3, triggers post-upload validation, and returns a success message with no warnings or errors.",
+      "relevant_requirements": "Acceptance Criteria: 1, 2, 8, 11"
+    },
+    {
+      "id": "TS-US_141-002",
+      "name": "Upload invalid classification dataset with missing subfolders",
+      "category": "error",
+      "description": "Testing validation for a classification dataset with missing subfolders or images.",
+      "test_objective": "Verify that the system recognizes a missing folder and returns an appropriate error message.",
+      "expected_outcome": "The system identifies the missing subfolders, rejects the upload, and returns an error message specifying the issue.",
+      "relevant_requirements": "Acceptance Criteria: 1, 2, 4"
+    },
+    {
+      "id": "TS-US_141-003",
+      "name": "Upload segmentation dataset with mismatched filenames",
+      "category": "error",
+      "description": "Testing the validation for a segmentation dataset where image filenames do not match their corresponding mask filenames.",
+      "test_objective": "Verify that the system identifies mismatched filenames in the segmentation dataset and returns an error message.",
+      "expected_outcome": "The system rejects the dataset, logs the mismatched files, and returns an error message indicating the issue.",
+      "relevant_requirements": "Acceptance Criteria: 1, 3, 7"
+    },
+    {
+      "id": "TS-US_141-004",
+      "name": "Upload classification dataset containing empty subfolders",
+      "category": "edge_case",
+      "description": "Testing the behavior when a classification dataset contains one or more empty subfolders.",
+      "test_objective": "Verify that the system uploads the dataset with a warning about the empty subfolders.",
+      "expected_outcome": "The system successfully uploads the dataset, provides a warning about the empty subfolders, and logs the event.",
+      "relevant_requirements": "Acceptance Criteria: 1, 2, 6"
+    },
+    {
+      "id": "TS-US_141-005",
+      "name": "Upload dataset exceeding maximum allowed size",
+      "category": "error",
+      "description": "Testing the upload functionality with a zip file that exceeds the 5GB size limit.",
+      "test_objective": "Verify that the system enforces the maximum file size limit and returns an appropriate error message.",
+      "expected_outcome": "The system rejects the file upload and responds with an HTTP 400 error, specifying the file size limit violation.",
+      "relevant_requirements": "Non-Functional Requirements: Maximum File Size (5GB)"
+    },
+    {
+      "id": "TS-US_141-006",
+      "name": "Simulate failed upload to AWS S3",
+      "category": "error",
+      "description": "Testing the system's behavior when the dataset upload to AWS S3 fails (e.g., due to network issues or incorrect credentials).",
+      "test_objective": "Verify that the system handles S3 upload failures gracefully and informs the user with an error message.",
+      "expected_outcome": "The system retries or logs the failure, ensures no partial upload, and returns an error message indicating the failure of the cloud storage operation.",
+      "relevant_requirements": "Acceptance Criteria: 10"
+    },
+    {
+      "id": "TS-US_141-007",
+      "name": "Upload dataset with unsupported image formats",
+      "category": "error",
+      "description": "Testing dataset validation when one or more images are in unsupported formats.",
+      "test_objective": "Verify that the system detects unsupported image formats (non-JPEG/PNG) and returns an appropriate error.",
+      "expected_outcome": "The system aborts the upload, specifies invalid image files in the response, and returns an error message to the user.",
+      "relevant_requirements": "Acceptance Criteria: 1, 9"
+    },
+    {
+      "id": "TS-US_141-008",
+      "name": "Role-based access control enforcement",
+      "category": "functional",
+      "description": "Testing if the API enforces user roles, allowing or denying access based on mock role-based access control (RBAC).",
+      "test_objective": "Verify that users with valid tokens corresponding to permitted roles can upload datasets, while others receive an HTTP 403 response.",
+      "expected_outcome": "Users with valid roles can proceed with uploads; invalid roles or tokens are denied access with a 403 Forbidden error.",
+      "relevant_requirements": "Non-Functional Requirements: RBAC Enforcement"
+    },
+    {
+      "id": "TS-US_141-009",
+      "name": "Trigger post-upload validation task",
+      "category": "integration",
+      "description": "Testing if a post-upload validation task is triggered after a dataset is successfully uploaded to AWS S3.",
+      "test_objective": "Verify that the system triggers the post-upload validation and logs a success message.",
+      "expected_outcome": "The system triggers the post-upload validation and completes without errors, logging a confirmation message.",
+      "relevant_requirements": "Acceptance Criteria: 8, 11"
+    }
+  ],
+  "coverage": {
+    "functional_areas": [
+      "Classification dataset upload and validation",
+      "Segmentation dataset upload and validation",
+      "RBAC enforcement",
+      "Post-upload tasks trigger"
+    ],
+    "edge_cases": [
+      "Empty subfolders in classification dataset",
+      "Unsupported image formats"
+    ],
+    "not_covered": [
+      "Concurrency for multiple uploads (future enhancement)",
+      "Dynamic role-based authentication (mock implementation)"
+    ]
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "module_id": "US_145",
+  "test_suite_name": "Test Scenarios for US_145",
+  "summary": "Test scenarios for validating the Image Quality Validation module's functionality, error handling, edge cases, and integration with preprocessing workflows, ensuring compliance with user story requirements and technical specifications.",
+  "test_scenarios": [
+    {
+      "id": "TS-US_145-001",
+      "name": "Validation of images with resolution greater than or equal to the minimum threshold (512x512)",
+      "category": "functional",
+      "description": "Tests that the system successfully validates images with resolutions that meet or exceed the required minimum threshold and returns a success message.",
+      "test_objective": "Verify that valid images pass the resolution check without errors.",
+      "expected_outcome": "The system returns a success response with validation status marked as 'VALID' and no error messages for qualifying images.",
+      "relevant_requirements": "Acceptance Criteria 1"
+    },
+    {
+      "id": "TS-US_145-002",
+      "name": "Validation failure when resolution is below 512x512",
+      "category": "functional",
+      "description": "Tests that the system rejects images with resolutions below the required threshold, returning an error message.",
+      "test_objective": "Ensure the resolution validation correctly flags images below the minimum resolution.",
+      "expected_outcome": "The system responds with validation status marked as 'INVALID' and an error message indicating resolution is below the threshold.",
+      "relevant_requirements": "Acceptance Criteria 2"
+    },
+    {
+      "id": "TS-US_145-003",
+      "name": "Blank image detection for training datasets",
+      "category": "functional",
+      "description": "Tests that blank images in a training dataset are identified and excluded from validation results while providing appropriate messages.",
+      "test_objective": "Verify blank image detection logic for training workflows.",
+      "expected_outcome": "The system identifies blank images, excludes them from valid results, and returns a message indicating their removal.",
+      "relevant_requirements": "Acceptance Criteria 3"
+    },
+    {
+      "id": "TS-US_145-004",
+      "name": "Blank image detection for inferencing datasets",
+      "category": "functional",
+      "description": "Tests that blank images submitted for AI model inferencing are rejected with an appropriate error message.",
+      "test_objective": "Check blank image detection during AI prediction workflows.",
+      "expected_outcome": "The system marks blank images as 'INVALID' and returns an error message indicating inferencing cannot proceed with blank images.",
+      "relevant_requirements": "Acceptance Criteria 4"
+    },
+    {
+      "id": "TS-US_145-005",
+      "name": "Duplicate DICOM detection for training datasets",
+      "category": "functional",
+      "description": "Tests that duplicate DICOM images in training datasets are identified and excluded, with appropriate messages indicating their removal.",
+      "test_objective": "Validate duplicate detection based on SOP Instance UID in Redis cache.",
+      "expected_outcome": "Duplicate DICOM images are flagged, removed from valid results, and error messages are returned for each duplicate.",
+      "relevant_requirements": "Acceptance Criteria 5"
+    },
+    {
+      "id": "TS-US_145-006",
+      "name": "Error handling for unsupported image formats",
+      "category": "error",
+      "description": "Tests that the system rejects unsupported image formats (e.g., BMP, GIF) with appropriate error messages.",
+      "test_objective": "Ensure input validation catches invalid image formats.",
+      "expected_outcome": "The system returns an error response with a message indicating only JPEG, PNG, or DICOM formats are supported.",
+      "relevant_requirements": "Edge Case 1"
+    },
+    {
+      "id": "TS-US_145-007",
+      "name": "Error handling for corrupted DICOM files",
+      "category": "edge_case",
+      "description": "Tests that the system properly handles corrupted DICOM files with missing or invalid SOPInstanceUID metadata.",
+      "test_objective": "Check the robustness of metadata extraction and response to corrupted inputs.",
+      "expected_outcome": "The system returns an error response and marks the image as 'INVALID' with an error message indicating SOPInstanceUID is missing or corrupted.",
+      "relevant_requirements": "Edge Case 4"
+    },
+    {
+      "id": "TS-US_145-008",
+      "name": "Integration with preprocessing module for valid images",
+      "category": "integration",
+      "description": "Tests that validated images are correctly transferred to the preprocessing module for downstream processing.",
+      "test_objective": "Ensure integration between image validation and preprocessing.",
+      "expected_outcome": "The system successfully transfers validated images, returns a success message, and confirms data integrity during transfer.",
+      "relevant_requirements": "Acceptance Criteria 6"
+    }
+  ],
+  "coverage": {
+    "functional_areas": [
+      "Resolution validation",
+      "Blank image detection",
+      "Duplicate DICOM detection",
+      "Metadata extraction",
+      "Preprocessing integration"
+    ],
+    "edge_cases": [
+      "Corrupted DICOM file metadata",
+      "Unsupported image formats",
+      "Empty dataset"
+    ],
+    "not_covered": [
+      "Color image handling for blank detection",
+      "Resolution validation for corrupt files",
+      "Limits on Redis performance under high load"
+    ]
+  }
+}

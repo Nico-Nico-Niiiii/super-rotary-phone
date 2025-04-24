@@ -1,0 +1,99 @@
+{
+  "module_id": "US_146",
+  "test_suite_name": "Test Scenarios for US_146",
+  "summary": "The test suite validates the functionality, edge cases, error handling, and integration of the image preprocessing module. It ensures that images are correctly validated, decoded, resized, normalized, and routed for training or inference purposes according to the requirements.",
+  "test_scenarios": [
+    {
+      "id": "TS-US_146-001",
+      "name": "Validate input with correct parameters",
+      "category": "functional",
+      "description": "Testing the input validation function with valid parameters including image file paths, resolution, pixel datatype, and use case.",
+      "test_objective": "To verify that valid inputs are accepted without errors and return a success status.",
+      "expected_outcome": "The validation function returns a success status with no error messages.",
+      "relevant_requirements": "Acceptance Criteria 1, Subtask 1"
+    },
+    {
+      "id": "TS-US_146-002",
+      "name": "Handle unsupported image bit representation",
+      "category": "error",
+      "description": "Testing the validation function with image formats that have unsupported bit representations.",
+      "test_objective": "To ensure that the function rejects unsupported formats gracefully and provides meaningful error messages.",
+      "expected_outcome": "The validation function returns an error status with the message indicating unsupported bit representation.",
+      "relevant_requirements": "Acceptance Criteria 1, Subtask 1"
+    },
+    {
+      "id": "TS-US_146-003",
+      "name": "Decode corrupted image file",
+      "category": "edge_case",
+      "description": "Testing the image decoding function with corrupted image files to verify error handling.",
+      "test_objective": "To verify that corrupted images are detected, appropriate errors are logged, and the pipeline skips the corrupted file.",
+      "expected_outcome": "The decoding function raises an exception or logs an error stating the image is corrupted, while allowing the pipeline to handle subsequent images.",
+      "relevant_requirements": "Acceptance Criteria 1, Subtask 2"
+    },
+    {
+      "id": "TS-US_146-004",
+      "name": "Resize image maintaining aspect ratio",
+      "category": "functional",
+      "description": "Testing the resizing functionality with an image and specified resolution, ensuring the aspect ratio is preserved.",
+      "test_objective": "To validate that resizing correctly preserves the aspect ratio while fitting within the target resolution.",
+      "expected_outcome": "The resized image matches the target resolution with proper scaling, padding as needed, and no distortion.",
+      "relevant_requirements": "Acceptance Criteria 2, Subtask 4"
+    },
+    {
+      "id": "TS-US_146-005",
+      "name": "Normalize pixel values to float32 format",
+      "category": "functional",
+      "description": "Testing the normalization function to verify correct application of mean subtraction, standard scaling, and datatype conversion.",
+      "test_objective": "To ensure the normalization function transforms pixel values correctly and converts them into float32 datatype as specified.",
+      "expected_outcome": "The normalized image data is scaled appropriately and converted to float32 without loss of information.",
+      "relevant_requirements": "Acceptance Criteria 3, Subtask 4"
+    },
+    {
+      "id": "TS-US_146-006",
+      "name": "Batch processing with parallelism using Dask",
+      "category": "performance",
+      "description": "Testing the batch processing functionality with a dataset of images to validate performance and accuracy using Dask-based parallelism.",
+      "test_objective": "To ensure that a batch of images undergoes preprocessing correctly and efficiently with parallel execution.",
+      "expected_outcome": "The batch is processed successfully, returning a list of processed image data with consistent results.",
+      "relevant_requirements": "Subtask 5"
+    },
+    {
+      "id": "TS-US_146-007",
+      "name": "Route data for training use case",
+      "category": "integration",
+      "description": "Testing the routing function for the 'training' use case to verify simulated routing behavior.",
+      "test_objective": "To validate that preprocessed data is routed correctly for batch creation in the training context.",
+      "expected_outcome": "Routing behavior is logged correctly, indicating successful data routing for training.",
+      "relevant_requirements": "Acceptance Criteria 4, Subtask 5"
+    },
+    {
+      "id": "TS-US_146-008",
+      "name": "Route data for inference use case",
+      "category": "integration",
+      "description": "Testing the routing function for the 'inference' use case to ensure it meets API compatibility requirements.",
+      "test_objective": "To validate that preprocessed data is routed correctly for model inferencing in the inference context.",
+      "expected_outcome": "Routing behavior is logged correctly, indicating successful data routing for model inference.",
+      "relevant_requirements": "Acceptance Criteria 5, Subtask 5"
+    }
+  ],
+  "coverage": {
+    "functional_areas": [
+      "Input validation",
+      "Image decoding",
+      "Image resizing",
+      "Normalization",
+      "Batch processing",
+      "Routing"
+    ],
+    "edge_cases": [
+      "Corrupted image files",
+      "Unsupported image formats",
+      "Extreme image resolutions"
+    ],
+    "not_covered": [
+      "Actual network communication for routing (placeholder simulation)",
+      "Normalization customization for different datasets",
+      "Fine-grained error handling for individual image failures during batch processing"
+    ]
+  }
+}

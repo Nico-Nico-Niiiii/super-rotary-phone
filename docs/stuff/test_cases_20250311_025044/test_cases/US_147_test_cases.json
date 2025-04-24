@@ -1,0 +1,192 @@
+{
+  "module_id": "US_147",
+  "test_suite_name": "Test Suite for US_147",
+  "summary": "This test suite validates the functionality, boundary cases, error handling, and performance of the Batch Data Creation Module for model training. It ensures that dataset validation, batch creation, preprocessing, and logging are accurate and in accordance with user story requirements and technical specifications.",
+  "test_cases": [
+    {
+      "id": "TC-US_147-001",
+      "name": "Validate handling of an incorrect dataset path",
+      "category": "error",
+      "priority": "high",
+      "preconditions": "The BatchDataPipeline class is initialized.",
+      "inputs": {
+        "dataset_path": "./nonexistent_directory/",
+        "batch_size": 32,
+        "preprocessing_config": {
+          "resize": [
+            224,
+            224
+          ],
+          "normalize": true
+        }
+      },
+      "steps": [
+        "Initialize the BatchDataPipeline with the given dataset path, batch size, and preprocessing config.",
+        "Execute the pipeline to validate the dataset path."
+      ],
+      "expected_results": [
+        "The system raises a FileNotFoundError with an appropriate error message: 'Dataset directory not found: ./nonexistent_directory/'.",
+        "No further processing is performed."
+      ],
+      "traceability": "Requirement TR-001: Validate dataset path."
+    },
+    {
+      "id": "TC-US_147-002",
+      "name": "Validate batch creation with insufficient dataset size",
+      "category": "boundary",
+      "priority": "high",
+      "preconditions": "A valid dataset directory with 5 image files exists.",
+      "inputs": {
+        "dataset_path": "./small_dataset/",
+        "batch_size": 10,
+        "preprocessing_config": {
+          "resize": [
+            224,
+            224
+          ],
+          "normalize": true
+        }
+      },
+      "steps": [
+        "Initialize the BatchDataPipeline with the given dataset path, batch size, and preprocessing config.",
+        "Execute the pipeline to create batches."
+      ],
+      "expected_results": [
+        "The system returns an error or warning message: 'Batch size exceeds the number of images in the dataset.'",
+        "No batches are created, and the process terminates gracefully."
+      ],
+      "traceability": "Acceptance Criteria 1: Error handling when images are less than the batch size."
+    },
+    {
+      "id": "TC-US_147-003",
+      "name": "Test successful batch creation for a valid dataset",
+      "category": "functional",
+      "priority": "high",
+      "preconditions": "A valid dataset directory with 50 image files exists.",
+      "inputs": {
+        "dataset_path": "./valid_dataset/",
+        "batch_size": 10,
+        "preprocessing_config": {
+          "resize": [
+            224,
+            224
+          ],
+          "normalize": true
+        }
+      },
+      "steps": [
+        "Initialize the BatchDataPipeline with the given dataset path, batch size, and preprocessing config.",
+        "Execute the pipeline to create and check batches."
+      ],
+      "expected_results": [
+        "The system successfully creates 5 batches of images, each containing 10 images.",
+        "Logs contain the batch details: {'batch_id': 1, 'image_count': 10} repeated for all 5 batches.",
+        "Preprocessing is correctly applied to all images in batches."
+      ],
+      "traceability": "Requirement TR-002: Dataset should be split into appropriate batches; User Story AC 2."
+    },
+    {
+      "id": "TC-US_147-004",
+      "name": "Test handling of corrupted image files during preprocessing",
+      "category": "error",
+      "priority": "medium",
+      "preconditions": "A dataset directory with 20 valid images and 3 corrupted files exists.",
+      "inputs": {
+        "dataset_path": "./corrupted_dataset/",
+        "batch_size": 5,
+        "preprocessing_config": {
+          "resize": [
+            224,
+            224
+          ],
+          "normalize": true
+        }
+      },
+      "steps": [
+        "Initialize the BatchDataPipeline with the given dataset path, batch size, and preprocessing config.",
+        "Execute the pipeline to preprocess images."
+      ],
+      "expected_results": [
+        "The system logs the corrupted files: {'corrupted_files': ['file1.jpg', 'file2.jpg', 'file3.jpg']}.",
+        "The process skips the corrupted files and continues processing valid images.",
+        "All valid images are preprocessed and added to batches."
+      ],
+      "traceability": "Requirement TR-003: Log corrupted files in JSON; Requirement TR-005: Fault-tolerant processing."
+    },
+    {
+      "id": "TC-US_147-005",
+      "name": "Validate accurate calculation of training steps",
+      "category": "functional",
+      "priority": "high",
+      "preconditions": "A valid dataset with 64 images and a batch size of 16.",
+      "inputs": {
+        "dataset_path": "./dataset_steps/",
+        "batch_size": 16,
+        "preprocessing_config": {
+          "resize": [
+            224,
+            224
+          ],
+          "normalize": true
+        }
+      },
+      "steps": [
+        "Initialize the BatchDataPipeline with the given dataset path, batch size, and preprocessing config.",
+        "Execute the pipeline and compute the number of training steps."
+      ],
+      "expected_results": [
+        "The system calculates the number of training steps as ceil(64/16) = 4.",
+        "Logs contain the correct value of training steps along with batch statistics."
+      ],
+      "traceability": "Requirement TR-006: Calculate training steps dynamically; Subtask 4."
+    },
+    {
+      "id": "TC-US_147-006",
+      "name": "Test parallel preprocessing with a large dataset",
+      "category": "performance",
+      "priority": "medium",
+      "preconditions": "A dataset directory with 1000 images exists.",
+      "inputs": {
+        "dataset_path": "./large_dataset/",
+        "batch_size": 50,
+        "preprocessing_config": {
+          "resize": [
+            224,
+            224
+          ],
+          "normalize": true
+        }
+      },
+      "steps": [
+        "Initialize the BatchDataPipeline with the given dataset path, batch size, and preprocessing config.",
+        "Execute the pipeline to preprocess all images in the dataset.",
+        "Measure the time taken for preprocessing and batch creation."
+      ],
+      "expected_results": [
+        "The pipeline uses parallel threads to preprocess images, reducing processing time significantly compared to sequential runs.",
+        "Batches are created accurately, and logs show the correct details.",
+        "The total time for processing stays within acceptable limits (depending on system configuration)."
+      ],
+      "traceability": "Requirement TR-002: Parallel preprocessing; Requirement TR-001: Handle large datasets efficiently."
+    }
+  ],
+  "test_coverage": {
+    "functional_areas_covered": [
+      "Dataset validation",
+      "Batch creation with valid and insufficient dataset",
+      "Preprocessing steps (resize, normalization)",
+      "Logging of corrupted files and batch details",
+      "Training step calculations"
+    ],
+    "edge_cases_covered": [
+      "Incorrect dataset path",
+      "Batch size greater than dataset size",
+      "Corrupted or unsupported files",
+      "Incomplete batch processing scenario"
+    ],
+    "not_covered": [
+      "Advanced preprocessing transformations beyond resizing and normalization",
+      "Handling non-standard or nested dataset directory structures"
+    ]
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "module_id": "US_144",
+  "test_suite_name": "Test Suite for US_144",
+  "summary": "This test suite verifies proper functioning of the image data validation system, covering supported formats, metadata requirements, corrupted files, AWS S3 upload integration, SQLite logging, and REST API endpoints.",
+  "test_cases": [
+    {
+      "id": "TC-US_144-001",
+      "name": "Validation success for supported image formats",
+      "category": "functional",
+      "priority": "high",
+      "preconditions": "SQLite database is initialized, AWS S3 connection is configured, and Flask API is running.",
+      "inputs": {
+        "files": [
+          "image1.jpg",
+          "image2.png",
+          "image3.bmp",
+          "image4.dcm"
+        ],
+        "metadata": {
+          "model_name": "AI_Xray_Classifier",
+          "expected_type": "DICOM",
+          "expected_modality": "X-ray"
+        }
+      },
+      "steps": [
+        "Set up the `/temp_uploads` folder with the provided files.",
+        "Send an HTTP POST request to `/api/v1/upload` with the files and metadata.",
+        "Capture the JSON response."
+      ],
+      "expected_results": [
+        "Validation result indicates success for valid files.",
+        "Each file's validation status is 'success' with a detailed success message.",
+        "Files are successfully uploaded to AWS S3 bucket."
+      ],
+      "traceability": "Acceptance Criteria 1"
+    },
+    {
+      "id": "TC-US_144-002",
+      "name": "Validation failure for unsupported image formats",
+      "category": "error",
+      "priority": "high",
+      "preconditions": "SQLite database is initialized, Flask API is running.",
+      "inputs": {
+        "files": [
+          "unsupported_file.tif",
+          "unsupported_file.gif"
+        ],
+        "metadata": {
+          "model_name": "AI_Generic_Classifier",
+          "expected_type": "Generic",
+          "expected_modality": "Any"
+        }
+      },
+      "steps": [
+        "Set up the `/temp_uploads` folder with the unsupported files.",
+        "Send an HTTP POST request to `/api/v1/upload` with the files and metadata.",
+        "Capture the JSON response."
+      ],
+      "expected_results": [
+        "Validation fails for unsupported formats with status 'error' and error code 101.",
+        "Each error message specifies 'Unsupported image format'.",
+        "No files are uploaded to AWS S3."
+      ],
+      "traceability": "Acceptance Criteria 2"
+    },
+    {
+      "id": "TC-US_144-003",
+      "name": "Validation failure for corrupted files",
+      "category": "error",
+      "priority": "high",
+      "preconditions": "SQLite database is initialized, Flask API is running.",
+      "inputs": {
+        "files": [
+          "corrupted_image.jpg",
+          "corrupted_dicom.dcm"
+        ],
+        "metadata": {
+          "model_name": "AI_Xray_Classifier",
+          "expected_type": "DICOM",
+          "expected_modality": "X-ray"
+        }
+      },
+      "steps": [
+        "Set up the `/temp_uploads` folder with corrupted files.",
+        "Send an HTTP POST request to `/api/v1/upload` with the files and metadata.",
+        "Capture the JSON response."
+      ],
+      "expected_results": [
+        "Validation fails for corrupted files with status 'error' and error code 102.",
+        "Each error message specifies 'Corrupted image detected'.",
+        "No files are logged or uploaded to AWS S3."
+      ],
+      "traceability": "Acceptance Criteria 3"
+    },
+    {
+      "id": "TC-US_144-004",
+      "name": "Validation failure for mismatched AI model metadata use-case",
+      "category": "functional",
+      "priority": "high",
+      "preconditions": "SQLite database is initialized, Flask API is running.",
+      "inputs": {
+        "files": [
+          "valid_xray_image1.dcm",
+          "valid_ct_image2.dcm"
+        ],
+        "metadata": {
+          "model_name": "AI_Xray_Classifier",
+          "expected_type": "DICOM",
+          "expected_modality": "X-ray"
+        }
+      },
+      "steps": [
+        "Set up the `/temp_uploads` folder with files including an invalid modality.",
+        "Send an HTTP POST request to `/api/v1/upload` with the files and metadata.",
+        "Capture the JSON response."
+      ],
+      "expected_results": [
+        "Valid X-ray file is successfully validated with status 'success'.",
+        "Validation fails for CT modality files with status 'error' and error code 103.",
+        "Error message specifies 'Mismatched metadata for target AI model use-case'."
+      ],
+      "traceability": "Acceptance Criteria 4"
+    },
+    {
+      "id": "TC-US_144-005",
+      "name": "Validation logs retrieval via API",
+      "category": "integration",
+      "priority": "medium",
+      "preconditions": "SQLite database contains logs for previous uploads.",
+      "inputs": {
+        "file_name_filter": "valid_xray_image1.dcm"
+      },
+      "steps": [
+        "Send an HTTP GET request to `/api/v1/logs` with 'file_name' filter as parameter.",
+        "Capture the JSON response."
+      ],
+      "expected_results": [
+        "API response includes logs for the filtered file.",
+        "Logs contain file name, validation status, timestamp, and success/error details."
+      ],
+      "traceability": "System Logging Requirement"
+    }
+  ],
+  "test_coverage": {
+    "functional_areas_covered": [
+      "Validation of supported formats",
+      "Handling of unsupported formats",
+      "Corruption detection",
+      "Metadata validation",
+      "API integration for logs retrieval"
+    ],
+    "edge_cases_covered": [
+      "Empty or invalid metadata",
+      "Mixed file validity within a batch",
+      "Corrupted and unsupported files"
+    ],
+    "not_covered": [
+      "Performance testing for high-concurrent batch uploads",
+      "Scalability testing for large-scale datasets"
+    ]
+  }
+}
