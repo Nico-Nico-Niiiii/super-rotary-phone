@@ -1,0 +1,2068 @@
+"""
+Integrated Code Generator and Relationship-Enhanced Integrator
+
+This script provides an end-to-end solution that:
+1. Reads technical specifications from an Excel file
+2. Generates production-ready Python code for each specification
+3. Validates and corrects the generated code
+4. Analyzes the code to extract relationships between functions, classes, and modules
+5. Generates comprehensive API documentation with relationship details
+6. Creates an integrated solution that properly imports and coordinates all modules
+7. Produces supporting documentation and visualization of relationships
+
+The workflow is completely automated from specification to final integrated solution.
+"""
+
+import os
+import logging
+import json
+import re
+import pandas as pd
+import ast
+import textwrap
+import shutil
+from typing import TypedDict, Annotated, List, Dict, Tuple, Optional, Set, Any
+import operator
+from langgraph.graph import StateGraph, END
+from langchain_core.messages import AnyMessage, SystemMessage, HumanMessage, AIMessage
+from datetime import datetime
+from collections import defaultdict
+import torch
+
+from langchain_openai import AzureChatOpenAI
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - [%(filename)s:%(lineno)d] - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+# Azure OpenAI configuration - Used across both parts of the script
+def check_openai_config():
+    """Check if Azure OpenAI config is set in environment variables."""
+    required_vars = [
+        "AZURE_OPENAI_API_KEY",
+        "AZURE_OPENAI_ENDPOINT",
+        "AZURE_OPENAI_API_VERSION",
+        "AZURE_OPENAI_CHAT_DEPLOYMENT_NAME"
+    ]
+    
+    missing = [var for var in required_vars if not os.environ.get(var)]
+    if missing:
+        # Check if we can set values explicitly
+        logger.info("Looking for OpenAI configuration in current environment...")
+        
+        if "AZURE_OPENAI_API_KEY" not in os.environ:
+            os.environ["AZURE_OPENAI_API_KEY"] = "0bf3daeba1814d03b5d62e1da4077478"
+        
+        if "AZURE_OPENAI_ENDPOINT" not in os.environ:
+            os.environ["AZURE_OPENAI_ENDPOINT"] = "https://openaisk123.openai.azure.com/"
+        
+        if "AZURE_OPENAI_API_VERSION" not in os.environ:
+            os.environ["AZURE_OPENAI_API_VERSION"] = "2024-08-01-preview"
+        
+        if "AZURE_OPENAI_CHAT_DEPLOYMENT_NAME" not in os.environ:
+            os.environ["AZURE_OPENAI_CHAT_DEPLOYMENT_NAME"] = "gpt-4o"
+    
+    # Verify all variables are set
+    missing = [var for var in required_vars if not os.environ.get(var)]
+    if missing:
+        raise EnvironmentError(f"Missing Azure OpenAI configuration: {', '.join(missing)}")
+    
+    logger.info("Azure OpenAI configuration verified")
+
+#############################################################
+# PART 1: Code Generation from Technical Specifications
+#############################################################
+
+class CodeGenerationState(TypedDict):
+    """State management for code generation process"""
+    messages: Annotated[list[AnyMessage], operator.add]
+    current_code: str
+    validation_status: bool
+    error_messages: list[str]
+    is_valid: bool
+    user_story_id: str
+
+# Define prompts for code generation
+developer_prompt = """
+Role: Python Developer
+Task: Generate complete, production-ready Python code based on the requirements specification.
+
+Requirements:
+{requirements}
+
+Your code must include:
+1. All necessary imports and dependencies
+2. Complete implementation with:
+   - Well-structured classes and functions
+   - Configuration management (using dataclasses or similar)
+   - Comprehensive error handling and validation
+   - Type hints throughout
+   - Logging with appropriate levels
+   - Unit tests where applicable
+3. Clear documentation:
+   - Module docstrings
+   - Function/method docstrings with parameters and return values
+   - Inline comments for complex logic
+
+Focus on implementing EVERY aspect mentioned in the requirements. Do not leave any required functionality unimplemented.
+
+## Output Format
+Your response should be the complete, production-ready Python code without surrounding explanations.
+DO NOT enclose your code in triple backticks (``` or ''').
+Simply output the pure Python code directly:
+
+# Your Python code here
+"""
+
+validator_prompt = """
+Role: Senior Code Reviewer
+Task: Perform a thorough validation of the provided Python code against the requirements.
+
+Requirements:
+{Requirements}
+
+Validation Process:
+1. Carefully compare the code against EACH requirement in the specification
+2. For each requirement, determine if it has been fully, partially, or not implemented
+3. Identify any missing functionality, edge cases, or requirements
+4. Evaluate code quality, error handling, security, and performance
+
+Validation Checklist:
+1. Code Completeness:
+   - All imports and dependencies present
+   - Full implementation of required functionality (check EACH requirement)
+   - No placeholder code or TODOs
+
+2. Code Quality:
+   - Follows PEP 8 standards
+   - Clear variable/function naming
+   - Appropriate modularization
+   - Avoids code duplication
+   - Maintainable architecture
+
+3. Technical Implementation:
+   - Proper error handling with specific exceptions
+   - Complete type annotations
+   - Correct algorithm implementation
+   - Efficient resource usage
+   - Security considerations addressed
+
+4. Documentation:
+   - Comprehensive docstrings
+   - Clear inline comments where needed
+
+## Output Format
+Return your validation report as a structured JSON object with the following format:
+
+```json
+{{
+  "validation_report": {{
+    "overall_assessment": "Pass/Fail",
+    "issues_found": [
+      "Issue 1 description",
+      "Issue 2 description",
+      "..."
+    ],
+    "suggested_improvements": [
+      {{
+        "description": "Improvement 1",
+        "priority": "high/medium/low"
+      }},
+      "..."
+    ],
+    "implementation_vs_requirements": {{
+      "match": true/false,
+      "details": [
+        {{
+          "requirement_section": "Requirement name/section",
+          "status": "Implemented/Partially Implemented/Not Implemented",
+          "notes": "Notes about implementation"
+        }},
+        "..."
+      ]
+    }}
+  }}
+}}
+
+Be strict in your assessment. If ANY requirement is not fully implemented, the overall assessment should be "Fail".
+"""
+
+corrector_prompt = """
+Role: Senior Python Developer
+Task: Refactor and fix the code based on the validation feedback.
+Original Requirements:
+{requirements}
+Validation Feedback:
+{ValidationFeedback}
+Correction Instructions:
+
+Address ALL issues identified in the validation feedback
+Pay particular attention to any requirements marked as "Not Implemented" or "Partially Implemented"
+Maintain the original architectural approach unless fundamentally flawed
+Ensure complete implementation of ALL requirements from the original specification
+Add or improve:
+
+Error handling for all edge cases
+Type hints throughout the codebase
+Documentation (docstrings and comments)
+Logging for important operations
+Performance optimizations where possible
+
+Important: Make sure you implement EVERY feature mentioned in the requirements that was flagged as missing or incomplete in the validation feedback.
+Output Format
+Your response should be the complete, corrected, production-ready Python code without explanations.
+DO NOT enclose your code in triple backticks (``` or ''').
+Simply output the pure Python code directly:
+Your corrected Python code here
+"""
+
+def extract_user_story_id(user_story_text):
+    """
+    Extract user story ID from the text that contains 'User Story ID: XXX'
+    
+    Args:
+        user_story_text (str): The full user story text
+        
+    Returns:
+        str: The extracted user story ID or 'unknown_id' if not found
+    """
+    # Look for "User Story ID: XXX" pattern
+    match = re.search(r'User\s+Story\s+ID\s*:\s*(\d+)', user_story_text, re.IGNORECASE)
+    if match:
+        return f"US_{match.group(1)}"
+    
+    # Alternative pattern - look for "userstory1" or similar patterns at the start of a line
+    match = re.search(r'^(?:(?:user)?story|us)(\d+)', user_story_text, re.IGNORECASE | re.MULTILINE)
+    if match:
+        return f"US_{match.group(1)}"
+    
+    # If no ID is found, generate a fallback ID based on a hash of the content
+    logger.warning("No user story ID found in text, using fallback ID")
+    import hashlib
+    hash_id = hashlib.md5(user_story_text.encode()).hexdigest()[:8]
+    return f"Unknown_ID_{hash_id}"
+
+def read_tech_specs_from_excel(excel_file_path):
+    """
+    Read technical specifications from Excel file.
+    
+    Returns:
+        List of dictionaries, each containing:
+        - 'user_story_id': ID of the user story
+        - 'tech_spec': Technical specification
+    """
+    try:
+        # Read the Excel file
+        df = pd.read_excel(excel_file_path)
+        
+        # Find the user story column and tech spec column
+        user_story_col = None
+        tech_spec_col = None
+        
+        # Determine column names - assuming first row has column headers
+        col_names = df.columns.tolist()
+        
+        # Find user story column
+        for col in col_names:
+            if 'user' in str(col).lower() and 'story' in str(col).lower():
+                user_story_col = col
+                break
+        
+        # Find tech spec column
+        for col in col_names:
+            if ('tech' in str(col).lower() and 'spec' in str(col).lower()) or 'requirement' in str(col).lower():
+                tech_spec_col = col
+                break
+        
+        # If we didn't find the right columns, default to the first two
+        if user_story_col is None and len(col_names) > 0:
+            user_story_col = col_names[0]
+        
+        if tech_spec_col is None and len(col_names) > 1:
+            tech_spec_col = col_names[1]
+        
+        logger.info(f"Using columns: User Story = '{user_story_col}', Tech Spec = '{tech_spec_col}'")
+        
+        # Extract tech specs
+        tech_specs = []
+        
+        # Skip the first row if it's empty (which appears to be the case)
+        start_row = 1 if df.iloc[0].isna().all() else 0
+        
+        for idx, row in df.iloc[start_row:].iterrows():
+            if pd.isna(row[user_story_col]) or pd.isna(row[tech_spec_col]):
+                logger.warning(f"Skipping row {idx} due to missing data")
+                continue
+                
+            user_story_text = str(row[user_story_col])
+            tech_spec_text = str(row[tech_spec_col])
+            
+            # Extract user story ID using the helper function
+            user_story_id = extract_user_story_id(user_story_text)
+            
+            tech_specs.append({
+                'user_story_id': user_story_id,
+                'tech_spec': tech_spec_text
+            })
+        
+        logger.info(f"Successfully extracted {len(tech_specs)} tech specs from Excel file")
+        return tech_specs
+        
+    except Exception as e:
+        logger.error(f"Error reading Excel file: {e}")
+        raise
+
+class CodeGenerator:
+    """Main class for generating, validating, and correcting code"""
+    
+    def __init__(self, model, base_output_dir=None, system_developer="", system_validator="", system_corrector=""):
+        self.system_developer = system_developer
+        self.system_validator = system_validator
+        self.system_corrector = system_corrector
+        
+        # Create output base directory
+        self.base_output_dir = base_output_dir or f"code_generation_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        os.makedirs(self.base_output_dir, exist_ok=True)
+        
+        # Initialize graph
+        graph = StateGraph(CodeGenerationState)
+        
+        # Add nodes
+        graph.add_node("developer", self.developer)
+        graph.add_node("validator", self.validator)
+        graph.add_node("correction", self.correction)
+        
+        # Add edges
+        graph.add_edge("developer", "validator")
+        
+        # Add conditional edges (matching notebook pattern)
+        graph.add_conditional_edges(
+            "validator", 
+            lambda state: state["is_valid"],
+            {
+                True: END,
+                False: "correction"
+            }
+        )
+        
+        graph.add_edge("correction", END)
+        
+        # Set entry point
+        graph.set_entry_point("developer")
+        self.graph = graph.compile()
+        self.model = model
+        
+        # Try to display graph visualization if possible (for notebook environments)
+        try:
+            from IPython.display import Image, display
+            display(Image(self.graph.get_graph().draw_mermaid_png()))
+        except Exception as e:
+            logger.debug(f"Could not display graph: {e}")
+            pass
+
+    def get_output_dir(self, user_story_id):
+        """Create and return a user story specific output directory"""
+        # Create user story specific directory if it doesn't exist
+        user_story_dir = os.path.join(self.base_output_dir, user_story_id)
+        os.makedirs(user_story_dir, exist_ok=True)
+        return user_story_dir
+
+    def extract_code(self, text):
+        """Extract code from between triple backticks or triple single quotes"""
+        pattern = r"```(?:python)?\\s*(.*?)```"
+        matches = re.findall(pattern, text, re.DOTALL)
+        if matches:
+            return matches[0].strip()
+            
+        # Try with triple single quotes
+        pattern = r"'''(?:python)?\\s*(.*?)'''"
+        matches = re.findall(pattern, text, re.DOTALL)
+        if matches:
+            return matches[0].strip()
+            
+        return text  # Return original if no code blocks found
+
+    def save_code_attempt(self, code: str, user_story_id: str, status: str = "initial") -> str:
+        """Save code attempt and return directory path"""
+        # Get user story specific output directory
+        output_dir = self.get_output_dir(user_story_id)
+        
+        attempt_dir = os.path.join(output_dir, f"attempt_{status}")
+        os.makedirs(attempt_dir, exist_ok=True)
+        
+        # Save code
+        code_file = os.path.join(attempt_dir, "code.py")
+        with open(code_file, 'w') as f:
+            f.write(code)
+        
+        logger.info(f"Saved code attempt to {code_file}")
+        return attempt_dir
+
+    def developer(self, state: CodeGenerationState):
+        """Generate initial code"""
+        messages = state['messages']
+        user_story_id = state.get('user_story_id', 'default_id')
+        logger.info(f"Processing user story ID: {user_story_id}")
+        print(f"developer - User Story ID: {user_story_id}")
+        
+        if self.system_developer:
+            # Format the prompt
+            formatted_prompt = self.system_developer.format(
+                requirements=messages[0].content,
+                TechnicalSpecifications=messages[0].content
+            )
+            messages = [SystemMessage(content=formatted_prompt)] + messages
+        
+        message = self.model.invoke(messages)
+        
+        # Extract code from response
+        response_text = getattr(message, "content", "")
+        code_only = self.extract_code(response_text)
+        
+        # Save code
+        self.save_code_attempt(code_only, user_story_id)
+        
+        return {
+            'messages': [message],
+            'current_code': code_only,
+            'validation_status': None,
+            'error_messages': [],
+            'is_valid': False,
+            'user_story_id': user_story_id
+        }
+
+    def validator(self, state: CodeGenerationState):
+        """Validate generated code"""
+        messages = state.get('messages', [])
+        current_code = state.get('current_code', '')
+        user_story_id = state.get('user_story_id', 'default_id')
+        
+        print(f"validate - User Story ID: {user_story_id}")
+        
+        if self.system_validator:
+            original_message = state["messages"][0].content if state["messages"] else ""
+            # Format the prompt
+            formatted_prompt = self.system_validator.format(
+                Requirements=original_message,
+                TechnicalSpecifications=original_message
+            )
+            messages = [SystemMessage(content=formatted_prompt)] + messages
+        
+        message = self.model.invoke(messages)
+        response_text = getattr(message, "content", "").lower()
+        
+        # Attempt to determine if validation passed by extracting JSON
+        is_valid = False
+        try:
+            # Try to extract JSON from the message
+            json_pattern = r"```json\s*(.*?)\s*```"
+            match = re.search(json_pattern, message.content, re.DOTALL)
+            if match:
+                validation_json = json.loads(match.group(1))
+                is_valid = (validation_json.get("validation_report", {}).get("overall_assessment", "").lower() == "pass")
+        except:
+            # Fallback to the original logic if JSON extraction fails
+            is_valid = "pass" in response_text and "correctly implements" in response_text
+        
+        # Save validation results to JSON if possible
+        try:
+            json_pattern = r"```json\s*(.*?)\s*```"
+            match = re.search(json_pattern, message.content, re.DOTALL)
+            if match:
+                validation_json = json.loads(match.group(1))
+                output_dir = self.get_output_dir(user_story_id)
+                json_path = os.path.join(output_dir, "validation_results.json")
+                with open(json_path, 'w') as f:
+                    json.dump(validation_json, f, indent=2)
+                logger.info(f"Saved validation results to {json_path}")
+        except Exception as e:
+            logger.error(f"Failed to save validation results: {e}")
+        
+        if is_valid:
+            self.save_code_attempt(current_code, user_story_id, "validated_pass")
+        else:
+            self.save_code_attempt(current_code, user_story_id, "validated_fail")
+            
+        return {
+            'messages': [message],
+            'current_code': current_code,
+            'is_valid': is_valid,
+            'error_messages': [] if is_valid else ["Validation failed"],
+            'user_story_id': user_story_id
+        }
+
+    def correction(self, state: CodeGenerationState):
+        """Correct code based on validation feedback"""
+        messages = state['messages']
+        user_story_id = state.get('user_story_id', 'default_id')
+        
+        print(f"correction - User Story ID: {user_story_id}")
+        
+        if self.system_corrector:
+            # Get original requirements from the first human message in the chain
+            original_requirements = ""
+            for msg in state['messages']:
+                if isinstance(msg, HumanMessage) and msg.content:
+                    original_requirements = msg.content
+                    break
+            
+            # Get validation feedback from the most recent message
+            validation_feedback = messages[0].content if messages else ""
+            
+            # Format the prompt
+            formatted_prompt = self.system_corrector.format(
+                requirements=original_requirements,
+                ValidationFeedback=validation_feedback
+            )
+            messages = [SystemMessage(content=formatted_prompt)] + messages
+        
+        message = self.model.invoke(messages)
+        response_text = getattr(message, "content", "")
+        code_only = self.extract_code(response_text)
+        
+        # Save corrected code
+        self.save_code_attempt(code_only, user_story_id, "correction")
+        
+        return {
+            'messages': [message],
+            'current_code': code_only,
+            'is_valid': False,
+            'error_messages': [],
+            'user_story_id': user_story_id
+        }
+
+def process_tech_specs(excel_file_path="tech.xlsx"):
+    """
+    Process tech specs from an Excel file
+    
+    Args:
+        excel_file_path: Path to Excel file with tech specs
+        
+    Returns:
+        str: Path to the output directory with generated code
+    """
+    try:
+        # Initialize OpenAI configuration
+        check_openai_config()
+        
+        # Read tech specs from Excel
+        tech_specs = read_tech_specs_from_excel(excel_file_path)
+        
+        if not tech_specs:
+            logger.error("No tech specs found in Excel file")
+            return None
+        
+        # Model initialization
+        model = AzureChatOpenAI(
+            azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
+            api_key=os.environ["AZURE_OPENAI_API_KEY"],
+            api_version=os.environ["AZURE_OPENAI_API_VERSION"],
+            deployment_name=os.environ["AZURE_OPENAI_CHAT_DEPLOYMENT_NAME"]
+        )
+        
+        # Create a base output directory
+        base_output_dir = f"code_generation_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        
+        # Initialize code generator with the base directory
+        code_gen = CodeGenerator(
+            model=model, 
+            base_output_dir=base_output_dir,
+            system_developer=developer_prompt,
+            system_validator=validator_prompt,
+            system_corrector=corrector_prompt
+        )
+        
+        # Process each tech spec
+        for idx, spec in enumerate(tech_specs):
+            user_story_id = spec['user_story_id']
+            tech_spec = spec['tech_spec']
+            
+            logger.info(f"Processing tech spec for user story ID: {user_story_id} ({idx+1}/{len(tech_specs)})")
+            
+            # Setup initial message
+            messages = [HumanMessage(content=tech_spec)]
+            
+            # Set up the input state
+            initial_state = {
+                "messages": messages,
+                "current_code": "",
+                "validation_status": None,
+                "error_messages": [],
+                "is_valid": False,
+                "user_story_id": user_story_id
+            }
+            
+            try:
+                # Run the graph
+                result = code_gen.graph.invoke(initial_state)
+                
+                # Log success
+                logger.info(f"Successfully processed tech spec for user story ID: {user_story_id}")
+                
+                # Extract final code
+                if 'current_code' in result and result['current_code']:
+                    final_status = "final_corrected" if not result.get('is_valid', False) else "final_validated"
+                    code_gen.save_code_attempt(result['current_code'], user_story_id, final_status)
+            
+            except Exception as e:
+                logger.error(f"Error processing tech spec for user story ID {user_story_id}: {e}")
+                continue
+            
+        logger.info(f"Completed processing all tech specs. Output directory: {base_output_dir}")
+        return base_output_dir
+        
+    except Exception as e:
+        logger.error(f"Error in process_tech_specs: {e}")
+        raise
+
+#############################################################
+# PART 2: Code Integration with Relationship Enhancement
+#############################################################
+
+def find_latest_code_generation_folder(base_dir=None):
+    """Find the latest code_generation folder based on creation time."""
+    if base_dir is None:
+        base_dir = os.getcwd()  # Current working directory
+    
+    code_gen_folders = [d for d in os.listdir(base_dir) if d.startswith("code_generation_") and os.path.isdir(os.path.join(base_dir, d))]
+    if not code_gen_folders:
+        raise FileNotFoundError("No code_generation folders found")
+    
+    # Sort by creation time, most recent first
+    code_gen_folders.sort(key=lambda d: os.path.getctime(os.path.join(base_dir, d)), reverse=True)
+    return os.path.join(base_dir, code_gen_folders[0])
+
+def find_code_files(base_folder):
+    """
+    Find all code files in subfolders.
+    Prioritize files in this order:
+    1. final_corrected
+    2. final_validated
+    3. correction
+    4. validated_pass
+    5. initial (fallback)
+    """
+    code_files = []
+    
+    # Priority order for folder names
+    priority_folders = ["final_corrected", "final_validated", "correction", "validated_pass", "initial"]
+    
+    # First, get all user story folders
+    user_story_folders = [f for f in os.listdir(base_folder) 
+                         if os.path.isdir(os.path.join(base_folder, f))]
+    
+    for user_folder in user_story_folders:
+        user_path = os.path.join(base_folder, user_folder)
+        
+        # Check each priority folder type
+        found = False
+        for priority in priority_folders:
+            attempt_path = os.path.join(user_path, f"attempt_{priority}")
+            code_file = os.path.join(attempt_path, "code.py")
+            
+            if os.path.exists(code_file):
+                code_files.append((user_folder, code_file))
+                found = True
+                logger.info(f"Using '{priority}' code for {user_folder}")
+                break
+        
+        if not found:
+            logger.warning(f"No code files found at all for {user_folder}")
+    
+    return code_files
+
+def read_code_files(code_files):
+    """Read code files and return a dictionary mapping module names to code content."""
+    code_contents = {}
+    
+    for module_name, file_path in code_files:
+        try:
+            with open(file_path, 'r') as f:
+                content = f.read()
+                code_contents[module_name] = content
+                logger.info(f"Read {len(content)} bytes from {file_path}")
+        except Exception as e:
+            logger.error(f"Error reading {file_path}: {e}")
+    
+    return code_contents
+
+def get_docstring_summary(docstring):
+    """Extract the first sentence of a docstring or return a default message."""
+    if not docstring:
+        return "No documentation available"
+    
+    # Try to get the first sentence
+    if '.' in docstring:
+        return docstring.split('.')[0].strip()
+    
+    return docstring.strip()
+
+class RelationshipVisitor(ast.NodeVisitor):
+    """AST visitor that extracts relationships between functions, classes, and variables."""
+    
+    def __init__(self):
+        self.defined_names = set()  # All defined names in the module
+        self.function_calls = defaultdict(set)  # Mapping of function name to the set of function names it calls
+        self.class_instantiations = defaultdict(set)  # Mapping of function name to the set of class names it instantiates
+        self.attribute_accesses = defaultdict(set)  # Mapping of function/method name to the attributes it accesses
+        self.imports = []  # List of import statements
+        self.global_vars = []  # List of global variables
+        self.functions = []  # List of functions
+        self.classes = []  # List of classes
+        
+        # Track current context (function or class being processed)
+        self.current_function = None
+        self.current_class = None
+        self.current_method = None
+        
+        # Track known external names
+        self.external_modules = set()
+        
+    def visit_Import(self, node):
+        """Process import statements."""
+        for name in node.names:
+            import_name = name.name
+            alias = name.asname or import_name
+            self.imports.append({
+                "module": import_name,
+                "alias": name.asname
+            })
+            self.defined_names.add(alias)
+            self.external_modules.add(alias)
+        self.generic_visit(node)
+    
+    def visit_ImportFrom(self, node):
+        """Process from ... import ... statements."""
+        module = node.module or ""
+        for name in node.names:
+            import_name = name.name
+            alias = name.asname or import_name
+            self.imports.append({
+                "module": module,
+                "name": import_name,
+                "alias": name.asname
+            })
+            self.defined_names.add(alias)
+        self.generic_visit(node)
+    
+    def visit_ClassDef(self, node):
+        """Process class definitions."""
+        class_name = node.name
+        self.defined_names.add(class_name)
+        
+        # Extract base classes
+        bases = []
+        for base in node.bases:
+            if isinstance(base, ast.Name):
+                bases.append(base.id)
+            else:
+                try:
+                    bases.append(ast.unparse(base))
+                except:
+                    bases.append(str(base))
+        
+        # Extract docstring
+        docstring = None
+        if (node.body and isinstance(node.body[0], ast.Expr) and 
+            isinstance(node.body[0].value, ast.Str)):
+            docstring = node.body[0].value.s.strip()
+        
+        # Save the current class context
+        prev_class = self.current_class
+        self.current_class = class_name
+        
+        # Process the class body
+        methods = []
+        for child in node.body:
+            if isinstance(child, ast.FunctionDef):
+                # This is a method
+                method_info = self.process_function(child, is_method=True)
+                if method_info:
+                    methods.append(method_info)
+        
+        # Add class info
+        self.classes.append({
+            "name": class_name,
+            "docstring": docstring or "No documentation available.",
+            "bases": bases,
+            "methods": methods,
+            "relationships": {
+                "inherits_from": bases,
+                "used_by_functions": [],  # Will be filled later
+                "instantiated_by": []  # Will be filled later
+            }
+        })
+        
+        # Restore previous class context
+        self.current_class = prev_class
+    
+    def process_function(self, node, is_method=False):
+        """Process function or method definition."""
+        func_name = node.name
+        
+        # Skip if it's a special method (like __init__) - we'll still process its body though
+        skip_adding = False
+        if is_method and func_name.startswith('__') and func_name.endswith('__'):
+            skip_adding = True
+        
+        # For methods, the full name includes the class name
+        full_name = f"{self.current_class}.{func_name}" if is_method and self.current_class else func_name
+        
+        # Extract docstring
+        docstring = None
+        if (node.body and isinstance(node.body[0], ast.Expr) and 
+            isinstance(node.body[0].value, ast.Str)):
+            docstring = node.body[0].value.s.strip()
+        
+        # Extract parameters
+        parameters = []
+        for arg in node.args.args:
+            param_name = arg.arg
+            param_type = None
+            if arg.annotation:
+                try:
+                    param_type = ast.unparse(arg.annotation)
+                except:
+                    param_type = str(arg.annotation)
+            
+            parameters.append({
+                "name": param_name,
+                "type": param_type,
+                "description": "Parameter description not available."
+            })
+        
+        # Extract return type
+        returns = None
+        if node.returns:
+            try:
+                returns = ast.unparse(node.returns)
+            except:
+                returns = str(node.returns)
+        
+        # Save the current function context
+        prev_function = self.current_function
+        prev_method = self.current_method
+        
+        if is_method:
+            self.current_method = full_name
+        else:
+            self.current_function = full_name
+            self.defined_names.add(func_name)
+        
+        # Visit the function body to capture calls and relationships
+        self.generic_visit(node)
+        
+        # Create the function info object
+        func_info = {
+            "name": func_name,
+            "docstring": docstring or "No documentation available.",
+            "parameters": parameters,
+            "returns": returns,
+            "relationships": {
+                "calls_functions": list(self.function_calls.get(full_name, set())),
+                "instantiates_classes": list(self.class_instantiations.get(full_name, set())),
+                "accesses_attributes": list(self.attribute_accesses.get(full_name, set())),
+                "called_by": []  # Will be filled later
+            }
+        }
+        
+        # Restore previous function context
+        self.current_function = prev_function
+        self.current_method = prev_method
+        
+        # Add to functions list if not a method or not a special method
+        if not skip_adding:
+            if not is_method:
+                self.functions.append(func_info)
+            return func_info
+        
+        return None
+    
+    def visit_FunctionDef(self, node):
+        """Process function definitions."""
+        self.process_function(node)
+    
+    def visit_Call(self, node):
+        """Process function calls."""
+        # Determine the current context
+        current_context = self.current_method if self.current_method else self.current_function
+        
+        if current_context:
+            # Function call
+            if isinstance(node.func, ast.Name):
+                func_name = node.func.id
+                self.function_calls[current_context].add(func_name)
+            
+            # Method call (obj.method())
+            elif isinstance(node.func, ast.Attribute) and isinstance(node.func.value, ast.Name):
+                obj_name = node.func.value.id
+                method_name = node.func.attr
+                
+                # Could be a module.function() call
+                if obj_name in self.external_modules:
+                    full_call = f"{obj_name}.{method_name}"
+                else:
+                    # Could be a class instantiation (ClassName())
+                    for cls in self.classes:
+                        if cls["name"] == obj_name:
+                            self.class_instantiations[current_context].add(obj_name)
+                            break
+                    
+                    full_call = f"{obj_name}.{method_name}"
+                
+                self.function_calls[current_context].add(full_call)
+                self.attribute_accesses[current_context].add(f"{obj_name}.{method_name}")
+        
+        self.generic_visit(node)
+    
+    def visit_Assign(self, node):
+        """Process assignments."""
+        # Only process global assignments
+        if not self.current_function and not self.current_method:
+            for target in node.targets:
+                if isinstance(target, ast.Name):
+                    var_name = target.id
+                    try:
+                        var_value = ast.unparse(node.value)
+                    except:
+                        var_value = str(node.value)
+                    
+                    # Check if it's a class instantiation
+                    if isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Name):
+                        class_name = node.value.func.id
+                        # Check if it's one of our known classes
+                        for cls in self.classes:
+                            if cls["name"] == class_name:
+                                self.class_instantiations["global"].add(class_name)
+                                break
+                    
+                    self.global_vars.append({
+                        "name": var_name,
+                        "value": var_value
+                    })
+                    self.defined_names.add(var_name)
+        
+        self.generic_visit(node)
+    
+    def post_process(self):
+        """Build reverse relationships after processing."""
+        # For each function call, update the called_by relationship
+        for caller, callees in self.function_calls.items():
+            for callee in callees:
+                # Find the actual function record
+                for func in self.functions:
+                    if func["name"] == callee:
+                        if caller not in func["relationships"]["called_by"]:
+                            func["relationships"]["called_by"].append(caller)
+        
+        # For each class instantiation, update the instantiated_by relationship
+        for instantiator, classes in self.class_instantiations.items():
+            for class_name in classes:
+                # Find the actual class record
+                for cls in self.classes:
+                    if cls["name"] == class_name:
+                        if instantiator not in cls["relationships"]["instantiated_by"]:
+                            cls["relationships"]["instantiated_by"].append(instantiator)
+        
+        # For each class, update the used_by_functions relationship
+        for cls in self.classes:
+            class_name = cls["name"]
+            for func in self.functions:
+                # If function instantiates this class
+                if class_name in func["relationships"]["instantiates_classes"]:
+                    if func["name"] not in cls["relationships"]["used_by_functions"]:
+                        cls["relationships"]["used_by_functions"].append(func["name"])
+                
+                # If function accesses any attributes related to this class
+                for attr in func["relationships"]["accesses_attributes"]:
+                    if attr.startswith(f"{class_name}."):
+                        if func["name"] not in cls["relationships"]["used_by_functions"]:
+                            cls["relationships"]["used_by_functions"].append(func["name"])
+
+class EnhancedAPIDocGenerator:
+    """Class to generate enhanced API documentation with relationship information."""
+    
+    def __init__(self, model):
+        self.model = model
+    
+    def generate_module_api_doc(self, module_name, code):
+        """Generate enhanced API documentation for a module."""
+        try:
+            # Parse the AST
+            tree = ast.parse(code)
+            
+            # Visit the AST to extract entities and relationships
+            visitor = RelationshipVisitor()
+            visitor.visit(tree)
+            visitor.post_process()
+            
+            # Extract module docstring
+            module_docstring = None
+            if (tree.body and isinstance(tree.body[0], ast.Expr) and 
+                isinstance(tree.body[0].value, ast.Str)):
+                module_docstring = tree.body[0].value.s.strip()
+            
+            # Create module doc
+            module_doc = {
+                "name": module_name,
+                "docstring": module_docstring or "No module documentation available.",
+                "imports": visitor.imports,
+                "global_vars": visitor.global_vars,
+                "functions": visitor.functions,
+                "classes": visitor.classes,
+                "relationships": {
+                    "dependencies": self._analyze_module_dependencies(visitor),
+                    "entry_points": self._identify_entry_points(visitor)
+                }
+            }
+            
+            return module_doc
+            
+        except SyntaxError as e:
+            logger.error(f"Syntax error in module {module_name}: {e}")
+            return self._fallback_api_doc_generation(module_name, code)
+        except Exception as e:
+            logger.error(f"Error parsing module {module_name}: {e}")
+            return self._fallback_api_doc_generation(module_name, code)
+    
+    def _analyze_module_dependencies(self, visitor):
+        """Analyze module level dependencies."""
+        dependencies = {
+            "imports": [imp.get("module") for imp in visitor.imports if "module" in imp],
+            "from_imports": [f"{imp.get('module')}.{imp.get('name')}" for imp in visitor.imports if "name" in imp],
+        }
+        return dependencies
+    
+    def _identify_entry_points(self, visitor):
+        """Identify potential entry points in the module."""
+        # Entry points are functions that are not called by other functions
+        entry_points = []
+        
+        for func in visitor.functions:
+            if not func["relationships"]["called_by"]:
+                # This function is not called by others
+                entry_points.append(func["name"])
+        
+        # Also look for if __name__ == "__main__" block
+        # This is a simplification - in a real implementation, we'd need to parse the AST for this
+        
+        return entry_points
+    
+    def _fallback_api_doc_generation(self, module_name, code):
+        """Use the LLM as a fallback for API doc generation when parsing fails."""
+        logger.info(f"Using LLM to extract enhanced API documentation for {module_name}")
+        
+        prompt = f"""
+Generate a detailed API documentation for the following Python code module.
+Extract all functions, classes, methods, and their parameters, return types, and docstrings.
+MOST IMPORTANTLY, also extract the relationships between functions and classes:
+- What functions call other functions
+- What functions instantiate classes
+- What classes inherit from other classes
+- What functions are entry points (not called by others)
+
+Format the response as a JSON object with the structure shown in the example.
+
+Example structure:
+```json
+{{
+  "name": "module_name",
+  "docstring": "Module docstring",
+  "imports": [
+    {{"module": "os", "alias": null}},
+    {{"module": "pandas", "alias": "pd"}}
+  ],
+  "global_vars": [
+    {{"name": "logger", "value": "logging.getLogger(__name__)"}}
+  ],
+  "functions": [
+    {{
+      "name": "function_name",
+      "docstring": "Function docstring",
+      "parameters": [
+        {{"name": "param1", "type": "str", "description": "Description of param1"}}
+      ],
+      "returns": "str",
+      "relationships": {{
+        "calls_functions": ["other_function", "third_function"],
+        "instantiates_classes": ["SomeClass"],
+        "accesses_attributes": ["object.attribute"],
+        "called_by": ["main"]
+      }}
+    }}
+  ],
+  "classes": [
+    {{
+      "name": "ClassName",
+      "docstring": "Class docstring",
+      "bases": ["BaseClass"],
+      "methods": [
+        {{
+          "name": "method_name",
+          "docstring": "Method docstring",
+          "parameters": [
+            {{"name": "self", "type": null, "description": "Instance reference"}},
+            {{"name": "param1", "type": "str", "description": "Description of param1"}}
+          ],
+          "returns": "bool",
+          "relationships": {{
+            "calls_functions": ["some_function"],
+            "instantiates_classes": [],
+            "accesses_attributes": ["self.attribute"],
+            "called_by": []
+          }}
+        }}
+      ],
+      "relationships": {{
+        "inherits_from": ["BaseClass"],
+        "used_by_functions": ["function_name"],
+        "instantiated_by": ["function_name"]
+      }}
+    }}
+  ],
+  "relationships": {{
+    "dependencies": {{
+      "imports": ["os", "pandas"],
+      "from_imports": ["logging.getLogger"]
+    }},
+    "entry_points": ["main"]
+  }}
+}}
+```
+
+Here's the code to document:
+
+```python
+{code}
+```
+
+Focus especially on capturing the relationships between functions and classes to help understand how the code works together.
+"""
+
+        system_message = SystemMessage(content="You are a Python expert who specializes in extracting API documentation and code relationships from code.")
+        human_message = HumanMessage(content=prompt)
+        
+        try:
+            response = self.model.invoke([system_message, human_message])
+            content = response.content
+            
+            # Try to extract JSON from the response
+            json_match = re.search(r'```json\s*(.*?)\s*```', content, re.DOTALL)
+            if json_match:
+                json_str = json_match.group(1)
+            else:
+                # If no JSON code block, try to find any JSON object
+                json_match = re.search(r'({[\s\S]*})', content)
+                if json_match:
+                    json_str = json_match.group(1)
+                else:
+                    json_str = content
+            
+            return json.loads(json_str)
+        
+        except Exception as e:
+            logger.error(f"Error getting API doc from LLM for {module_name}: {e}")
+            # Return a minimal structure
+            return {
+                "name": module_name,
+                "docstring": "Documentation extraction failed.",
+                "imports": [],
+                "global_vars": [],
+                "functions": [],
+                "classes": [],
+                "relationships": {
+                    "dependencies": {
+                        "imports": [],
+                        "from_imports": []
+                    },
+                    "entry_points": []
+                }
+            }
+    
+    def generate_all_module_docs(self, code_contents):
+        """Generate API documentation for all modules."""
+        module_docs = {}
+        
+        for module_name, code in code_contents.items():
+            try:
+                module_doc = self.generate_module_api_doc(module_name, code)
+                module_docs[module_name] = module_doc
+                logger.info(f"Generated enhanced API documentation for {module_name}")
+            except Exception as e:
+                logger.error(f"Error generating API doc for {module_name}: {e}")
+        
+        return module_docs
+    
+    def try_generate_dependency_graph(self, module_docs):
+        """Try to generate a dependency graph visualization for all modules."""
+        try:
+            # Check if matplotlib and networkx are available
+            try:
+                import matplotlib.pyplot as plt
+                import networkx as nx
+            except ImportError:
+                logger.warning("matplotlib or networkx not available, skipping graph generation")
+                return None
+            
+            # Create a directed graph
+            G = nx.DiGraph()
+            
+            # Add nodes for each module
+            for module_name in module_docs.keys():
+                G.add_node(module_name, type='module')
+            
+            # Add edges for dependencies between modules
+            for module_name, doc in module_docs.items():
+                # For each function in this module
+                for func in doc.get("functions", []):
+                    # For each function call
+                    for called_func in func.get("relationships", {}).get("calls_functions", []):
+                        # If the function contains a dot, it might be a cross-module call
+                        if "." in called_func:
+                            parts = called_func.split(".")
+                            if len(parts) == 2:
+                                potential_module = parts[0]
+                                # Check if this is one of our modules
+                                if potential_module in module_docs:
+                                    G.add_edge(module_name, potential_module, 
+                                            label=f"{func['name']} -> {called_func}")
+                                    
+                # Add edges based on imports if we can determine they're our modules
+                for imp in doc.get("imports", []):
+                    module = imp.get("module")
+                    if module in module_docs:
+                        G.add_edge(module_name, module, label="imports")
+            
+            # Check if we have any edges
+            if not G.edges():
+                # Add edges based on function similarities
+                self._add_similarity_edges(G, module_docs)
+            
+            # Create the visualization
+            plt.figure(figsize=(12, 8))
+            pos = nx.spring_layout(G)
+            nx.draw(G, pos, with_labels=True, node_color='lightblue', 
+                    font_weight='bold', node_size=2000, arrows=True)
+            
+            # Add edge labels
+            edge_labels = {(u, v): d.get('label', '') for u, v, d in G.edges(data=True)}
+            nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
+            
+            return G
+        except Exception as e:
+            logger.error(f"Error generating dependency graph: {e}")
+            return None
+    
+    def _add_similarity_edges(self, G, module_docs):
+        """Add edges based on function and class name similarities."""
+        # Create a dictionary of all function names to their modules
+        function_to_module = {}
+        for module_name, doc in module_docs.items():
+            for func in doc.get("functions", []):
+                function_to_module[func["name"]] = module_name
+        
+        # Look for similar function names across modules
+        for module_name, doc in module_docs.items():
+            for func in doc.get("functions", []):
+                for called_func in func.get("relationships", {}).get("calls_functions", []):
+                    # If the function appears in another module
+                    if called_func in function_to_module and function_to_module[called_func] != module_name:
+                        target_module = function_to_module[called_func]
+                        G.add_edge(module_name, target_module, 
+                                label=f"{func['name']} -> {called_func}")
+    
+    def format_api_docs_for_llm(self, module_docs):
+        """Format API documentation for use in LLM prompt, including relationship information."""
+        formatted_docs = []
+        
+        for module_name, doc in module_docs.items():
+            module_text = [f"MODULE: {module_name}_code.py"]
+            
+            # Add module docstring
+            module_text.append(f"Description: {doc['docstring']}")
+            module_text.append("")
+            
+            # Add imports
+            if doc["imports"]:
+                module_text.append("Imports:")
+                for imp in doc["imports"]:
+                    if "name" in imp:
+                        from_txt = f"from {imp['module']} " if imp['module'] else "from "
+                        as_txt = f" as {imp['alias']}" if imp['alias'] else ""
+                        module_text.append(f"  {from_txt}import {imp['name']}{as_txt}")
+                    else:
+                        as_txt = f" as {imp['alias']}" if imp['alias'] else ""
+                        module_text.append(f"  import {imp['module']}{as_txt}")
+                module_text.append("")
+            
+            # Add global variables
+            if doc["global_vars"]:
+                module_text.append("Global Variables:")
+                for var in doc["global_vars"]:
+                    module_text.append(f"  {var['name']} = {var['value']}")
+                module_text.append("")
+            
+            # Add classes
+            if doc["classes"]:
+                module_text.append("Classes:")
+                for cls in doc["classes"]:
+                    bases = f"({', '.join(cls['bases'])})" if cls['bases'] else ""
+                    module_text.append(f"  class {cls['name']}{bases}:")
+                    module_text.append(f"    \"{cls['docstring']}\"")
+                    
+                    # Add class relationships
+                    if cls.get("relationships"):
+                        module_text.append("    Relationships:")
+                        inherits = cls["relationships"].get("inherits_from", [])
+                        if inherits:
+                            module_text.append(f"      Inherits from: {', '.join(inherits)}")
+                        
+                        used_by = cls["relationships"].get("used_by_functions", [])
+                        if used_by:
+                            module_text.append(f"      Used by functions: {', '.join(used_by)}")
+                        
+                        inst_by = cls["relationships"].get("instantiated_by", [])
+                        if inst_by:
+                            module_text.append(f"      Instantiated by: {', '.join(inst_by)}")
+                        
+                        module_text.append("")
+                    
+                    if cls["methods"]:
+                        module_text.append("    Methods:")
+                        for method in cls["methods"]:
+                            params = []
+                            for p in method["parameters"]:
+                                param_type = f": {p['type']}" if p['type'] else ""
+                                params.append(f"{p['name']}{param_type}")
+                            
+                            returns = f" -> {method['returns']}" if method['returns'] else ""
+                            module_text.append(f"      def {method['name']}({', '.join(params)}){returns}:")
+                            module_text.append(f"        \"{method['docstring']}\"")
+                            
+                            # Add method relationships
+                            if method.get("relationships"):
+                                module_text.append("        Relationships:")
+                                calls = method["relationships"].get("calls_functions", [])
+                                if calls:
+                                    module_text.append(f"          Calls functions: {', '.join(calls)}")
+                                
+                                instantiates = method["relationships"].get("instantiates_classes", [])
+                                if instantiates:
+                                    module_text.append(f"          Instantiates classes: {', '.join(instantiates)}")
+                                
+                                accesses = method["relationships"].get("accesses_attributes", [])
+                                if accesses:
+                                    module_text.append(f"          Accesses attributes: {', '.join(accesses)}")
+                                
+                                called_by = method["relationships"].get("called_by", [])
+                                if called_by:
+                                    module_text.append(f"          Called by: {', '.join(called_by)}")
+                                
+                                module_text.append("")
+                            
+                            # Add parameter descriptions
+                            if any(p["description"] != "Parameter description not available." for p in method["parameters"]):
+                                module_text.append("        Parameters:")
+                                for p in method["parameters"]:
+                                    if p["description"] != "Parameter description not available.":
+                                        module_text.append(f"          {p['name']}: {p['description']}")
+                            
+                            module_text.append("")
+                    
+                    module_text.append("")
+            
+            # Add functions
+            if doc["functions"]:
+                module_text.append("Functions:")
+                for func in doc["functions"]:
+                    params = []
+                    for p in func["parameters"]:
+                        param_type = f": {p['type']}" if p['type'] else ""
+                        params.append(f"{p['name']}{param_type}")
+                    
+                    returns = f" -> {func['returns']}" if func['returns'] else ""
+                    module_text.append(f"  def {func['name']}({', '.join(params)}){returns}:")
+                    module_text.append(f"    \"{func['docstring']}\"")
+                    
+                    # Add function relationships
+                    if func.get("relationships"):
+                        module_text.append("    Relationships:")
+                        calls = func["relationships"].get("calls_functions", [])
+                        if calls:
+                            module_text.append(f"      Calls functions: {', '.join(calls)}")
+                        
+                        instantiates = func["relationships"].get("instantiates_classes", [])
+                        if instantiates:
+                            module_text.append(f"      Instantiates classes: {', '.join(instantiates)}")
+                        
+                        accesses = func["relationships"].get("accesses_attributes", [])
+                        if accesses:
+                            module_text.append(f"      Accesses attributes: {', '.join(accesses)}")
+                        
+                        called_by = func["relationships"].get("called_by", [])
+                        if called_by:
+                            module_text.append(f"      Called by: {', '.join(called_by)}")
+                        
+                        module_text.append("")
+                    
+                    # Add parameter descriptions
+                    if any(p["description"] != "Parameter description not available." for p in func["parameters"]):
+                        module_text.append("    Parameters:")
+                        for p in func["parameters"]:
+                            if p["description"] != "Parameter description not available.":
+                                module_text.append(f"      {p['name']}: {p['description']}")
+                    
+                    module_text.append("")
+            
+            # Add module-level relationships
+            if doc.get("relationships"):
+                module_text.append("Module Relationships:")
+                
+                # Dependencies
+                deps = doc["relationships"].get("dependencies", {})
+                imports = deps.get("imports", [])
+                if imports:
+                    module_text.append(f"  Imports modules: {', '.join(imports)}")
+                
+                from_imports = deps.get("from_imports", [])
+                if from_imports:
+                    module_text.append(f"  Imports from: {', '.join(from_imports)}")
+                
+                # Entry points
+                entry_points = doc["relationships"].get("entry_points", [])
+                if entry_points:
+                    module_text.append(f"  Entry points: {', '.join(entry_points)}")
+                
+                module_text.append("")
+            
+            formatted_docs.append("\n".join(module_text))
+        
+        return "\n\n" + "\n\n".join(formatted_docs) + "\n"
+
+class EnhancedCodeIntegrator:
+    """Class to integrate code modules based on enhanced API documentation with relationships."""
+    
+    def __init__(self, model, doc_generator):
+        self.model = model
+        self.doc_generator = doc_generator
+    
+    def create_integration_prompt(self, api_docs):
+        """Create a prompt for the LLM to integrate the code with relationship awareness."""
+        prompt = f"""
+I have multiple Python modules that need to be integrated into a cohesive solution.
+Below is the ENHANCED API documentation for each module, which includes detailed relationship information
+showing which functions call other functions, which classes are instantiated, and other dependencies.
+Each module is stored in a separate file with the naming pattern of "US_XXX_code.py" where XXX is the user story ID.
+
+{api_docs}
+
+Your task is to:
+
+1. Create a single integrated Python file that coordinates functionality from all these modules
+2. Design the integrated solution to import modules correctly using their filenames (e.g., "import US_142_code" NOT "import US_142")
+3. Create proper references to functions and classes from each module with correct module prefixes
+4. Make sure to import all necessary standard and third-party libraries needed by the solution
+5. Ensure proper sequencing based on the function call relationships documented above
+6. Include a main execution block that coordinates the overall flow
+7. Write clear comments to explain how the integration works, especially noting important function relationships
+8. Add detailed documentation explaining which functions call which other functions and their dependencies
+
+IMPORTANT: Each module should be imported using its full filename (e.g., "import US_142_code" not "import US_142").
+When referring to functions, classes, or variables from these modules, use the proper module prefix
+(e.g., "US_142_code.process_file()" not "US_142.process_file()").
+
+Your integrated solution should include:
+1. A detailed module docstring explaining the overall architecture and how the modules interact
+2. Comments for each section explaining which components depend on each other
+3. A function relationship map in comments to help developers understand the code flow
+4. A main execution function that coordinates the execution flow based on the identified relationships
+
+Format your response as a single Python file with all necessary imports, functions, 
+and a main execution block. Add helpful comments to explain your integration strategy.
+
+Return only the final integrated Python code without explanation or other text.
+"""
+        return prompt
+    
+    def validate_integrated_code(self, code, module_names):
+        """Validate that the integrated code properly imports all modules with correct names."""
+        # Check if modules are imported with _code suffix
+        proper_imports = True
+        module_import_checks = []
+        
+        for module_name in module_names:
+            module_import_name = f"{module_name}_code"
+            if f"import {module_name}" in code and f"import {module_import_name}" not in code:
+                proper_imports = False
+                module_import_checks.append((module_name, False))
+            else:
+                module_import_checks.append((module_name, True))
+        
+        # Check for any functions or classes referenced without proper module prefix
+        improper_references = []
+        
+        for module_name in module_names:
+            # Look for patterns like "ModuleName.function" instead of "ModuleName_code.function"
+            pattern = fr"{module_name}\.[a-zA-Z0-9_]+"
+            matches = re.findall(pattern, code)
+            if matches:
+                improper_references.extend(matches)
+        
+        return {
+            "proper_imports": proper_imports,
+            "module_import_checks": module_import_checks,
+            "improper_references": improper_references
+        }
+    
+    def fix_integrated_code(self, code, validation_result):
+        """Fix issues with the integrated code based on validation results."""
+        fixed_code = code
+        
+        # Fix improper imports
+        for module_name, is_proper in validation_result["module_import_checks"]:
+            if not is_proper:
+                # Replace "import ModuleName" with "import ModuleName_code"
+                fixed_code = re.sub(
+                    fr"import\s+{module_name}(?!_code)",
+                    f"import {module_name}_code",
+                    fixed_code
+                )
+                
+                # Replace "from ModuleName import" with "from ModuleName_code import"
+                fixed_code = re.sub(
+                    fr"from\s+{module_name}(?!_code)\s+import",
+                    f"from {module_name}_code import",
+                    fixed_code
+                )
+        
+        # Fix improper references
+        for ref in validation_result["improper_references"]:
+            module_name = ref.split('.')[0]
+            fixed_code = fixed_code.replace(ref, ref.replace(f"{module_name}.", f"{module_name}_code."))
+        
+        return fixed_code
+    
+    def generate_integrated_code(self, module_docs):
+        """Generate integrated code based on enhanced API documentation with relationships."""
+        # Format API docs for the LLM
+        api_docs_text = self.doc_generator.format_api_docs_for_llm(module_docs)
+        
+        # Create the prompt
+        prompt = self.create_integration_prompt(api_docs_text)
+        
+        # Send to LLM
+        system_message = SystemMessage(content="""You are a Python expert who specializes in integrating multiple code modules 
+into cohesive solutions. You excel at understanding module dependencies and creating orchestration code.""")
+        human_message = HumanMessage(content=prompt)
+        
+        logger.info("Sending enhanced API documentation to LLM for integration")
+        response = self.model.invoke([system_message, human_message])
+        
+        # Extract code from response
+        content = response.content
+        
+        # Check if the response is wrapped in code blocks
+        if "```python" in content and "```" in content.split("```python", 1)[1]:
+            # Extract code between the markers
+            code = content.split("```python", 1)[1].split("```", 1)[0].strip()
+        elif "```" in content and content.count("```") >= 2:
+            # Extract code between the markers
+            parts = content.split("```", 2)
+            code = parts[1]
+            if code.startswith("python"):
+                code = code[6:]
+            code = code.strip()
+        else:
+            # If not wrapped in code blocks, return as is
+            code = content
+        
+        # Validate and fix the code
+        validation_result = self.validate_integrated_code(code, module_docs.keys())
+        
+        if not validation_result["proper_imports"] or validation_result["improper_references"]:
+            logger.info("Fixing issues in the integrated code")
+            code = self.fix_integrated_code(code, validation_result)
+        
+        return code
+    
+    def generate_init_file(self, output_dir, module_docs):
+        """Generate an __init__.py file to make importing modules easier."""
+        init_content = ['"""Package initialization file with module relationships documented."""\n']
+        
+        # Add imports for all modules
+        for module_name in module_docs.keys():
+            # Import the module
+            init_content.append(f"import {module_name}_code")
+            
+            # Create shorter aliases for convenience
+            init_content.append(f"{module_name} = {module_name}_code")
+        
+        # Add module relationship documentation
+        init_content.append("\n# Module relationships:")
+        for module_name, doc in module_docs.items():
+            # Document entry points
+            entry_points = doc.get("relationships", {}).get("entry_points", [])
+            if entry_points:
+                init_content.append(f"# {module_name}_code entry points: {', '.join(entry_points)}")
+            
+            # Document function calls between modules
+            calls_found = False
+            for func in doc.get("functions", []):
+                for called_func in func.get("relationships", {}).get("calls_functions", []):
+                    if "." in called_func:
+                        parts = called_func.split(".")
+                        if len(parts) == 2 and parts[0] in module_docs:
+                            if not calls_found:
+                                init_content.append(f"# {module_name}_code function dependencies:")
+                                calls_found = True
+                            init_content.append(f"#   {func['name']} -> {called_func}")
+            
+            if not calls_found:
+                init_content.append(f"# {module_name}_code: No external function calls identified")
+        
+        # Write the file
+        init_path = os.path.join(output_dir, "__init__.py")
+        with open(init_path, 'w') as f:
+            f.write("\n".join(init_content))
+        
+        logger.info(f"Created enhanced __init__.py file at {init_path}")
+
+def save_modules_with_proper_names(output_dir, code_contents):
+    """Save individual modules with proper names based on user story IDs."""
+    os.makedirs(output_dir, exist_ok=True)
+    
+    for module_name, code in code_contents.items():
+        file_name = f"{module_name}_code.py"
+        file_path = os.path.join(output_dir, file_name)
+        
+        with open(file_path, 'w') as f:
+            f.write(code)
+        
+        logger.info(f"Saved module {module_name} to {file_path}")
+
+def create_relationship_documentation(output_dir, module_docs):
+    """Create a RELATIONSHIPS.md file documenting the relationships between all components."""
+    content = [
+        "# Module Relationship Documentation",
+        "",
+        "This document provides detailed information about the relationships between modules, functions, and classes.",
+        "",
+        "## Overview",
+        ""
+    ]
+    
+    # Create a list of all modules
+    content.append("### Modules")
+    for module_name in module_docs.keys():
+        content.append(f"- {module_name}_code.py")
+    content.append("")
+    
+    # Document module-level relationships
+    content.append("## Module Dependencies")
+    content.append("")
+    
+    for module_name, doc in module_docs.items():
+        content.append(f"### {module_name}_code.py")
+        content.append(f"*{doc['docstring']}*")
+        content.append("")
+        
+        # Dependencies
+        deps = doc.get("relationships", {}).get("dependencies", {})
+        imports = deps.get("imports", [])
+        if imports:
+            content.append("**Imports modules:**")
+            for imp in imports:
+                content.append(f"- {imp}")
+            content.append("")
+        
+        # Entry points
+        entry_points = doc.get("relationships", {}).get("entry_points", [])
+        if entry_points:
+            content.append("**Entry points:**")
+            for ep in entry_points:
+                content.append(f"- {ep}")
+            content.append("")
+        
+        # Functions
+        if doc.get("functions"):
+            content.append("**Functions:**")
+            for func in doc["functions"]:
+                # Add function with its relationships
+                # Safely extract the docstring summary
+                docstring_summary = get_docstring_summary(func.get('docstring'))
+                content.append(f"- `{func['name']}`: {docstring_summary}")
+                
+                # Function calls
+                calls = func.get("relationships", {}).get("calls_functions", [])
+                if calls:
+                    content.append(f"  - Calls: {', '.join([f'`{c}`' for c in calls])}")
+                
+                # Function instantiations
+                instantiates = func.get("relationships", {}).get("instantiates_classes", [])
+                if instantiates:
+                    content.append(f"  - Instantiates: {', '.join([f'`{c}`' for c in instantiates])}")
+                
+                # Called by
+                called_by = func.get("relationships", {}).get("called_by", [])
+                if called_by:
+                    content.append(f"  - Called by: {', '.join([f'`{c}`' for c in called_by])}")
+            
+            content.append("")
+        
+        # Classes
+        if doc.get("classes"):
+            content.append("**Classes:**")
+            for cls in doc["classes"]:
+                # Add class with its relationships
+                docstring_summary = get_docstring_summary(cls.get('docstring'))
+                content.append(f"- `{cls['name']}`: {docstring_summary}")
+                
+                # Inheritance
+                inherits = cls.get("relationships", {}).get("inherits_from", [])
+                if inherits:
+                    content.append(f"  - Inherits from: {', '.join([f'`{c}`' for c in inherits])}")
+                
+                # Used by
+                used_by = cls.get("relationships", {}).get("used_by_functions", [])
+                if used_by:
+                    content.append(f"  - Used by: {', '.join([f'`{c}`' for c in used_by])}")
+                
+                # Instantiated by
+                inst_by = cls.get("relationships", {}).get("instantiated_by", [])
+                if inst_by:
+                    content.append(f"  - Instantiated by: {', '.join([f'`{c}`' for c in inst_by])}")
+            
+            content.append("")
+    
+    # Create function call graph section
+    content.append("## Function Call Graph")
+    content.append("")
+    content.append("This section shows which functions call other functions across all modules.")
+    content.append("")
+    
+    # Build the function call graph
+    call_graph = defaultdict(list)
+    
+    for module_name, doc in module_docs.items():
+        for func in doc.get("functions", []):
+            func_full_name = f"{module_name}_code.{func['name']}"
+            for called_func in func.get("relationships", {}).get("calls_functions", []):
+                if "." in called_func:
+                    call_graph[func_full_name].append(called_func)
+                else:
+                    # It's in the same module
+                    call_graph[func_full_name].append(f"{module_name}_code.{called_func}")
+    
+    # Print call graph
+    for caller, callees in sorted(call_graph.items()):
+        if callees:
+            content.append(f"- `{caller}` calls:")
+            for callee in sorted(callees):
+                content.append(f"  - `{callee}`")
+            content.append("")
+    
+    # Write to file
+    rel_path = os.path.join(output_dir, "RELATIONSHIPS.md")
+    with open(rel_path, 'w') as f:
+        f.write("\n".join(content))
+    
+    logger.info(f"Created detailed relationship documentation at {rel_path}")
+
+def create_setup_py(output_dir, module_name="integrated_solution"):
+    """Create a setup.py file to make the package installable."""
+    setup_content = f'''"""
+Setup script for {module_name} package.
+This package combines multiple modules with their relationships preserved.
+"""
+
+from setuptools import setup, find_packages
+
+setup(
+    name="{module_name}",
+    version="0.1.0",
+    packages=find_packages(),
+    author="AI Code Generator",
+    author_email="ai@example.com",
+    description="Integrated solution generated from multiple modules with relationship awareness",
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+    python_requires=">=3.6",
+)
+'''
+    
+    setup_path = os.path.join(output_dir, "setup.py")
+    with open(setup_path, 'w') as f:
+        f.write(setup_content)
+    
+    logger.info(f"Created setup.py file at {setup_path}")
+
+def create_readme(output_dir, module_docs):
+    """Create a README.md file with information about the integrated solution."""
+    readme_content = [
+        "# Relationship-Enhanced Integrated Solution",
+        "",
+        "This is an automatically generated integrated solution that combines functionality from multiple modules,",
+        "with enhanced documentation of relationships between functions and classes.",
+        "",
+        "## Architecture Overview",
+        "",
+        "The solution consists of the following modules, each with distinct responsibilities:",
+        ""
+    ]
+    
+    # Add module descriptions
+    for module_name, doc in module_docs.items():
+        readme_content.append(f"### {module_name}_code")
+        readme_content.append(f"{doc['docstring']}")
+        
+        # Add entry points
+        entry_points = doc.get("relationships", {}).get("entry_points", [])
+        if entry_points:
+            readme_content.append("\nEntry Points:")
+            for ep in entry_points:
+                readme_content.append(f"- `{ep}`")
+        
+        # Add functions with their relationships
+        if doc["functions"]:
+            readme_content.append("\nKey Functions:")
+            for func in doc["functions"]:
+                # Only include functions that have relationships or are entry points
+                has_relationships = (
+                    func.get("relationships", {}).get("calls_functions") or 
+                    func.get("relationships", {}).get("instantiates_classes") or
+                    func.get("relationships", {}).get("called_by")
+                )
+                
+                is_entry_point = func["name"] in entry_points
+                
+                if has_relationships or is_entry_point:
+                    # Safely get docstring summary
+                    docstring_summary = get_docstring_summary(func.get('docstring'))
+                    readme_content.append(f"- `{func['name']}`: {docstring_summary}")
+                    
+                    # Add relationship info
+                    if has_relationships:
+                        rel = func.get("relationships", {})
+                        calls = rel.get("calls_functions", [])
+                        if calls:
+                            readme_content.append(f"  - Calls: {', '.join(calls)}")
+                        
+                        called_by = rel.get("called_by", [])
+                        if called_by:
+                            readme_content.append(f"  - Called by: {', '.join(called_by)}")
+                        
+                        instantiates = rel.get("instantiates_classes", [])
+                        if instantiates:
+                            readme_content.append(f"  - Instantiates: {', '.join(instantiates)}")
+        
+        readme_content.append("")
+    
+    # Add integration information
+    readme_content.extend([
+        "## Integration Strategy",
+        "",
+        "The integration follows these principles:",
+        "",
+        "1. **Dependency-Based Execution**: Functions are called in an order that respects their dependencies",
+        "2. **Module Isolation**: Each module maintains its own namespace to prevent conflicts",
+        "3. **Coordinated Execution**: The main execution orchestrates the flow across modules",
+        "",
+        "## Documentation",
+        "",
+        "For more detailed information about the relationships between components, see:",
+        "",
+        "- `RELATIONSHIPS.md`: Detailed documentation of all module and function relationships",
+        "- `integrated_solution.py`: The main integration file with relationship comments",
+        "- `__init__.py`: Contains module relationship information"
+    ])
+    
+    readme_path = os.path.join(output_dir, "README.md")
+    with open(readme_path, 'w') as f:
+        f.write("\n".join(readme_content))
+    
+    logger.info(f"Created enhanced README.md file at {readme_path}")
+
+def integrate_code_with_enhanced_relationships(code_generation_folder=None):
+    """
+    Integrate code with enhanced relationship documentation and analysis
+    
+    Args:
+        code_generation_folder: Path to the folder containing generated code (if None, uses the latest folder)
+        
+    Returns:
+        str: Path to the output directory with integrated solution
+    """
+    try:
+        # Check OpenAI configuration
+        check_openai_config()
+        
+        # Initialize the model
+        model = AzureChatOpenAI(
+            azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
+            api_key=os.environ["AZURE_OPENAI_API_KEY"],
+            api_version=os.environ["AZURE_OPENAI_API_VERSION"],
+            deployment_name=os.environ["AZURE_OPENAI_CHAT_DEPLOYMENT_NAME"],
+            temperature=0.1  # Low temperature for more deterministic output
+        )
+        
+        # Find the code generation folder (latest or specified)
+        if code_generation_folder is None:
+            code_generation_folder = find_latest_code_generation_folder()
+        
+        logger.info(f"Using code generation folder: {code_generation_folder}")
+        
+        # Create output directory
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        output_dir = os.path.join(os.path.dirname(code_generation_folder), f"integrated_solution_{timestamp}")
+        os.makedirs(output_dir, exist_ok=True)
+        
+        # Find all code files
+        code_files = find_code_files(code_generation_folder)
+        logger.info(f"Found {len(code_files)} code files to integrate")
+        
+        if not code_files:
+            logger.error("No code files found to integrate")
+            return None
+        
+        # Read all code files
+        code_contents = read_code_files(code_files)
+        
+        # Save modules with proper names
+        save_modules_with_proper_names(output_dir, code_contents)
+        
+        # Generate enhanced API documentation with relationships
+        doc_generator = EnhancedAPIDocGenerator(model)
+        module_docs = doc_generator.generate_all_module_docs(code_contents)
+        
+        # Save enhanced API documentation
+        api_docs_path = os.path.join(output_dir, "enhanced_api_documentation.json")
+        with open(api_docs_path, 'w') as f:
+            json.dump(module_docs, f, indent=2)
+        logger.info(f"Saved enhanced API documentation to {api_docs_path}")
+        
+        # Create detailed relationship documentation
+        create_relationship_documentation(output_dir, module_docs)
+        
+        # Try to generate dependency graph
+        try:
+            # Try to import required libraries
+            import matplotlib.pyplot as plt
+            import networkx as nx
+            
+            # Try to generate the graph
+            dependency_graph = doc_generator.try_generate_dependency_graph(module_docs)
+            if dependency_graph:
+                graph_path = os.path.join(output_dir, "module_dependencies.png")
+                plt.savefig(graph_path)
+                logger.info(f"Saved dependency graph visualization to {graph_path}")
+        except ImportError:
+            logger.warning("matplotlib or networkx not available, skipping graph generation")
+        except Exception as e:
+            logger.warning(f"Could not generate dependency graph: {e}")
+        
+        # Generate integrated code
+        integrator = EnhancedCodeIntegrator(model, doc_generator)
+        integrated_code = integrator.generate_integrated_code(module_docs)
+        
+        # Add header
+        header = f'''"""
+Relationship-Enhanced Integrated Solution
+This file was automatically generated by the Combined Code Generation and Integration System.
+Generated on: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+
+This code serves as an integration layer that coordinates all the individual modules.
+Each module's code is stored in separate files named by their user story IDs with "_code.py" suffix.
+The integration is based on detailed analysis of function and class relationships between modules.
+"""
+
+'''
+        integrated_code = header + integrated_code
+        
+        # Save integrated code
+        integrated_code_path = os.path.join(output_dir, "integrated_solution.py")
+        with open(integrated_code_path, 'w') as f:
+            f.write(integrated_code)
+        
+        # Create enhanced __init__.py file
+        integrator.generate_init_file(output_dir, module_docs)
+        
+        # Create enhanced README.md
+        create_readme(output_dir, module_docs)
+        
+        # Create setup.py
+        create_setup_py(output_dir)
+        
+        logger.info(f"Successfully created relationship-enhanced integrated solution: {integrated_code_path}")
+        print(f"Relationship-enhanced integrated solution created at: {output_dir}")
+        
+        return output_dir
+    
+    except Exception as e:
+        logger.error(f"Error in code integration: {e}")
+        import traceback
+        traceback.print_exc()
+        raise
+
+#############################################################
+# Combined Workflow
+#############################################################
+
+def combined_code_generation_and_integration(excel_file_path="tech.xlsx"):
+    """
+    Combined workflow function that runs both code generation and integration
+    
+    Args:
+        excel_file_path: Path to Excel file with technical specifications
+        
+    Returns:
+        Tuple[str, str]: Paths to the code generation and integrated solution directories
+    """
+    try:
+        # Step 1: Configure OpenAI
+        check_openai_config()
+        
+        # Step 2: Generate code from technical specifications
+        print("Starting code generation from technical specifications...")
+        code_generation_dir = process_tech_specs(excel_file_path)
+        
+        if not code_generation_dir:
+            logger.error("Code generation failed or no tech specs found")
+            return None, None
+        
+        print(f"Completed code generation. Directory: {code_generation_dir}")
+        
+        # Step 3: Integrate the generated code with relationship enhancement
+        print("Starting code integration with relationship analysis...")
+        integrated_solution_dir = integrate_code_with_enhanced_relationships(code_generation_dir)
+        
+        if not integrated_solution_dir:
+            logger.error("Code integration failed")
+            return code_generation_dir, None
+        
+        print(f"Completed code integration. Directory: {integrated_solution_dir}")
+        
+        # Return both directory paths
+        return code_generation_dir, integrated_solution_dir
+        
+    except Exception as e:
+        logger.error(f"Error in combined workflow: {e}")
+        import traceback
+        traceback.print_exc()
+        raise
+
+if __name__ == "__main__":
+    # Execute the combined workflow
+    code_gen_dir, integrated_dir = combined_code_generation_and_integration("tech.xlsx")
+    
+    if code_gen_dir and integrated_dir:
+        print("\nWorkflow completed successfully!")
+        print(f"Generated code: {code_gen_dir}")
+        print(f"Integrated solution: {integrated_dir}")
+    else:
+        print("\nWorkflow completed with errors. Check logs for details.")
