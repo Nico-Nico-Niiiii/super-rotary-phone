@@ -1,0 +1,39 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# static upload folders
+eval_uploads/
+uploads/
+rag_zip_uploads/
+rag_extracted_uploads/
+datasets/
+
+
+# Virtual env
+.env
+
+
+# Logs
+log/
+logs/
+presentations/
+temp_downloads/
+
+
+
+# models
+model/
+
+
+
+# vector DB
+chroma_db/
+faiss_indexes/
+
+
+# test files
+test.py 
+
+

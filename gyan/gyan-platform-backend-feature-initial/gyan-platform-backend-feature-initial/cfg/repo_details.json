@@ -1,0 +1,5 @@
+{
+    "model_repo": "./model",
+    "dataset_repo": "./datasets",
+    "log_path": "./log"
+}

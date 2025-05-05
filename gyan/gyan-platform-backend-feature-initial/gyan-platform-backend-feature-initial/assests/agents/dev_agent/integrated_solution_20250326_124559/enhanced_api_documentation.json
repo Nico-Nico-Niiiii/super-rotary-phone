@@ -1,0 +1,382 @@
+{
+  "US_171": {
+    "name": "dicom_sr_module",
+    "docstring": null,
+    "imports": [
+      {
+        "module": "fastapi",
+        "alias": null
+      },
+      {
+        "module": "pydantic",
+        "alias": null
+      },
+      {
+        "module": "typing",
+        "alias": null
+      },
+      {
+        "module": "sqlalchemy",
+        "alias": null
+      },
+      {
+        "module": "sqlalchemy.exc",
+        "alias": null
+      },
+      {
+        "module": "re",
+        "alias": null
+      },
+      {
+        "module": "requests",
+        "alias": null
+      },
+      {
+        "module": "logging",
+        "alias": null
+      },
+      {
+        "module": "cachetools",
+        "alias": null
+      },
+      {
+        "module": "functools",
+        "alias": null
+      },
+      {
+        "module": "fastapi.security",
+        "alias": null
+      },
+      {
+        "module": "fastapi.middleware.trustedhost",
+        "alias": null
+      },
+      {
+        "module": "fastapi.middleware.cors",
+        "alias": null
+      },
+      {
+        "module": "fastapi_limiter",
+        "alias": null
+      },
+      {
+        "module": "fastapi_limiter.depends",
+        "alias": null
+      },
+      {
+        "module": "redis",
+        "alias": null
+      },
+      {
+        "module": "json",
+        "alias": null
+      }
+    ],
+    "global_vars": [
+      {
+        "name": "app",
+        "value": "FastAPI()"
+      },
+      {
+        "name": "logger",
+        "value": "logging.getLogger(__name__)"
+      },
+      {
+        "name": "DATABASE_URL",
+        "value": "\"sqlite:///./test.db\""
+      },
+      {
+        "name": "engine",
+        "value": "create_engine(DATABASE_URL)"
+      },
+      {
+        "name": "PACS_SERVER_URL",
+        "value": "\"http://pacs-server/api\""
+      },
+      {
+        "name": "AI_ENGINE_URL",
+        "value": "\"http://ai-engine/api\""
+      },
+      {
+        "name": "cache",
+        "value": "TTLCache(maxsize=100, ttl=300)"
+      },
+      {
+        "name": "redis_client",
+        "value": "redis.StrictRedis(host=\"localhost\", port=6379, db=0)"
+      },
+      {
+        "name": "security",
+        "value": "HTTPBasic()"
+      }
+    ],
+    "functions": [
+      {
+        "name": "validate_patient_id",
+        "docstring": "Validate patient ID format.",
+        "parameters": [
+          {
+            "name": "patient_id",
+            "type": "str",
+            "description": "Patient ID to validate"
+          }
+        ],
+        "returns": "bool",
+        "relationships": {
+          "calls_functions": [
+            "re.match",
+            "logger.error"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "post_dicom_sr_details",
+            "get_dicom_sr"
+          ]
+        }
+      },
+      {
+        "name": "fetch_dicom_sr_from_db",
+        "docstring": "Fetch DICOM SR from the database.",
+        "parameters": [
+          {
+            "name": "patient_id",
+            "type": "str",
+            "description": "Patient ID to fetch DICOM SR for"
+          }
+        ],
+        "returns": "Optional[Dict[str, Any]]",
+        "relationships": {
+          "calls_functions": [
+            "engine.connect",
+            "logger.warning",
+            "logger.error",
+            "HTTPException"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "post_dicom_sr_details",
+            "get_dicom_sr"
+          ]
+        }
+      },
+      {
+        "name": "fetch_dicom_image_from_pacs",
+        "docstring": "Fetch DICOM image from PACS server.",
+        "parameters": [
+          {
+            "name": "patient_id",
+            "type": "str",
+            "description": "Patient ID to fetch DICOM image for"
+          }
+        ],
+        "returns": "Optional[Dict[str, Any]]",
+        "relationships": {
+          "calls_functions": [
+            "requests.get",
+            "response.raise_for_status",
+            "response.json",
+            "logger.error",
+            "HTTPException"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "post_dicom_sr_details"
+          ]
+        }
+      },
+      {
+        "name": "perform_ai_inference",
+        "docstring": "Perform AI inference on DICOM image.",
+        "parameters": [
+          {
+            "name": "image_data",
+            "type": "Dict[str, Any]",
+            "description": "DICOM image data for inference"
+          }
+        ],
+        "returns": "Dict[str, Any]",
+        "relationships": {
+          "calls_functions": [
+            "requests.post",
+            "response.raise_for_status",
+            "response.json",
+            "logger.error",
+            "HTTPException"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": [
+            "post_dicom_sr_details"
+          ]
+        }
+      },
+      {
+        "name": "post_dicom_sr_details",
+        "docstring": "Post DICOM SR details.",
+        "parameters": [
+          {
+            "name": "details",
+            "type": "PatientDetails",
+            "description": "Patient details"
+          },
+          {
+            "name": "credentials",
+            "type": "HTTPBasicCredentials",
+            "description": "HTTP Basic credentials"
+          }
+        ],
+        "returns": "Dict[str, Any]",
+        "relationships": {
+          "calls_functions": [
+            "validate_patient_id",
+            "fetch_dicom_sr_from_db",
+            "fetch_dicom_image_from_pacs",
+            "perform_ai_inference"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": []
+        }
+      },
+      {
+        "name": "get_dicom_sr",
+        "docstring": "Get DICOM SR by patient ID.",
+        "parameters": [
+          {
+            "name": "patient_id",
+            "type": "str",
+            "description": "Patient ID to fetch DICOM SR for"
+          }
+        ],
+        "returns": "Dict[str, Any]",
+        "relationships": {
+          "calls_functions": [
+            "validate_patient_id",
+            "logger.info",
+            "fetch_dicom_sr_from_db",
+            "cache.__contains__",
+            "cache.__setitem__"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": []
+        }
+      },
+      {
+        "name": "test_validate_patient_id",
+        "docstring": null,
+        "parameters": [],
+        "returns": null,
+        "relationships": {
+          "calls_functions": [
+            "validate_patient_id"
+          ],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": []
+        }
+      },
+      {
+        "name": "test_fetch_dicom_sr_from_db",
+        "docstring": null,
+        "parameters": [],
+        "returns": null,
+        "relationships": {
+          "calls_functions": [],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": []
+        }
+      },
+      {
+        "name": "test_fetch_dicom_image_from_pacs",
+        "docstring": null,
+        "parameters": [],
+        "returns": null,
+        "relationships": {
+          "calls_functions": [],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": []
+        }
+      },
+      {
+        "name": "test_perform_ai_inference",
+        "docstring": null,
+        "parameters": [],
+        "returns": null,
+        "relationships": {
+          "calls_functions": [],
+          "instantiates_classes": [],
+          "accesses_attributes": [],
+          "called_by": []
+        }
+      }
+    ],
+    "classes": [
+      {
+        "name": "PatientDetails",
+        "docstring": null,
+        "bases": [
+          "BaseModel"
+        ],
+        "methods": [],
+        "relationships": {
+          "inherits_from": [
+            "BaseModel"
+          ],
+          "used_by_functions": [
+            "post_dicom_sr_details"
+          ],
+          "instantiated_by": []
+        }
+      },
+      {
+        "name": "DicomSR",
+        "docstring": null,
+        "bases": [
+          "BaseModel"
+        ],
+        "methods": [],
+        "relationships": {
+          "inherits_from": [
+            "BaseModel"
+          ],
+          "used_by_functions": [],
+          "instantiated_by": []
+        }
+      }
+    ],
+    "relationships": {
+      "dependencies": {
+        "imports": [
+          "fastapi",
+          "pydantic",
+          "typing",
+          "sqlalchemy",
+          "sqlalchemy.exc",
+          "re",
+          "requests",
+          "logging",
+          "cachetools",
+          "functools",
+          "fastapi.security",
+          "fastapi.middleware.trustedhost",
+          "fastapi.middleware.cors",
+          "fastapi_limiter",
+          "fastapi_limiter.depends",
+          "redis",
+          "json"
+        ],
+        "from_imports": []
+      },
+      "entry_points": [
+        "post_dicom_sr_details",
+        "get_dicom_sr"
+      ]
+    }
+  }
+}

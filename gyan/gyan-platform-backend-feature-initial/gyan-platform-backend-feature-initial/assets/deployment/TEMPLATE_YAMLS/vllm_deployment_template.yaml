@@ -1,0 +1,36 @@
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  namespace: default
+  name: demo
+  annotations:
+    original-service-name: demo
+spec:
+  predictor:
+    minReplicas: 0
+    maxReplicas: 1
+    containers:
+    - args:
+      - --port
+      - '8080'
+      - --model
+      - /mnt/models
+      command:
+      - python3
+      - -m
+      - vllm.entrypoints.openai.api_server
+      env:
+      - name: STORAGE_URI
+        value: pvc://demo-claim/model_files/
+      image: docker.io/kserve/vllmserver:latest
+      imagePullPolicy: IfNotPresent
+      name: kserve-container
+      resources:
+        limits:
+          cpu: '4'
+          memory: 12Gi
+          nvidia.com/gpu: '1'
+        requests:
+          cpu: '4'
+          memory: 12Gi
+          nvidia.com/gpu: '1'

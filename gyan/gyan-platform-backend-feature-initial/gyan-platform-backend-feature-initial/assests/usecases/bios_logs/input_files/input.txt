@@ -1,0 +1,175 @@
+Event PCR Index: 0
+     Event Type: No Action
+    SHA1 Digest: 0000000000000000000000000000000000000000
+     Event Size: 17
+
+Event PCR Index: 0
+     Event Type: CTRM Contents
+    SHA1 Digest: F92AC7A9A9A10E9C8C35F46B54BA935037D73FAD
+     Event Size: 27
+
+Event PCR Index: 0
+     Event Type: CRTM Version
+    SHA1 Digest: FECD1C5166E9EB24934CC185F8F18F9A87708DFF
+     Event Size: 280
+
+Event PCR Index: 0
+     Event Type: Platform Fireware Blob
+    SHA1 Digest: 2B812D652E972F125BBA832DC229D02ADF84D2FA
+     Event Size: 16
+
+Event PCR Index: 0
+     Event Type: Post Code
+    SHA1 Digest: D4ABAE68323310F06945D312160A546717270C40
+     Event Size: 9
+
+Event PCR Index: 0
+     Event Type: Post Code
+    SHA1 Digest: 4A412E183453B0FFA8227CA73243C261EF6DCB08
+     Event Size: 9
+
+Event PCR Index: 7
+     Event Type: Variable Driver Config
+    SHA1 Digest: 57CD4DC19442475AA82743484F3B1CAA88E142B8
+     Event Size: 53
+
+Event PCR Index: 7
+     Event Type: Variable Driver Config
+    SHA1 Digest: 90FB892C9697830AFCDE01D92295CD2E797F19A2
+     Event Size: 1264
+
+Event PCR Index: 7
+     Event Type: Variable Driver Config
+    SHA1 Digest: FABA441201E390CBA37DA0253756E5B1851072FD
+     Event Size: 2828
+
+Event PCR Index: 7
+     Event Type: Variable Driver Config
+    SHA1 Digest: A35E6421B0C4D11DA06F2676BBF6A10EFBF06C9F
+     Event Size: 4411
+
+Event PCR Index: 7
+     Event Type: Variable Driver Config
+    SHA1 Digest: E591C948BFB6F708C7DEC5664B682B1841BF434E
+     Event Size: 13282
+
+Event PCR Index: 7
+     Event Type: Separator
+    SHA1 Digest: 9069CA78E7450A285173431B3E52C5C25299E473
+     Event Size: 4
+
+Event PCR Index: 2
+     Event Type: Boot Services Driver
+    SHA1 Digest: 535B3B84FA2C90DAEF017BA5B05A86F7549697D1
+     Event Size: 32
+
+Event PCR Index: 4
+     Event Type: Boot Services Application
+    SHA1 Digest: BBF9A86D98D3F5AE5BF41CEFE7842B170E64516E
+     Event Size: 76
+
+Event PCR Index: 4
+     Event Type: Boot Services Application
+    SHA1 Digest: AAC44961829238190D954F1601C6BB1835056569
+     Event Size: 76
+
+Event PCR Index: 4
+     Event Type: Boot Services Application
+    SHA1 Digest: 85B88830E45D559D9F5996C3C3BBF5B801A32991
+     Event Size: 76
+
+Event PCR Index: 1
+     Event Type: Variable Boot
+    SHA1 Digest: CD419F505A0230F054A89EEB6326F707541D8917
+     Event Size: 64
+
+Event PCR Index: 1
+     Event Type: Variable Boot
+    SHA1 Digest: EAE31313F281B3231CF9A61D89803B9D54CA686B
+     Event Size: 166
+
+Event PCR Index: 1
+     Event Type: Variable Boot
+    SHA1 Digest: 74DC619252F2671543D8F2A28E5175FCD9D63048
+     Event Size: 356
+
+Event PCR Index: 1
+     Event Type: Variable Boot
+    SHA1 Digest: 490155A3FF337B2B240BA720E8F7A67AF2D67B65
+     Event Size: 176
+
+Event PCR Index: 1
+     Event Type: Variable Boot
+    SHA1 Digest: 91808E7D4456F80E054003BAB205DAFDCD466100
+     Event Size: 210
+
+Event PCR Index: 1
+     Event Type: Variable Boot
+    SHA1 Digest: 02D5B95A1E78C7CD17841499CB74E2A2E0A1BD67
+     Event Size: 243
+
+Event PCR Index: 1
+     Event Type: Variable Boot
+    SHA1 Digest: 08D0C4D1569D965B7A681FDFE1C3845C67E6C95E
+     Event Size: 238
+
+Event PCR Index: 1
+     Event Type: Variable Boot
+    SHA1 Digest: E5E57D955046DD1308008CBE2DC1476C4121355B
+     Event Size: 271
+
+Event PCR Index: 4
+     Event Type: Action
+    SHA1 Digest: CD0FDB4531A6EC41BE2753BA042637D6E5F7F256
+     Event Size: 40
+
+Event PCR Index: 0
+     Event Type: Separator
+    SHA1 Digest: 9069CA78E7450A285173431B3E52C5C25299E473
+     Event Size: 4
+
+Event PCR Index: 1
+     Event Type: Separator
+    SHA1 Digest: 9069CA78E7450A285173431B3E52C5C25299E473
+     Event Size: 4
+
+Event PCR Index: 2
+     Event Type: Separator
+    SHA1 Digest: 9069CA78E7450A285173431B3E52C5C25299E473
+     Event Size: 4
+
+Event PCR Index: 3
+     Event Type: Separator
+    SHA1 Digest: 9069CA78E7450A285173431B3E52C5C25299E473
+     Event Size: 4
+
+Event PCR Index: 4
+     Event Type: Separator
+    SHA1 Digest: 9069CA78E7450A285173431B3E52C5C25299E473
+     Event Size: 4
+
+Event PCR Index: 5
+     Event Type: Separator
+    SHA1 Digest: 9069CA78E7450A285173431B3E52C5C25299E473
+     Event Size: 4
+
+Event PCR Index: 6
+     Event Type: Separator
+    SHA1 Digest: 9069CA78E7450A285173431B3E52C5C25299E473
+     Event Size: 4
+
+Event PCR Index: 1
+     Event Type: Handoff Tables
+    SHA1 Digest: AFEEEB88CD4D0CEE55244028A77A4D7534A263A3
+     Event Size: 32
+
+Event PCR Index: 4
+     Event Type: Boot Services Application
+    SHA1 Digest: 93A111272EEA37B26C23C54F4F7C18ED4DF73D61
+     Event Size: 128
+
+Event PCR Index: 4
+     Event Type: Boot Services Application
+    SHA1 Digest: C2A67505EF86BD98A5B95B7191E74C121A29CB2C
+     Event Size: 140
+

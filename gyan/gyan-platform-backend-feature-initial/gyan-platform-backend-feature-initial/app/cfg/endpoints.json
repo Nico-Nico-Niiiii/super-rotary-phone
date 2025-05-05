@@ -1,0 +1,80 @@
+{
+    "automation": {
+        "c": {
+            "prefix": "/automation/c", 
+            "routes" : {
+                "files": "/load_file"
+            }
+        }, 
+
+        "go" : {
+            "prefix" : "/automation/go",
+            "routes" : {
+                "files": "/get_files", 
+                "file_content" : "/file_content",
+                "save_prompt" : "/save_prompt", 
+                "upload_zip" : "/upload_zip",
+                "download": "/download",
+                "generate" : {
+                    "file" : "/generate_from_file",
+                    "folder" : "/generate_from_folder" 
+                }, 
+                "build" : {
+                    "file" : "/build_from_file", 
+                    "folder" : "/build_from_folder"
+                }, 
+                "report" : {
+                    "file" : "/coverage_file", 
+                    "folder" : "/coverage_folder"
+                }
+            }
+        }, 
+
+        "java": {
+            "prefix" : "/automation/java",
+            "routes" : {
+                "generate" : "/generate_file",
+                "build" : "/build",
+                "report" : "/report" 
+            }
+            
+        }
+    }, 
+
+    "bios" : {
+        "prefix" : "/bios_logs", 
+        "routes" : {
+            "generate" : "/generate"
+        }
+    },
+
+    "chatbot" : {
+        "prefix" : "/chatbot", 
+        "routes" : {
+            "get_models" : "/get_models",
+            "load_model" : "/load",
+            "infer" : "/infer", 
+            "prompt" : "/prompt", 
+            "rag" : "/rag"
+        }
+    },
+
+    "data_analyzer" : {
+        "prefix" : "/data_analyzer",
+        "routes" : {
+            "generate" : "/generate"
+        }
+    }, 
+
+    "software_debugger" : {
+        "wifi" : {
+            "prefix" : "/sw_debugger/wifi",
+            "routes" : {
+                "generate" : "/generate", 
+                "packet_analysis" : "/packet_analysis", 
+                "packet_loading" : "/packet_loading",
+                "export" : "/export_report"
+            }
+        }
+    }
+}

@@ -1,0 +1,119 @@
+{
+    "use_case": 
+    {
+      "automation_java": {
+        "java_model": "/media/sahil/data1/usecases/gyan-platform-backend/models/usecases/automation/java",
+        "assets": "/media/sahil/data1/gyan_backend/assets/automation/java/pom.xml",
+        "input_files" : "/media/sahil/data1/gyan_backend/assests/usecases/automation/Java/Test_Files",
+        "output_folder" : "/media/sahil/data1/gyan_backend/assests/usecases/automation/Java/Test_Folder"
+    },
+
+    "automation_c": {
+      "assets_path": "/media/sahil/data1/gyan_backend/assets/automation/C",
+      "files_path": "/media/sahil/data1/gyan_backend/assests/usecases/automation/C/Test_Files/",
+      "output_folder" : "/media/sahil/data1/gyan_backend/assests/usecases/automation/C/Test_Folder"
+    },
+
+    "automation_cpp" : {
+      "model_path" : "/media/sahil/data1/usecases/gyan-platform-backend/models/usecases/automation/cpp", 
+      "input_file" : "/media/sahil/data1/gyan_backend/assests/usecases/automation/Cpp/Test_Files",
+      "input_folder" : "/media/sahil/data1/gyan_backend/assests/usecases/automation/Cpp/Test_Folder",
+      "assets_path": "/media/sahil/data1/gyan_backend/assets/automation/Cpp",
+      "folder_assets_path": "/media/sahil/data1/gyan_backend/assets/automation/Cpp/Folder/CMakeLists.txt"
+
+    },
+
+    "automation_go": {
+      "assets_path": "/media/sahil/data1/gyan_backend/assets/automation/go",
+      "files_path" : "/media/sahil/data1/gyan_backend/assests/usecases/automation/Go/Test_Files",
+      "output_folder" : "/media/sahil/data1/gyan_backend/assests/usecases/automation/Go/Test_Folder"
+    },
+
+      "bios": {
+        "model_path": "/media/sahil/data1/gyan_backend/app/usecase-models/bios_log_analyser/results_bios_log_data_reason",
+        "logs_path": "/media/sahil/data1/gyan_backend/assests/usecases/bios_logs"
+      },
+
+      "chatbot": {
+          "model_path": "/media/sahil/data1/gyan_backend/app/usecase-models/chatbot",
+          "logs_path": "/media/sahil/data1/gyan_backend/assests/usecases/chatbot"
+      },
+
+      "chatbot_boeing": {
+          "model_paths": {
+            "path_1": "/path/to/model1",
+            "path_2": "/path/to/model2"
+          },
+          "prompt_lib_paths": {
+            "path_1": "/path/to/prompt_lib1",
+            "path_2": "/path/to/prompt_lib2"
+          },
+          "rag_base_paths": {
+            "path_1": "/path/to/rag_base1",
+            "path_2": "/path/to/rag_base2"
+          },
+          "dataset_paths": {
+            "path_1": "/path/to/dataset1",
+            "path_2": "/path/to/dataset2"
+          },
+          "images_paths": {
+            "path_1": "/path/to/images1",
+            "path_2": "/path/to/images2"
+          }
+      },
+
+      "cori": {
+          "model_path": "/media/sahil/data1/usecases/gyan-platform-backend/models/usecases/cori/checkpoint-6000",
+          "logs_path": "/media/sahil/data1/gyan_backend/assests/usecases/cori",
+          "document_path" : "/media/sahil/data1/gyan_backend/assets/usecases/cori"
+      },
+      
+      "code_review": {
+          "assets_path": "/media/sahil/data1/usecases/gyan-platform-backend/user_assets/usecases/test_scenario_gen"
+      },
+
+      "cori_device_logs" : {
+        "model_path" : "/media/sahil/data1/usecases/gyan-platform-backend/models/usecases/cori_device/SmithandNephew_755_50", 
+        "pdfs_path" : "/media/sahil/data1/gyan_backend/assets/usecases/cori_device", 
+        "zip_path" : "/media/sahil/data1/gyan_backend/assests/usecases/cori_device"
+      },
+
+
+      "data_analyser": {
+          "model_path": "/media/sahil/data1/gyan_backend/app/usecase-models/data_analyser",
+          "logs_path": "/media/sahil/data1/gyan_backend/assests/usecases/data_analyser"
+      },
+
+      "software_debugger": { 
+        "model_path": {
+            "path_1": "/media/sahil/data1/usecases/gyan-platform-backend/models/usecases/software_debugger/epoch_1.pt",
+            "path_2": "/media/sahil/data1/usecases/gyan-platform-backend/models/usecases/software_debugger/dummy_model_2.pt",
+            "wifi": "/media/sahil/data1/usecases/gyan-platform-backend/models/usecases/software_debugger/results_oil_filter", 
+            "wifi_peft" : "/media/sahil/data1/usecases/gyan-platform-backend/models/usecases/software_debugger/wifi_logs/peft_model"
+          },
+          
+          "logs_path": "/media/sahil/data1/gyan_backend/assests/usecases/software_debugger/wifi",
+          
+          "dataset_path": {
+            "path_1": "/media/shared/GYAN_TEST/asset/usecases/software_debugger/Project",
+            "path_2": "/path/to/dataset2"
+          }
+      },
+
+      "ticket_management" : {
+        "model_path" : {
+          "duplicate_model" : "/media/sahil/data1/usecases/gyan-platform-backend/models/usecases/ticket_management/results_te_ticket_duplicate",
+          "label_model" : "/media/sahil/data1/usecases/gyan-platform-backend/models/usecases/ticket_management/results_te_ticket_label_300", 
+          "blank_model" : "/media/sahil/data1/usecases/gyan-platform-backend/models/usecases/ticket_management/results_te_warehouse_v1", 
+          "response_model" : "/media/sahil/data1/usecases/gyan-platform-backend/models/usecases/ticket_management/results_te_ticket_150"
+        }
+      }
+  }, 
+
+  "agents" : {
+    "dev_agent" : {
+      "files_path" : "/media/sahil/data1/gyan_backend/assests/agents/dev_agent"
+    }
+  }
+
+}

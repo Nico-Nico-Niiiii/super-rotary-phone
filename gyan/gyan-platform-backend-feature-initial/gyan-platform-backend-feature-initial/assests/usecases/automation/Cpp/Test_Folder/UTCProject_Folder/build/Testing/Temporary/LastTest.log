@@ -1,0 +1,40 @@
+Start testing: Apr 02 18:03 IST
+----------------------------------------------------------
+1/1 Testing: MyTests
+1/1 Test: MyTests
+Command: "/media/sahil/data1/gyan_backend/assests/usecases/automation/Cpp/Test_Folder/UTCProject_Folder/build/run_tests"
+Directory: /media/sahil/data1/gyan_backend/assests/usecases/automation/Cpp/Test_Folder/UTCProject_Folder/build
+"MyTests" start time: Apr 02 18:03 IST
+Output:
+----------------------------------------------------------
+Running main() from ./googletest/src/gtest_main.cc
+[==========] Running 5 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 2 tests from AddTests
+[ RUN      ] AddTests.PositiveNumbers
+[       OK ] AddTests.PositiveNumbers (0 ms)
+[ RUN      ] AddTests.NegativeNumberAndPositiveNumber
+[       OK ] AddTests.NegativeNumberAndPositiveNumber (0 ms)
+[----------] 2 tests from AddTests (0 ms total)
+
+[----------] 3 tests from FindMaxTests
+[ RUN      ] FindMaxTests.EmptyArrayReturnsZero
+[       OK ] FindMaxTests.EmptyArrayReturnsZero (0 ms)
+[ RUN      ] FindMaxTests.SingleElementArrayReturnsThatValue
+[       OK ] FindMaxTests.SingleElementArrayReturnsThatValue (0 ms)
+[ RUN      ] FindMaxTests.MultipleElementsReturnLargestOne
+[       OK ] FindMaxTests.MultipleElementsReturnLargestOne (0 ms)
+[----------] 3 tests from FindMaxTests (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 5 tests from 2 test suites ran. (0 ms total)
+[  PASSED  ] 5 tests.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"MyTests" end time: Apr 02 18:03 IST
+"MyTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Apr 02 18:03 IST

@@ -1,0 +1,14 @@
+{"model_base_path":"./model/",
+
+
+"deployment":{
+    "deploy_gyan":{
+      "model_path":"./model",
+      "yaml_dir":"assets/deployment/ORIGINAL_YAMLS",
+      "templates_dir":"assets/deployment/TEMPLATE_YAMLS",
+      "mount_dir":"assets/deployment/MOUNT_YAMLS",
+      "docker_dir":"/media/airangers/AiRangersData2",
+      "temp_path":"temp/deployment"
+    }
+}
+}

@@ -1,0 +1,1 @@
+/usr/bin/c++  --coverage CMakeFiles/add.dir/src/main/src/main_add.cpp.o CMakeFiles/add.dir/src/main/src/add.cpp.o CMakeFiles/add.dir/src/main/src/findmax.cpp.o -o add 

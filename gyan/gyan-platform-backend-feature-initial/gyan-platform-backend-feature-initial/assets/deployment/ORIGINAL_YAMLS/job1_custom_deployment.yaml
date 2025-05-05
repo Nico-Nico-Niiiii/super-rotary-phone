@@ -1,0 +1,64 @@
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  namespace: default
+  name: job1
+  annotations:
+    original-service-name: job1
+spec:
+  predictor:
+    minReplicas: 0
+    maxReplicas: 1
+    containers:
+    - name: job1-custom_container
+      image: sahilbandar/custom-container:latest
+      imagePullPolicy: IfNotPresent
+      ports:
+      - containerPort: 6823
+      command:
+      - python
+      - custom_server.py
+      args:
+      - --port
+      - '6823'
+      - --model
+      - /mnt/models
+      env:
+      - name: MODEL_PATH
+        value: /mnt/models/model_files
+      - name: MODEL_NAME
+        value: demo
+      - name: CUSTOM_PORT
+        value: '6823'
+      resources:
+        limits:
+          cpu: 32
+          memory: 30Gi
+          nvidia.com/gpu: 1
+        requests:
+          cpu: 8
+          memory: 10Gi
+          nvidia.com/gpu: 1
+      volumeMounts:
+      - name: job1-model-volume
+        mountPath: /mnt/models
+        readOnly: true
+    volumes:
+    - name: job1-model-volume
+      persistentVolumeClaim:
+        claimName: job1-pvc
+        readOnly: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: job1-service
+  namespace: default
+spec:
+  selector:
+    kserve.io/inferenceservice: job1
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 6823
+  type: LoadBalancer

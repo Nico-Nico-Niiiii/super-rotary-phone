@@ -1,0 +1,62 @@
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  namespace: default
+  name: demo
+  annotations:
+    original-service-name: demo
+spec:
+  predictor:
+    minReplicas: 0
+    maxReplicas: 1
+    containers:
+    - name: demo-custom_container
+      image: sahilbandar/kserve-custom-server:latest
+      imagePullPolicy: IfNotPresent
+      ports:
+      - containerPort: 8909
+      command:
+      - python
+      - custom_server.py
+      args:
+      - --port
+      - '8909'
+      - --model
+      - /mnt/models
+      env:
+      - name: MODEL_PATH
+        value: /mnt/models/model_files
+      - name: MODEL_NAME
+        value: demo
+      - name: CUSTOM_PORT
+        value: '8909'
+      resources:
+        limits:
+          cpu: '6'
+          memory: 14Gi
+          nvidia.com/gpu: '1'
+        requests:
+          cpu: '6'
+          memory: 14Gi
+          nvidia.com/gpu: '1'
+      volumeMounts:
+      - name: demo-model-volume
+        mountPath: /mnt/models
+    volumes:
+    - name: demo-model-volume
+      persistentVolumeClaim:
+        claimName: check-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-service
+  namespace: default
+spec:
+  selector:
+    kserve.io/inferenceservice: demo
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8909
+  type: LoadBalancer

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: model-store-pod-job1
+spec:
+  containers:
+  - name: model-store-container
+    image: busybox
+    command:
+    - sleep
+    - '3600'
+    volumeMounts:
+    - mountPath: /mnt/models
+      name: model-storage
+  volumes:
+  - name: model-storage
+    persistentVolumeClaim:
+      claimName: job1-pvc

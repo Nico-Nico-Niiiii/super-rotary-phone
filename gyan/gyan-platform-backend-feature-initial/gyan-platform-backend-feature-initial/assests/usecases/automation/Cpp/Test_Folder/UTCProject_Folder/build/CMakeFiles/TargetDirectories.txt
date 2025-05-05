@@ -1,0 +1,7 @@
+/media/sahil/data1/gyan_backend/assests/usecases/automation/Cpp/Test_Folder/UTCProject_Folder/build/CMakeFiles/add.dir
+/media/sahil/data1/gyan_backend/assests/usecases/automation/Cpp/Test_Folder/UTCProject_Folder/build/CMakeFiles/findmax.dir
+/media/sahil/data1/gyan_backend/assests/usecases/automation/Cpp/Test_Folder/UTCProject_Folder/build/CMakeFiles/run_tests.dir
+/media/sahil/data1/gyan_backend/assests/usecases/automation/Cpp/Test_Folder/UTCProject_Folder/build/CMakeFiles/coverage.dir
+/media/sahil/data1/gyan_backend/assests/usecases/automation/Cpp/Test_Folder/UTCProject_Folder/build/CMakeFiles/test.dir
+/media/sahil/data1/gyan_backend/assests/usecases/automation/Cpp/Test_Folder/UTCProject_Folder/build/CMakeFiles/edit_cache.dir
+/media/sahil/data1/gyan_backend/assests/usecases/automation/Cpp/Test_Folder/UTCProject_Folder/build/CMakeFiles/rebuild_cache.dir

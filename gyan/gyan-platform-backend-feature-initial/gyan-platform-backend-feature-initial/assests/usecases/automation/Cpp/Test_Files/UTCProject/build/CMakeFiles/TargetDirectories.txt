@@ -1,0 +1,6 @@
+/media/sahil/data1/gyan_backend/assests/usecases/automation/Cpp/Test_Files/UTCProject/build/CMakeFiles/main_exec.dir
+/media/sahil/data1/gyan_backend/assests/usecases/automation/Cpp/Test_Files/UTCProject/build/CMakeFiles/run_tests.dir
+/media/sahil/data1/gyan_backend/assests/usecases/automation/Cpp/Test_Files/UTCProject/build/CMakeFiles/coverage.dir
+/media/sahil/data1/gyan_backend/assests/usecases/automation/Cpp/Test_Files/UTCProject/build/CMakeFiles/test.dir
+/media/sahil/data1/gyan_backend/assests/usecases/automation/Cpp/Test_Files/UTCProject/build/CMakeFiles/edit_cache.dir
+/media/sahil/data1/gyan_backend/assests/usecases/automation/Cpp/Test_Files/UTCProject/build/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,433 @@
+{
+  "auth": {
+      "prefix": "/auth",
+      "routes": {
+          "login": "/login",
+          "signup": "/signup",
+          "logout": "/logout",
+          "refresh_token": "/refresh-token",
+          "verify": "/verify",
+          "create_access_token": "/create-access-token"
+      }
+  },
+  "user": {
+      "prefix": "/user",
+      "routes": {
+          "profile": "/profile",
+          "update": "/update"
+      }
+  },
+  "project": {
+      "prefix": "/project",
+      "routes": {
+          "create": "/create",
+          "list": "/list",
+          "get_by_id": "/{project_id}",
+          "get_user_projects": "/user/{user_id}",
+          "update": "/{project_id}/update",
+          "delete": "/{project_id}/delete",
+          "count": "/count"
+      }
+  },
+  "foundation_models": {
+      "prefix": "/foundation-models",
+      "routes": {
+          "create": "/",
+          "list": "/",
+          "get_by_id": "/{model_id}",
+          "get_by_type": "/type/{model_type}", 
+          "get_by_name": "/name/{model_name:path}",
+          "update": "/{model_id}",
+          "delete": "/{model_id}",
+          "load_model": "/load/{model_id:path}",
+          "unloaded_model": "/model/unload_model",
+          "infer": "/infer/{model_id:path}",
+          "request_model": "/request",
+     "get_requests": "/requests/all",
+     "get_request_by_id": "/request/{request_id}",
+     "guard_check": "/guard-check"
+      }
+  },
+  
+    "training": {
+      "prefix": "/training",
+      "routes": {
+        "create": "/create",
+        "list": "/list/{project_id}",
+        "get": "/{job_id}",
+        "update": "/{job_id}/update",
+        "delete": "/{job_id}/delete",
+        "update_job_status": "/{job_id}/update_job_status",
+        "count": "/count"
+      }
+    },
+
+    "training_logs": {
+    "prefix": "/training-logs",
+    "routes": {
+      "get_logs": "/{job_id}/logs",
+      "get_latest": "/{job_id}",
+      "delete_logs": "/{task_id}/logs"
+    }
+  },
+
+  "evaluation": {
+    "prefix": "/evaluation",
+    "routes": {
+      "model_types": "/model-types",         
+      "projects": "/{project_name}",                
+      "models": "/models",                   
+      "evaluate": "/evaluate",               
+      "list": "/list/{project_id}",         
+      "get": "/{evaluation_id}",            
+      "delete": "/{evaluation_id}",          
+      "status": "/{evaluation_id}/status",
+      "count": "/count",
+      "recent-activities": "/recent-activities",
+      "get-job": "/get_jobs"   
+    }
+  },
+  "playground": {
+    "prefix": "/playground",
+    "routes": {
+      "user_models": "/models/user",
+      "load_model": "/model/load",
+      "unloaded_model": "/model/unload_model",
+      "infer": "/model/infer",
+      "model_status": "/model/status/{model_id}",
+      "projects": "/user/projects"
+    }
+  },
+  "prompts": {
+    "prefix": "/prompts",
+    "routes": {
+      "create": "/create",
+      "list": "/list",
+      "get_by_id": "/{prompt_id}",
+      "get_by_library": "/library/{library_name}",
+      "get_by_user": "/user/{user_email}",
+      "update": "/{prompt_id}",
+      "delete": "/{prompt_id}",
+      "bulk_create": "/bulk-create",
+      "delete_library": "/library/{library_name}"
+    }
+  },
+  
+    "deployment": {
+      "prefix" : "/deployment",
+      "routes" : {
+        "check_system_resourses": "/check-resourses",
+        "generate_yaml": "/generate-yaml",
+        "generate_yaml_custom": "/generate-yaml-custom",
+        "deploy_service": "/deploy-service",
+        "get_pods": "/get-pods",
+        "del_pods": "/delete-pod"
+      }
+    },
+    "workflow": {
+    "prefix": "/api",
+    "routes": {
+      "list": "/workflows",
+      "save": "/workflows",
+      "get": "/workflows/{workflow_id}",
+      "update": "/workflows/{workflow_id}",
+      "delete": "/workflows/{workflow_id}",
+      "trigger": "/workflows/trigger",
+      "triggerSaved": "/workflows/{workflow_id}/trigger"
+    }
+  },
+
+    "rag": {
+    "prefix": "/rag",
+    "routes": {
+      "create": "/create",
+      "list": "/list",
+      "get_by_id": "/{rag_id}",
+      "get_by_project": "/project/{project_id}",
+      "update": "/{rag_id}/update",
+      "delete": "/{rag_id}/delete",
+      "status": "/{rag_id}/status",
+      "files": {
+        "list": "/{rag_id}/files",
+        "get": "/{rag_id}/files/{file_id}",
+        "content": "/{rag_id}/files/{file_id}/content"
+      },
+      "process": {
+        "index": "/{rag_id}/index",
+        "reindex": "/{rag_id}/reindex",
+        "status": "/{rag_id}/process/status"
+      },
+      "search": {
+        "query": "/{rag_id}/search",
+        "similar": "/{rag_id}/search/similar"
+      },
+      "stats": {
+        "usage": "/{rag_id}/stats/usage",
+        "performance": "/{rag_id}/stats/performance"
+      },
+      "count": "/count",
+      "recent": "/recent"
+    }
+  },
+  
+    "agentProjects": {
+      "prefix": "/api/agent-projects",
+      "routes": {
+        "list": "/",
+        "get": "/{project_id}",
+        "getByProId": "/by-agent-pro-id/{agent_pro_id}",
+        "create": "/",
+        "update": "/{project_id}",
+        "delete": "/{project_id}"
+      }
+    },
+    "agentCustomInfo": {
+      "prefix": "/api/agent-custom-info",
+      "routes": {
+        "list": "/",
+        "getByProject": "/project/{agent_pro_id}",
+        "get": "/{info_id}",
+        "create": "/",
+        "update": "/{info_id}",
+        "delete": "/{info_id}"
+      }
+    },
+
+  "usecases": {
+
+    "automation": {
+        "c": {
+            "prefix": "/automation/c", 
+            "routes" : {
+                "files": "/load_file", 
+                "generate" : {
+                    "file" : "/generate_from_file",
+                    "folder" : "/generate_from_zip"
+                },
+                "prompts" : {
+                    "get_name": "/prompt_name"
+                }, 
+                "build" : {
+                    "file" : "/build_from_file",
+                    "folder": "/build_from_zip"
+                },  
+                "download" : {
+                    "test_file": "/download_source_for_file",
+                    "coverage_file" : "/download_coverage_for_file",
+                    "test_folder": "/download_source_for_zip",
+                    "coverage_folder": "/download_coverage_for_zip",
+                    "all": "/downlaod_all"
+                }
+            }
+        }, 
+
+        "cpp" : {
+          "prefix" : "/automation/cpp", 
+          "routes" : {
+            "generate" : {
+                "file" : "/generate_from_file", 
+                "folder" : "/generate_from_zip"
+            }, 
+            "build" : {
+                "file" : "/build_from_file", 
+                "folder" : "/build_from_zip"
+            }, 
+
+            "download" : {
+                "test_file": "/download_source_for_file",
+                "coverage_file" : "/download_coverage_for_file",
+                "test_folder": "/download_source_for_zip",
+                "coverage_folder": "/download_coverage_for_zip",
+                "all": "/downlaod_all"
+            }
+          }  
+        },
+
+        "go" : {
+            "prefix" : "/automation/go",
+            "routes" : {
+                "files": "/get_files", 
+                "file_content" : "/file_content",
+                "save_prompt" : "/save_prompt", 
+                "upload_zip" : "/upload_zip",
+
+                "generate" : {
+                    "file" : "/generate_from_file",
+                    "folder" : "/generate_from_zip" 
+                }, 
+                "build" : {
+                    "file" : "/build_from_file", 
+                    "folder" : "/build_from_zip"
+                }, 
+                "report" : {
+                    "file" : "/coverage_file", 
+                    "folder" : "/coverage_zip"
+                }, 
+                "prompts": {
+                    "get_name" : "/prompt_name"
+                },
+                "download" : {
+                    "test_file": "/download_source_for_file",
+                    "coverage_file" : "/download_coverage_for_file",
+                    "test_folder": "/download_source_for_zip",
+                    "coverage_folder": "/download_coverage_for_zip",
+                    "all": "/downlaod_all"
+                }
+            }
+        }, 
+
+        "java": {
+            "prefix" : "/automation/java",
+            "routes" : {
+                "generate" : {
+                    "file" : "/generate_from_file",
+                    "folder" : "/generate_from_zip"
+                },
+                "build" : {
+                    "file": "/build_from_file",
+                    "folder": "/build_from_zip"
+                },
+                "download":{
+                   "test_file": "/download_source_for_file",
+                    "coverage_file" : "/download_coverage_for_file",
+                    "test_folder": "/download_source_for_zip",
+                    "coverage_folder": "/download_coverage_for_zip",
+                    "all": "/downlaod_all"
+                }
+            }
+        }
+            
+    },
+    "bios" : {
+      "prefix" : "/bios_logs", 
+      "routes" : {
+        "generate" : "/generate"
+      }
+    }, 
+
+    "chatbot" : {
+      "prefix" : "/chatbot",
+      "routes" : {
+          "get_models" : "/get_models",
+          "load_model" : "/load_model",
+          "unload_model" : "/unload_model",
+          "infer" : "/infer",
+          "prompt" : "/prompt",
+          "rag" : "/rag",
+          "add_rlhf": "/add_rlhf"
+      }
+    }, 
+
+    "data_analyzer" : {
+      "prefix" : "/data_analyzer", 
+      "routes" : {
+        "generate" : "/generate"
+      }
+    }, 
+
+    "cori": {
+        "prefix" : "/cori", 
+        "routes" : {
+            "generate" : "/generate"
+        }
+    },
+
+    "cori_device" : {
+        "prefix" : "/cori_logs", 
+        "routes" : {
+            "analyze" : "/analyze" 
+        }
+    },
+
+    "software_debugger" : {
+        "prefix" : "/sw_debugger", 
+        "routes" : {
+            "wifi_logs" : {
+                "generate" : "/wifi_logs/generate", 
+                "packet_analysis" : "/wifi_logs/packet_analysis", 
+                "packet_loading" : "/wifi_logs/packet_loading",
+                "export" : "/wifi_logs/export_report"
+            },
+
+            "wifi_hf" : {
+                "run" : "/run_analysis", 
+                "packet_analysis" : "/packet_analysis",
+                "export" : "/export_report",
+                "packet_loading" : "/packet_loading"
+            },
+
+            "generate" : "/generate"
+        }
+    }, 
+
+    "src_code_review" : {
+        "prefix" : "/code_review", 
+        "routes" : {
+            "generate" : "/generate"
+        }
+    },
+
+    "test_scenario_gen" : {
+        "prefix" : "/test_scenario",
+        "routes" : {
+            "generate" : "/generate"
+        }
+    }, 
+
+    "ticket_management" : {
+        "prefix" : "/ticket_mgnt", 
+        "routes" : {
+            "generate" : "/generate", 
+            "chat" : "/chat"
+        }
+    }
+  }, 
+
+  "agents" : {
+        "func_tech_agent" : {
+            "prefix" : "/func_tech_agent", 
+            "routes" : {
+                "generate" : "/generate"
+            } 
+        }, 
+
+        "development_agent" : {
+            "prefix" : "/dev_agent", 
+            "routes" : {
+                "generate" : "/generate"
+            }
+        }, 
+
+        "code_reviewer" : {
+            "prefix" : "/review_agent", 
+            "routes" : {
+                "generate" : "/generate"
+            }
+        },
+
+        "userstory_agent" : {
+            "prefix" : "/userstory_agent", 
+            "routes" : {
+                "generate" : "/generate"
+            }
+        }, 
+
+        "project_manager" : {
+            "prefix" : "/pm_agent",
+            "routes" : {
+                "generate" : "/generate"
+            }
+        }
+    }, 
+
+  "GyanHub" : {
+      "prefix" : "/gyanhub", 
+      "routes" : {
+          "fetch_data_repo" : "/fetch_data_repo", 
+          "fetch_model_repo" : "/fetch_model_repo", 
+          "push_file" : "/push_file", 
+          "download_file" : "/download_file"
+      }
+    }
+
+}

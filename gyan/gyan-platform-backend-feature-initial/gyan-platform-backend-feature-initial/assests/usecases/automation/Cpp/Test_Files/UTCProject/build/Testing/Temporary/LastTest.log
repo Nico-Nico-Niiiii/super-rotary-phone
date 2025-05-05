@@ -1,0 +1,30 @@
+Start testing: Apr 02 18:01 IST
+----------------------------------------------------------
+1/1 Testing: MyTests
+1/1 Test: MyTests
+Command: "/media/sahil/data1/gyan_backend/assests/usecases/automation/Cpp/Test_Files/UTCProject/build/run_tests"
+Directory: /media/sahil/data1/gyan_backend/assests/usecases/automation/Cpp/Test_Files/UTCProject/build
+"MyTests" start time: Apr 02 18:01 IST
+Output:
+----------------------------------------------------------
+[==========] Running 2 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 2 tests from AddTests
+[ RUN      ] AddTests.PositiveNumbers
+[       OK ] AddTests.PositiveNumbers (0 ms)
+[ RUN      ] AddTests.NegativeNumberAndPositiveNumber
+[       OK ] AddTests.NegativeNumberAndPositiveNumber (0 ms)
+[----------] 2 tests from AddTests (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 2 tests from 1 test suite ran. (0 ms total)
+[  PASSED  ] 2 tests.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"MyTests" end time: Apr 02 18:01 IST
+"MyTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Apr 02 18:01 IST

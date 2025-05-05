@@ -1,0 +1,72 @@
+Text,Response
+1703665569.009752: wl2: Deauthenticate all stations,Deauthenticate
+1703665569.012208: wl2: AP-DISABLED,Disconnected
+1703665569.012491: wl2: Deauthenticate all stations,Deauthenticate
+1703665569.012774: wl2: AP-DISABLED,Disconnected
+1703665573.641052: wl2: Deauthenticate all stations at BSS start,Deauthenticate
+1703665612.437362: 1703665612.437364: wl2: STA 42:da:44:6c:13:0a WPA: invalid MIC in msg 2/4 of 4-Way Handshake,Invalid password
+1703665613.429490: 1703665613.429492: wl2: STA 42:da:44:6c:13:0a WPA: invalid MIC in msg 2/4 of 4-Way Handshake,Invalid password
+1703665614.472496: 1703665614.472498: wl2: STA 42:da:44:6c:13:0a WPA: invalid MIC in msg 2/4 of 4-Way Handshake,Invalid password
+1703665616.425469: WPA: 42:da:44:6c:13:0a WPA_PTK entering state DISCONNECT,Disconnected
+1703665616.425478: wpa_sta_disconnect STA 42:da:44:6c:13:0a (reason 14),Disconnected
+1703665616.425489: hostapd_wpa_auth_disconnect: WPA authenticator requests disconnect: STA 42:da:44:6c:13:0a reason 14,Disconnected
+1703665616.425500: wl2: ap_sta_disconnect addr 42:da:44:6c:13:0a reason=14,Disconnected
+1703665616.426767: wl2: ap_sta_disconnect: reschedule ap_handle_timer timeout for 42:da:44:6c:13:0a (5 seconds - AP_MAX_INACTIVITY_AFTER_DEAUTH),Disconnected
+1703665616.426788: WPA: 42:da:44:6c:13:0a WPA_PTK entering state DISCONNECTED,Disconnected
+"1703665616.427418: 1703665616.427420: wl2: STA 42:da:44:6c:13:0a MLME: MLME-DEAUTHENTICATE.indication(42:da:44:6c:13:0a, 14)",Deauthenticate
+1703665616.850792: 1703665616.850794: wl2: STA 42:da:44:6c:13:0a IEEE 802.11: disassociated,Disassociated
+1703665616.851195: WPA: 42:da:44:6c:13:0a WPA_PTK entering state DISCONNECTED,Disconnected
+1703665617.697109: 1703665617.697111: wl2: STA 42:da:44:6c:13:0a IEEE 802.11: disassociated,Disassociated
+1703665634.821449: 1703665634.821451: wl2: STA 42:da:44:6c:13:0a WPA: invalid MIC in msg 2/4 of 4-Way Handshake,Invalid password
+1703665635.819234: 1703665635.819236: wl2: STA 42:da:44:6c:13:0a WPA: invalid MIC in msg 2/4 of 4-Way Handshake,Invalid password
+1703665636.821184: 1703665636.821186: wl2: STA 42:da:44:6c:13:0a WPA: invalid MIC in msg 2/4 of 4-Way Handshake,Invalid password
+1703665638.139743: 1703665638.139745: wl2: STA 42:da:44:6c:13:0a WPA: invalid MIC in msg 2/4 of 4-Way Handshake,Invalid password
+1703665638.814001: WPA: 42:da:44:6c:13:0a WPA_PTK entering state DISCONNECT,Disconnected
+1703665638.814012: wpa_sta_disconnect STA 42:da:44:6c:13:0a (reason 14),Disconnected
+1703665638.814022: hostapd_wpa_auth_disconnect: WPA authenticator requests disconnect: STA 42:da:44:6c:13:0a reason 14,Disconnected
+1703665638.814035: wl2: ap_sta_disconnect addr 42:da:44:6c:13:0a reason=14,Disconnected
+1703665638.815327: wl2: ap_sta_disconnect: reschedule ap_handle_timer timeout for 42:da:44:6c:13:0a (5 seconds - AP_MAX_INACTIVITY_AFTER_DEAUTH),Disconnected
+1703665638.815349: WPA: 42:da:44:6c:13:0a WPA_PTK entering state DISCONNECTED,Disconnected
+"1703665638.816265: 1703665638.816266: wl2: STA 42:da:44:6c:13:0a MLME: MLME-DEAUTHENTICATE.indication(42:da:44:6c:13:0a, 14)",Deauthenticate
+1703665638.822266: 1703665638.822268: wl2: STA 42:da:44:6c:13:0a IEEE 802.11: disassociated,Disassociated
+1703665638.822603: WPA: 42:da:44:6c:13:0a WPA_PTK entering state DISCONNECTED,Disconnected
+1703665639.740933: 1703665639.740935: wl2: STA 42:da:44:6c:13:0a IEEE 802.11: disassociated,Disassociated
+1703665661.877752: 1703665661.877754: wl2: STA 42:da:44:6c:13:0a WPA: invalid MIC in msg 2/4 of 4-Way Handshake,Invalid password
+1703665662.831786: 1703665662.831788: wl2: STA 42:da:44:6c:13:0a WPA: invalid MIC in msg 2/4 of 4-Way Handshake,Invalid password
+1703665663.855727: 1703665663.855729: wl2: STA 42:da:44:6c:13:0a WPA: invalid MIC in msg 2/4 of 4-Way Handshake,Invalid password
+1703665665.823410: WPA: 42:da:44:6c:13:0a WPA_PTK entering state DISCONNECT,Disconnected
+1703665665.823419: wpa_sta_disconnect STA 42:da:44:6c:13:0a (reason 14),Disconnected
+1703665665.823430: hostapd_wpa_auth_disconnect: WPA authenticator requests disconnect: STA 42:da:44:6c:13:0a reason 14,Disconnected
+1703665665.823441: wl2: ap_sta_disconnect addr 42:da:44:6c:13:0a reason=14,Disconnected
+1703665665.824767: wl2: ap_sta_disconnect: reschedule ap_handle_timer timeout for 42:da:44:6c:13:0a (5 seconds - AP_MAX_INACTIVITY_AFTER_DEAUTH),Disconnected
+1703665665.824788: WPA: 42:da:44:6c:13:0a WPA_PTK entering state DISCONNECTED,Disconnected
+"1703665665.825453: 1703665665.825455: wl2: STA 42:da:44:6c:13:0a MLME: MLME-DEAUTHENTICATE.indication(42:da:44:6c:13:0a, 14)",Deauthenticate
+1703665667.068091: 1703665667.068093: wl2: STA 42:da:44:6c:13:0a IEEE 802.11: disassociated,Disassociated
+1703665667.068498: WPA: 42:da:44:6c:13:0a WPA_PTK entering state DISCONNECTED,Disconnected
+1703665667.810982: 1703665667.810984: wl2: STA 42:da:44:6c:13:0a IEEE 802.11: disassociated,Disassociated
+1703665684.123926: 1703665684.123928: wl2: STA 42:da:44:6c:13:0a WPA: invalid MIC in msg 2/4 of 4-Way Handshake,Invalid password
+1703665685.130634: 1703665685.130636: wl2: STA 42:da:44:6c:13:0a WPA: invalid MIC in msg 2/4 of 4-Way Handshake,Invalid password
+1703665686.129690: 1703665686.129692: wl2: STA 42:da:44:6c:13:0a WPA: invalid MIC in msg 2/4 of 4-Way Handshake,Invalid password
+1703665688.112968: 1703665688.112970: wl2: STA 42:da:44:6c:13:0a WPA: invalid MIC in msg 2/4 of 4-Way Handshake,Invalid password
+1703665688.117388: WPA: 42:da:44:6c:13:0a WPA_PTK entering state DISCONNECT,Disconnected
+1703665688.117398: wpa_sta_disconnect STA 42:da:44:6c:13:0a (reason 14),Disconnected
+1703665688.117407: hostapd_wpa_auth_disconnect: WPA authenticator requests disconnect: STA 42:da:44:6c:13:0a reason 14,Disconnected
+1703665688.117417: wl2: ap_sta_disconnect addr 42:da:44:6c:13:0a reason=14,Disconnected
+1703665688.118742: wl2: ap_sta_disconnect: reschedule ap_handle_timer timeout for 42:da:44:6c:13:0a (5 seconds - AP_MAX_INACTIVITY_AFTER_DEAUTH),Disconnected
+1703665688.118763: WPA: 42:da:44:6c:13:0a WPA_PTK entering state DISCONNECTED,Disconnected
+"1703665688.119373: 1703665688.119375: wl2: STA 42:da:44:6c:13:0a MLME: MLME-DEAUTHENTICATE.indication(42:da:44:6c:13:0a, 14)",Deauthenticate
+1703665688.125073: 1703665688.125075: wl2: STA 42:da:44:6c:13:0a IEEE 802.11: disassociated,Disassociated
+1703665688.125506: WPA: 42:da:44:6c:13:0a WPA_PTK entering state DISCONNECTED,Disconnected
+1703665688.856914: 1703665688.856916: wl2: STA 42:da:44:6c:13:0a IEEE 802.11: disassociated,Disassociated
+1703665817.410054: 1703665817.410056: wl2: STA 70:cd:0d:c7:d7:65 IEEE 802.11: disassociated,Disassociated
+1703665817.410114: wl2: AP-STA-DISCONNECTED 70:cd:0d:c7:d7:65,Disconnected
+1703665817.410552: WPA: 70:cd:0d:c7:d7:65 WPA_PTK entering state DISCONNECTED,Disconnected
+1703665817.411150: 1703665817.411152: wl2: STA 70:cd:0d:c7:d7:65 IEEE 802.11: disassociated,Disassociated
+1703665878.946464: 1703665878.946466: wl2: STA 70:cd:0d:c6:05:7f IEEE 802.11: disassociated,Disassociated
+1703665878.946523: wl2: AP-STA-DISCONNECTED 70:cd:0d:c6:05:7f,Disconnected
+1703665878.947439: WPA: 70:cd:0d:c6:05:7f WPA_PTK entering state DISCONNECTED,Disconnected
+1703665878.948105: 1703665878.948107: wl2: STA 70:cd:0d:c6:05:7f IEEE 802.11: disassociated,Disassociated
+1703666035.991696: 1703666035.991698: wl2: STA 70:cd:0d:c7:d7:65 IEEE 802.11: disassociated,Disassociated
+1703666035.991755: wl2: AP-STA-DISCONNECTED 70:cd:0d:c7:d7:65,Disconnected
+1703666035.992283: WPA: 70:cd:0d:c7:d7:65 WPA_PTK entering state DISCONNECTED,Disconnected
+1703666035.992921: 1703666035.992923: wl2: STA 70:cd:0d:c7:d7:65 IEEE 802.11: disassociated,Disassociated

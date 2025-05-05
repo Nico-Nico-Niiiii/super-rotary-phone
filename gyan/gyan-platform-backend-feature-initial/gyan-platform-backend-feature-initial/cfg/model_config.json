@@ -1,0 +1,150 @@
+{
+  "models": {
+    "Gyan/CodeLlama-7B": {
+      "model_id": "codellama/CodeLlama-7b-hf",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Llama2-7B": {
+      "model_id": "meta-llama/Llama-2-7b",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Llama3-8B": {
+      "model_id": "meta-llama/Meta-Llama-3-8B",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Llama3.1-8B-instruct": {
+      "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Mistral-7B": {
+      "model_id": "mistralai/Mistral-7B-v0.1",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/MobileLLM-125M": {
+      "model_id": "facebook/MobileLLM-125M",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/OPT-350M": {
+      "model_id": "facebook/opt-350m",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/OPT-1.3B": {
+      "model_id": "facebook/opt-1.3b",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/OPT-2.7B": {
+      "model_id": "facebook/opt-2.7b",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/TinyLlama-1.1B": {
+      "model_id": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Yi-6B": {
+      "model_id": "01-ai/Yi-6B",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/PaliGemma": {
+      "model_id": "google/paligemma-3b-pt-224",
+      "type": "Vision LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Llama-3.2-1B": {
+      "model_id": "meta-llama/Llama-3.2-1B",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Llama-3.2-3B": {
+      "model_id": "meta-llama/Llama-3.2-3B",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Llama-3.2-1B-Instruct": {
+      "model_id": "meta-llama/Llama-3.2-1B-Instruct",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Llama-3.2-3B-Instruct": {
+      "model_id": "meta-llama/Llama-3.2-3B-Instruct",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Llama-3.1-8B": {
+      "model_id": "meta-llama/Meta-Llama-3-8B",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Llama-3.1-8B-Instruct": {
+      "model_id": "meta-llama/Meta-Llama-3-8B-Instruct",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Llama-2-13B": {
+      "model_id": "meta-llama/Llama-2-13b-hf",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Llama-2-7B-Chat": {
+      "model_id": "meta-llama/Llama-2-7b-chat-hf",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Llama-2-13B-Chat": {
+      "model_id": "meta-llama/Llama-2-13b-chat",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Llama-3.2-11B-Vision": {
+      "model_id": "meta-llama/Llama-3.2-11B-Vision",
+      "type": "Vision LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Llama-3.2-11B-Vision-Instruct": {
+      "model_id": "meta-llama/Llama-3.2-11B-Vision-Instruct",
+      "type": "Vision LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Llama-3.2-90B-Vision": {
+      "model_id": "meta-llama/Llama-3.2-90B-Vision",
+      "type": "Vision LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Llama-3.2-90B-Vision-Instruct": {
+      "model_id": "meta-llama/Llama-3.2-90B-Vision-Instruct",
+      "type": "Vision LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Llama-3.3-70B-Instruct": {
+      "model_id": "meta-llama/Llama-3.3-70B-Instruct",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Llama-3.1-70B": {
+      "model_id": "meta-llama/Llama-3.1-70B",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Llama-3.1-70B-Instruct": {
+      "model_id": "meta-llama/Llama-3.1-70B-Instruct",
+      "type": "LLM",
+      "auth_token": "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"
+    },
+    "Gyan/Llama-2-70B": {
+      "model_id": "meta-llama/Llama-2-70b-hf",
+      "type": "LLM",
+      "auth_token": "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"
+    }
+  }
+}
+

@@ -1,0 +1,1 @@
+/usr/bin/c++  --coverage CMakeFiles/run_tests.dir/src/test/src/add_test.cpp.o CMakeFiles/run_tests.dir/src/test/src/findmax_test.cpp.o CMakeFiles/run_tests.dir/src/main/src/add.cpp.o CMakeFiles/run_tests.dir/src/main/src/findmax.cpp.o -o run_tests  -lgtest -lgtest_main 

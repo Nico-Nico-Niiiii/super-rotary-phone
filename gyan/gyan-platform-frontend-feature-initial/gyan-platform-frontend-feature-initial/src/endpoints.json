@@ -1,0 +1,190 @@
+{
+    "auth": {
+      "prefix": "/auth",
+      "routes": {
+        "login": "/login",
+        "signup": "/signup",
+        "logout": "/logout",
+        "refresh": "/refresh-token",
+        "verify": "/verify"
+      }
+    },
+    "user": {
+      "prefix": "/user",
+      "routes": {
+        "profile": "/profile",
+        "update": "/update"
+      }
+    },
+    "project": {
+        "prefix": "/project",
+        "routes": {
+          "create": "/create",
+          "list": "/list",
+          "get_by_id": "/{project_id}",
+          "get_user_projects": "/user/{user_email}",
+          "update": "/{project_id}/update",
+          "delete": "/{project_id}/delete",
+          "count": "/count"   
+        }
+      },
+      "foundation_models": {
+      "prefix": "/foundation-models",
+      "routes": {
+          "create": "/",
+          "list": "/",
+          "get_by_id": "/{model_id}",
+          "get_by_type": "/type/{model_type}", 
+          "get_by_name": "/name/{model_name}",
+          "update": "/{model_id}",
+          "delete": "/{model_id}",
+          "load_model": "/load/{model_id}",
+          "unloaded_model": "/model/unload_model",
+          "infer": "/infer/{model_id}",
+          "request_model": "/request",
+          "get_requests": "/requests/all",
+          "get_request_by_id": "/request/{request_id}",
+          "guard_check": "/guard-check"
+      }
+  },
+      "training": {
+        "prefix": "/training",
+        "routes": {
+          "create": "/create",
+          "list": "/list/{project_id}",
+          "get": "/{job_id}",
+          "delete": "/{job_id}/delete",
+          "update_job_status": "/{job_id}/update_job_status",
+          "count": "/count"   
+        }
+      },
+      "training_logs": {
+    "prefix": "/training-logs",
+    "routes": {
+      "get_logs": "/{job_id}/logs",
+      "get_latest": "/{job_id}",
+      "delete_logs": "/{task_id}/logs"
+    }
+  },
+  "playground": {
+    "prefix": "/playground",
+    "routes": {
+      "user_models": "/models/user",
+      "load_model": "/model/load",
+      "unloaded_model": "/model/unload_model",
+      "infer": "/model/infer",
+      "model_status": "/model/status/{model_id}",
+      "projects": "/user/projects"
+    }
+  },
+  "evaluation": {
+    "prefix": "/evaluation",
+    "routes": {
+      "model_types": "/model-types",         
+      "projects": "/{project_name}",                
+      "models": "/models",                   
+      "evaluate": "/evaluate",               
+      "list": "/list/{project_id}",         
+      "get": "/{evaluation_id}",            
+      "delete": "/{evaluation_id}",          
+      "status": "/{evaluation_id}/status",
+      "count": "/count",
+      "get-job": "/get_jobs"  
+    }
+  },
+  "workflow": {
+    "prefix": "/api",
+    "routes": {
+      "list": "/workflows",
+      "save": "/workflows",
+      "get": "/workflows/{workflow_id}",
+      "update": "/workflows/{workflow_id}",
+      "delete": "/workflows/{workflow_id}",
+      "trigger": "/workflows/trigger",
+      "triggerSaved": "/workflows/{workflow_id}/trigger"
+    }
+  },
+  "deployment": {
+      "prefix" : "/deployment",
+      "routes" : {
+        "check_system_resourses": "/check-resourses",
+        "generate_yaml": "/generate-yaml",
+        "generate_yaml_custom": "/generate-yaml-custom",
+        "deploy_service": "/deploy-service",
+        "get_pods": "/get-pods",
+        "del_pods": "/delete-pod"
+      }
+    },
+    "prompts": {
+      "prefix": "/prompts",
+      "routes": {
+        "create": "/create",
+        "list": "/list",
+        "get_by_id": "/{prompt_id}",
+        "get_by_library": "/library/{library_name}",
+        "get_by_user": "/user/{user_email}",
+        "update": "/{prompt_id}",
+        "delete": "/{prompt_id}",
+        "bulk_create": "/bulk-create",
+        "delete_library": "/library/{library_name}",
+        "get_library": "/library/{library_name}"
+      }
+    },
+
+    "rag": {
+      "prefix": "/rag",
+      "routes": {
+        "create": "/create",
+        "list": "/list",
+        "get_by_id": "/{rag_id}",
+        "get_by_project": "/project/{project_id}",
+        "update": "/{rag_id}/update",
+        "delete": "/{rag_id}/delete",
+        "status": "/{rag_id}/status",
+        "files": {
+          "list": "/{rag_id}/files",
+          "get": "/{rag_id}/files/{file_id}",
+          "content": "/{rag_id}/files/{file_id}/content"
+        },
+        "process": {
+          "index": "/{rag_id}/index",
+          "reindex": "/{rag_id}/reindex",
+          "status": "/{rag_id}/process/status"
+        },
+        "search": {
+          "query": "/{rag_id}/search",
+          "similar": "/{rag_id}/search/similar"
+        },
+        "stats": {
+          "usage": "/{rag_id}/stats/usage",
+          "performance": "/{rag_id}/stats/performance"
+        },
+        "count": "/count",
+        "recent": "/recent"
+      }
+    },
+    
+      "agentProjects": {
+        "prefix": "/api/agent-projects",
+        "routes": {
+          "list": "/",
+          "get": "/{project_id}",
+          "getByProId": "/by-agent-pro-id/{agent_pro_id}",
+          "create": "/",
+          "update": "/{project_id}",
+          "delete": "/{project_id}"
+        }
+      },
+      "agentCustomInfo": {
+        "prefix": "/api/agent-custom-info",
+        "routes": {
+          "list": "/",
+          "getByProject": "/project/{agent_pro_id}",
+          "get": "/{info_id}",
+          "create": "/",
+          "update": "/{info_id}",
+          "delete": "/{info_id}"
+        }
+      }
+    
+  }
