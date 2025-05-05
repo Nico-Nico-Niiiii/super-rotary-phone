@@ -1,0 +1,23 @@
+{
+  "databases": {
+    "weaviate": {
+      "enabled": true,
+      "host": "http://localhost:8080",
+      "data_path": "/media/sahil/data/gyan_backend/app/RAG/vector_databases/weaviate"
+    },
+    "chromadb": {
+      "enabled": true,
+      "persist_dir": "/media/sahil/data/gyan_backend/app/RAG/vector_databases/chromadb/persist"
+    },
+    "faiss": {
+      "enabled": true,
+      "index_path": "/media/sahil/data/gyan_backend/app/RAG/vector_databases/faiss"
+    },
+    "pinecone": {
+      "enabled": true,
+      "config_path": "/media/sahil/data/gyan_backend/app/RAG/vector_databases/pinecone/pinecone_config.json"
+    }
+  },
+  "embedding_model": "intfloat/e5-large-v2",
+  "batch_size": 32
+}
