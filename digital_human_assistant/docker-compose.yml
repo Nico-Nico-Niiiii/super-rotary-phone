@@ -1,0 +1,42 @@
+version: "3.9"
+services:
+  # === Riva Speech ===
+  riva-speech:
+    image: nvcr.io/nvidia/riva/riva-speech:2.13.0-servicemaker
+    runtime: nvidia
+    environment:
+      - "LOGLEVEL=INFO"
+      - "SERVICE_PORT=50051"
+    volumes:
+      - riva-model-store:/data
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    command: ["--start_asr", "false", "--start_nlp", "false", "--start_tts", "true"]
+    ports:
+      - "50051:50051"   # gRPC
+
+  # === Ollama ===
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama:/root/.ollama
+    ports: ["11434:11434"]
+    runtime: nvidia
+
+  # === Whisper (optional offline ASR) ===
+  whisper:
+    image: ghcr.io/ggerganov/whisper.cpp:latest
+    command: ["--model", "/models/base.en.bin", "--http-port", "9000"]
+    volumes:
+      - ./models/whisper:/models
+    ports: ["9000:9000"]
+    runtime: nvidia
+
+volumes:
+  riva-model-store:
+  ollama:
